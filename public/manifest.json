@@ -1,0 +1,21 @@
+{
+  "name": "Zottr Admin",
+  "short_name": "Zottr Admin",
+  "start_url": "/home",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffA500",
+  "description": "Admin app for Zottr Social sellers.",
+  "icons": [
+    {
+      "src": "logo192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "logo512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

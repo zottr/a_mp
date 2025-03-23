@@ -1,0 +1,143 @@
+// // src/App.tsx
+// import React, { useState } from 'react';
+// import RegistrationForm from './components/Registration/RegisterForm';
+// import AdminWelcomePage from './components/Products/AdminWelcomePage';
+// import {
+//   BrowserRouter as Router,
+//   Route,
+//   Routes,
+//   Navigate,
+// } from 'react-router-dom';
+// import { client } from './graphql/client';
+
+// import { UserProvider } from './context/UserContext';
+// import ViewProfile from './components/Profile/ViewProfile';
+// import { useAuth } from './context/AuthContext';
+// import ProtectedRoute from './components/Products/ProtectedRoute';
+// import LoginFormOld from './components/Login/LoginFormOld';
+// import WelcomePage from './components/Welcome/WelcomePage';
+// import PhoneVerificationForm from './components/Registration/PhoneVerificationForm';
+// import ProtectedSignupRoute from './components/Registration/ProtectedSignupRoute';
+// import { VerificationProvider } from './context/VerificationContext';
+// import ProtectedForgotPasswordRoute from './components/Registration/ProtectedForgotPasswordRoute';
+// import ForgotPasswordForm from './components/Registration/ForgotPasswordForm';
+
+// const App: React.FC = () => {
+//   const [isLoggedIn, setIsLoggedIn] = useState(false);
+//   const [showLogin, setShowLogin] = useState(true);
+//   const [userId, setUserId] = useState('');
+
+//   const { authToken, setToken, unsetToken } = useAuth();
+
+//   const handleLogin = (userId: string) => {
+//     console.log('Inside login');
+//     setUserId(userId);
+//     setIsLoggedIn(true);
+//     setToken(localStorage.getItem('zottrAdminAuthToken') ?? '');
+//   };
+
+//   const handleRegister = () => {
+//     setShowLogin(true);
+//   };
+
+//   const logout = () => {
+//     //remove auth token for logout
+//     unsetToken();
+//     client.clearStore();
+//     localStorage.removeItem('zottrAdminAuthToken');
+//     setIsLoggedIn(false);
+//   };
+
+//   return (
+//     <Router>
+//       <Routes>
+//         <Route
+//           path="/login"
+//           element={
+//             authToken ? (
+//               <Navigate replace to="/home" />
+//             ) : (
+//               <LoginFormOld onLogin={handleLogin} />
+//             )
+//           }
+//         />
+//         <Route
+//           path="/welcome"
+//           element={
+//             authToken ? <Navigate replace to="/home" /> : <WelcomePage />
+//           }
+//         />
+//         <Route
+//           path="/signup-phone-verification"
+//           element={
+//             authToken ? (
+//               <Navigate replace to="/home" />
+//             ) : (
+//               <VerificationProvider>
+//                 <PhoneVerificationForm navigateUrl="/signup" />
+//               </VerificationProvider>
+//             )
+//           }
+//         />
+//         <Route
+//           path="/signup"
+//           element={
+//             <VerificationProvider>
+//               <ProtectedSignupRoute
+//                 element={
+//                   <RegistrationForm
+//                     onRegister={handleRegister}
+//                     logout={logout}
+//                   />
+//                 }
+//               />
+//             </VerificationProvider>
+//           }
+//         />
+//         <Route
+//           path="/password-phone-verification"
+//           element={
+//             <VerificationProvider>
+//               <PhoneVerificationForm navigateUrl="/forgot-password" />
+//             </VerificationProvider>
+//           }
+//         />
+//         <Route
+//           path="/forgot-password"
+//           element={
+//             <VerificationProvider>
+//               <ProtectedForgotPasswordRoute element={<ForgotPasswordForm />} />
+//             </VerificationProvider>
+//           }
+//         />
+//         <Route
+//           path="/home"
+//           element={
+//             <ProtectedRoute
+//               element={
+//                 <UserProvider userId={userId}>
+//                   <AdminWelcomePage logout={logout} />
+//                 </UserProvider>
+//               }
+//             />
+//           }
+//         />
+//         <Route
+//           path="/viewProfile"
+//           element={
+//             <ProtectedRoute
+//               element={
+//                 <UserProvider userId={userId}>
+//                   <ViewProfile />
+//                 </UserProvider>
+//               }
+//             />
+//           }
+//         />
+//         <Route path="*" element={<Navigate replace to="/login" />} />
+//       </Routes>
+//     </Router>
+//   );
+// };
+
+// export default App;

@@ -1,0 +1,57 @@
+.flexCenter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flexLeft {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.flexRight {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+@keyframes slideInFromRight {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.quill > .ql-container > .ql-editor.ql-blank::before {
+  font-size: 1rem;
+  color: #9e9e9e;
+  font-weight: 400;
+  font-family: Poppins, sans-serif;
+}
+
+.quill .ql-container .ql-editor:focus {
+  outline: none; /* Remove the default outline */
+  border: 2px solid #1976d2; /* Change border color on focus */
+  /* font-size: 1rem; */
+  color: #212121;
+  /* font-weight: 400; */
+  font-family: Poppins, sans-serif;
+}
+
+.ql-container {
+  border: 1px solid #757575 !important; /*Adjust width and color*/
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+
+.ql-toolbar {
+  border: 1px solid #757575 !important; /*Adjust width and color*/
+  border-bottom: none !important; /*Avoid double border*/
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
