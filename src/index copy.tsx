@@ -12,15 +12,6 @@ import { InstallPromptProvider } from './context/InstallPromptContext.jsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <StyledEngineProvider injectFirst>
-      <AuthProvider>
-        <ThemeProvider theme={mainTheme}>
-          <CssBaseline />
-          <InstallPromptProvider>
-            <App />
-          </InstallPromptProvider>
-        </ThemeProvider>
-      </AuthProvider>
-    </StyledEngineProvider>
+    <App />
   </StrictMode>
 );

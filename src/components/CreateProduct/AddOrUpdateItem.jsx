@@ -139,7 +139,7 @@ const AddOrUpdateItem = ({
     variables: {
       options: {
         filter: {
-          facetId: { eq: `${process.env.REACT_APP_VENDURE_CATEGORY_FACET_ID}` },
+          facetId: { eq: `${import.meta.env.VITE_VENDURE_CATEGORY_FACET_ID}` },
         },
       },
     },
@@ -156,7 +156,7 @@ const AddOrUpdateItem = ({
         console.log(fetchedData);
         const category = fetchedData.product.facetValues?.find(
           (obj) =>
-            obj.facetId === `${process.env.REACT_APP_VENDURE_CATEGORY_FACET_ID}`
+            obj.facetId === `${import.meta.env.VITE_VENDURE_CATEGORY_FACET_ID}`
         );
 
         //create images by adding cover image as well
@@ -359,7 +359,7 @@ const AddOrUpdateItem = ({
   //                   ?.trim()
   //                   ?.replace(/\W+/g, '-')
   //                   .toLowerCase(),
-  //                 languageCode: `${process.env.REACT_APP_VENDURE_LANGUAGE_CODE}`,
+  //                 languageCode: `${process.env.VITE_VENDURE_LANGUAGE_CODE}`,
   //               },
   //               enabled: product.enabled,
   //               facetValueIds: [sellerFacetValueId, product.categoryId], //remove only category facet id and add new one
@@ -423,7 +423,7 @@ const AddOrUpdateItem = ({
   //                   ?.trim()
   //                   ?.replace(/\W+/g, '-')
   //                   .toLowerCase(),
-  //                 languageCode: `${process.env.REACT_APP_VENDURE_LANGUAGE_CODE}`,
+  //                 languageCode: `${process.env.VITE_VENDURE_LANGUAGE_CODE}`,
   //               },
   //               enabled: product.enabled,
   //               facetValueIds: [sellerFacetValueId, product.categoryId],
@@ -537,7 +537,7 @@ const AddOrUpdateItem = ({
               name: product.name,
               description: product.description,
               slug: product.name?.trim()?.replace(/\W+/g, '-').toLowerCase(),
-              languageCode: `${process.env.REACT_APP_VENDURE_LANGUAGE_CODE}`,
+              languageCode: `${import.meta.env.VITE_VENDURE_LANGUAGE_CODE}`,
             },
             enabled: product.enabled,
             facetValueIds: [sellerFacetValueId, product.categoryId],
@@ -633,7 +633,7 @@ const AddOrUpdateItem = ({
               name: product.name,
               description: product.description,
               slug: product.name?.trim()?.replace(/\W+/g, '-').toLowerCase(),
-              languageCode: `${process.env.REACT_APP_VENDURE_LANGUAGE_CODE}`,
+              languageCode: `${import.meta.env.VITE_VENDURE_LANGUAGE_CODE}`,
             },
             enabled: product.enabled,
             facetValueIds: [sellerFacetValueId, product.categoryId], //remove only category facet id and add new one

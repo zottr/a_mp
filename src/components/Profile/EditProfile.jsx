@@ -11,10 +11,6 @@ import {
 import { ApolloError, useMutation } from '@apollo/client';
 import { UPDATE_ACTIVE_ADMINISTRATOR } from '../../libs/graphql/definitions/administrator-definitions';
 import {
-  Administrator,
-  UpdateActiveAdministratorInput,
-} from '../../libs/graphql/generated-types';
-import {
   CREATE_ASSETS,
   DELETE_ASSETS,
 } from '../../libs/graphql/definitions/product-definitions';

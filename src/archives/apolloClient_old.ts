@@ -2,9 +2,7 @@ import { ApolloClient, ApolloLink, InMemoryCache } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
 
-const API_URL = process.env.REACT_APP_VENDURE_SERVER_URL
-  ? process.env.REACT_APP_VENDURE_SERVER_URL
-  : `https://demo.vendure.io/shop-api`;
+const API_URL = import.meta.env.VITE_VENDURE_SERVER_URL;
 // If using bearer-token based session management, we'll store the token
 // in localStorage using this key.
 const AUTH_TOKEN_KEY = 'zottrAdminAuthToken';

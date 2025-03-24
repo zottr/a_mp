@@ -1,21 +1,11 @@
 // src/App.tsx
-import React from 'react';
-import RegistrationForm from './components/Registration_old/RegisterForm';
-import AdminWelcomePage from './components/Products_old/AdminWelcomePage';
 import { Route, Routes, Navigate, BrowserRouter } from 'react-router-dom';
-import { apolloClient } from './archives/apolloClient_old';
-
 import { UserProvider } from './context/UserContext';
 import ViewProfile from './components/Profile/ViewProfile';
 import { useAuth } from './context/AuthContext';
-import ProtectedRoute from './components/Products_old/ProtectedRoute';
 import Login from './components/new_Login/Login';
 import SignUpHome from './components/new_Registration/SignUpHome';
-import PhoneVerificationForm from './components/Registration_old/PhoneVerificationForm';
-import ProtectedSignupRoute from './components/Registration_old/ProtectedSignupRoute';
 import { VerificationProvider } from './context/VerificationContext';
-import ProtectedForgotPasswordRoute from './components/Registration_old/ProtectedForgotPasswordRoute';
-import ForgotPasswordForm from './components/Registration_old/ForgotPasswordForm';
 import useApolloClient from './hooks/useApolloClient';
 import { ApolloProvider } from '@apollo/client';
 import Home from './components/Home';
@@ -25,15 +15,10 @@ import Banners from './components/Banners';
 import PaymentDetails from './components/PaymentSettings';
 import StoreSettings from './components/StoreSettings';
 import OrderDetails from './components/Orders/OrderDetails';
+import ProtectedRoute from './components/common/ProtectedRoute';
 
-const App: React.FC = () => {
-  const { authToken, unsetAuthToken } = useAuth();
-
-  const logout = () => {
-    apolloClient.clearStore();
-    //remove auth token for logout
-    unsetAuthToken();
-  };
+function App() {
+  const { authToken } = useAuth();
 
   return (
     <ApolloProvider client={useApolloClient()}>
@@ -58,7 +43,7 @@ const App: React.FC = () => {
                 authToken ? <Navigate replace to="/home" /> : <SignUpHome />
               }
             />
-            <Route
+            {/* <Route
               path="/signup-phone-verification"
               element={
                 authToken ? (
@@ -69,8 +54,8 @@ const App: React.FC = () => {
                   </VerificationProvider>
                 )
               }
-            />
-            <Route
+            /> */}
+            {/* <Route
               path="/signupold"
               element={
                 <VerificationProvider>
@@ -79,8 +64,8 @@ const App: React.FC = () => {
                   />
                 </VerificationProvider>
               }
-            />
-            <Route
+            /> */}
+            {/* <Route
               path="/password-phone-verification"
               element={
                 <VerificationProvider>
@@ -97,7 +82,7 @@ const App: React.FC = () => {
                   />
                 </VerificationProvider>
               }
-            />
+            /> */}
             <Route path="/" element={<Navigate replace to="/home" />} />
             <Route
               path="/home"
@@ -183,7 +168,7 @@ const App: React.FC = () => {
                 />
               }
             /> */}
-            <Route
+            {/* <Route
               path="/homeold"
               element={
                 <ProtectedRoute
@@ -194,7 +179,7 @@ const App: React.FC = () => {
                   }
                 />
               }
-            />
+            /> */}
             <Route
               path="/viewProfile"
               element={
@@ -213,6 +198,6 @@ const App: React.FC = () => {
       </BrowserRouter>
     </ApolloProvider>
   );
-};
+}
 
 export default App;

@@ -3,9 +3,7 @@ import { setContext } from '@apollo/client/link/context';
 import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
 import { useAuth } from '../context/AuthContext';
 
-const API_URL = process.env.REACT_APP_VENDURE_SERVER_URL
-  ? process.env.REACT_APP_VENDURE_SERVER_URL
-  : `https://demo.vendure.io/admin-api`;
+const API_URL = import.meta.env.VITE_VENDURE_SERVER_URL;
 // If using bearer-token based session management, we'll store the token
 // in localStorage using this key.
 
