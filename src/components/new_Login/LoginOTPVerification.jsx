@@ -33,7 +33,7 @@ function LoginOTPVerification({ phone, setSentOTP }) {
   const [authenticateAdmin] = useMutation(AUTHENTICATE_ADMIN_VIA_OTP);
 
   // countdown states
-  const [timer, setTimer] = useState(6); // 10 minutes in seconds
+  const [timer, setTimer] = useState(600); // 10 minutes in seconds
   const [isTimerActive, setIsTimerActive] = useState(true);
 
   const resendOTP = async () => {
