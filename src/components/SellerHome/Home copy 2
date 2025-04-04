@@ -16,8 +16,8 @@ import { GET_FACET_VALUE_LIST } from '../../libs/graphql/definitions/facet-defin
 import AddOrUpdateItem from '../CreateProduct/AddOrUpdateItem';
 import { useLazyQuery } from '@apollo/client';
 import CustomSnackBar from '../common/Snackbars/CustomSnackBar';
-import Notifications from './Notifications';
-import HomeLinks from './HomeLinks';
+import Notifications from '../Notifications';
+import HomeLinks from './SellerHomeLinks';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -26,7 +26,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 function Home() {
   const theme = useTheme();
   const { adminUser } = useUserContext();
-  const [sellerFacetValueId, setSellerFacetValueId] = useState('');
+  // const [sellerFacetValueId, setSellerFacetValueId] = useState('');
   const [productToEditId, setProductToEditId] = useState(null);
 
   const [dialogOpen, setDialogOpen] = useState(false); // State for dialog visibility
@@ -66,17 +66,18 @@ function Home() {
     window.history.scrollRestoration = 'manual';
   }, []);
 
-  useEffect(() => {
-    if (adminUser) {
-      fetchFacets();
-      if (
-        fValueData?.facetValues?.totalItems &&
-        fValueData?.facetValues?.totalItems > 0
-      ) {
-        setSellerFacetValueId(fValueData?.facetValues.items[0].id);
-      }
-    }
-  }, [adminUser, fetchFacets, fValueData]);
+  // useEffect(() => {
+  //   if (adminUser) {
+  //     fetchFacets();
+  //     console.log(fValueData);
+  //     if (
+  //       fValueData?.facetValues?.totalItems &&
+  //       fValueData?.facetValues?.totalItems > 0
+  //     ) {
+  //       setSellerFacetValueId(fValueData?.facetValues.items[0].id);
+  //     }
+  //   }
+  // }, [adminUser, fetchFacets, fValueData]);
 
   return (
     <>
@@ -170,13 +171,11 @@ function Home() {
           handleDialogClose={handleDialogClose}
           adminId={adminUser?.id ?? ''}
           adminName={adminUser?.firstName ?? ''}
-          sellerFacetValueId={sellerFacetValueId}
+          // sellerFacetValueId={sellerFacetValueId}
           callbackOnAdd={() => {
             setNewProductCreated(true);
           }}
           productToEditId={productToEditId}
-          productToEdit={null}
-          initialAssets={null}
         />
       </Dialog>
       <CustomSnackBar

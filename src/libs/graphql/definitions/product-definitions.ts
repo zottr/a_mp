@@ -393,6 +393,8 @@ export const GET_PRODUCT_TO_EDIT = gql`
       description
       enabled
       featuredAsset {
+        id
+        name
         preview
       }
       assets {
@@ -407,6 +409,24 @@ export const GET_PRODUCT_TO_EDIT = gql`
         id
         name
         facetId
+      }
+    }
+  }
+`;
+
+export const GET_PRODUCT_ASSETS_TO_DELETE = gql`
+  query GetProductAssetsToDelete($id: ID!) {
+    product(id: $id) {
+      id
+      featuredAsset {
+        id
+        name
+        preview
+      }
+      assets {
+        id
+        name
+        preview
       }
     }
   }

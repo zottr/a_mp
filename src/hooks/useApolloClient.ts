@@ -66,6 +66,7 @@ const useApolloClient = () => {
       afterwareLink,
       httpLink,
     ]),
+    // cache: new InMemoryCache(),
     cache: new InMemoryCache(),
   });
   return client;

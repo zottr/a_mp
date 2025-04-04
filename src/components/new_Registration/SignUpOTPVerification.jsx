@@ -20,8 +20,15 @@ import { useMutation } from '@apollo/client';
 import { ResponseStatus } from '../../utils/ResponseStatus';
 import { ErrorCode } from '../../utils/ErrorCodes';
 import SignUpOTPExpiredErrorAlert from '../common/Alerts/SignUpOTPExpiredErrorAlert';
+import EditIcon from '@mui/icons-material/Edit';
+import CustomSnackBar from '../common/Snackbars/CustomSnackBar';
 
-function SignUpOTPVerification({ phone, setSentOTP, setVerifiedOTP }) {
+function SignUpOTPVerification({
+  phone,
+  setSentOTP,
+  setVerifiedOTP,
+  setOTPForReg,
+}) {
   const theme = useTheme();
   const [resendingOTP, setResendingOTP] = useState(false);
   const [verifyingOTP, setVerifyingOTP] = useState(false);
@@ -43,6 +50,11 @@ function SignUpOTPVerification({ phone, setSentOTP, setVerifiedOTP }) {
     setOtpInvalidError(false);
     setOtpExpiredError(false);
   }
+
+  const setOTPValue = (otp) => {
+    setOTP(otp);
+    setOTPForReg(otp);
+  };
 
   const resendOTP = async () => {
     try {
@@ -150,183 +162,181 @@ function SignUpOTPVerification({ phone, setSentOTP, setVerifiedOTP }) {
   };
 
   return (
-    <Box
-    // sx={{
-    //   animation: 'slideInFromRight 0.2s ease-out', // Applying the animation
-    // }}
-    >
-      <Grid container>
-        <Grid item xs={12}>
-          <Stack
-            gap={0.5}
+    <Box>
+      <Stack
+        gap={3}
+        sx={{
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <Typography
+          variant="h5"
+          sx={{
+            color: theme.palette.grey[900],
+          }}
+        >
+          Create New Account
+        </Typography>
+        <Stack sx={{ display: 'flex', alignItems: 'center' }}>
+          <Typography variant="h7" sx={{ color: 'grey.700' }}>
+            Enter 6-digit verification code
+          </Typography>
+          <Typography
+            variant="b1"
+            align="center"
+            color={theme.palette.grey[600]}
+          >
+            received on Whatsapp +91{phone}
+          </Typography>
+
+          <Box sx={{ mt: 4 }}>
+            <OtpInput
+              value={otp}
+              onChange={setOTPValue}
+              numInputs={6}
+              renderInput={(props) => <input {...props} />}
+              inputStyle={{
+                width: '45px',
+                height: '45px',
+                margin: '5px',
+                fontSize: '32px',
+                borderRadius: '5px',
+                border: '1px solid rgba(0,0,0,0.5)',
+              }}
+              shouldAutoFocus
+            />
+            {verifyingOTP && (
+              <Box sx={{ marginTop: '20px' }}>
+                <LinearProgress color="info" />
+              </Box>
+            )}
+          </Box>
+          {/* Countdown Timer */}
+          <Typography
             sx={{
+              marginTop: 2,
+              color: theme.palette.warning.main,
+              // Using the default monospaced font so the text doesn't
+              // move horizontally with changing timeer digits as mono-
+              //-space letters all have same widths
+              fontFamily: 'monospace',
+            }}
+            variant="heavyb1"
+          >
+            Code expiring in: {formatTime(timer)}
+          </Typography>
+
+          {/*error alerts*/}
+          {otpInvalidError && !verifyingOTP && (
+            <Box sx={{ marginTop: '20px' }}>
+              <SignUpOTPInvalidErrorAlert />
+            </Box>
+          )}
+          {otpExpiredError && !verifyingOTP && (
+            <Box sx={{ marginTop: '20px' }}>
+              <SignUpOTPExpiredErrorAlert />
+            </Box>
+          )}
+        </Stack>
+        <Stack
+          sx={{
+            width: '100%',
+            marginTop: '20px',
+          }}
+        >
+          <Typography color={theme.palette.grey[700]} variant="b1">
+            Did not receive a verification code ?
+          </Typography>
+          <Stack
+            direction="row"
+            sx={{
+              mt: 2,
               width: '100%',
               display: 'flex',
-              justifyContent: 'flex-start',
               alignItems: 'center',
+              justifyContent: 'space-between',
             }}
           >
-            <Typography
-              variant="h5"
-              sx={{
-                color: theme.palette.grey[900],
+            <LoadingButton
+              loading={resendingOTP && !serviceError}
+              variant="contained"
+              size="large"
+              type="button"
+              buttonStyles={{
+                backgroundColor: 'primary.light',
+              }}
+              buttonContainerStyles={{
+                width: '50%',
+                height: '45px',
+              }}
+              label="Send code again"
+              labelStyles={{
+                color: 'white',
+              }}
+              loadingLabel="Sending..."
+              loadingLabelStyles={{
+                color: 'white',
+              }}
+              labelVariant="button1"
+              progressSize={24}
+              progressThickness={4}
+              progressStyles={{
+                color: 'white',
+              }}
+              onClick={resendOTP}
+            />
+            <Button
+              onClick={() => {
+                setSentOTP(false); //back to login landing page
               }}
             >
-              Enter verification code
-            </Typography>
-            <Typography
-              variant="b1"
-              align="center"
-              color={theme.palette.grey[600]}
-            >
-              received on Whatsapp +91{phone}
-            </Typography>
-            <Box sx={{ marginTop: '30px' }}>
-              <OtpInput
-                value={otp}
-                onChange={setOTP}
-                numInputs={6}
-                renderInput={(props) => <input {...props} />}
-                inputStyle={{
-                  width: '45px',
-                  height: '45px',
-                  margin: '5px',
-                  fontSize: '32px',
-                  borderRadius: '5px',
-                  border: '1px solid rgba(0,0,0,0.5)',
+              <EditIcon
+                sx={{
+                  fontSize: '1rem',
+                  color: 'grey.600',
                 }}
-                shouldAutoFocus
               />
-              {verifyingOTP && (
-                <Box sx={{ marginTop: '20px' }}>
-                  <LinearProgress color="info" />
-                </Box>
-              )}
-            </Box>
-            {/* Countdown Timer */}
-            <Typography
-              sx={{
-                marginTop: 2,
-                color: theme.palette.warning.main,
-                // Using the default monospaced font so the text doesn't
-                // move horizontally with changing timeer digits as mono-
-                //-space letters all have same widths
-                fontFamily: 'monospace',
-              }}
-              variant="heavyb1"
-            >
-              Code expiring in: {formatTime(timer)}
-            </Typography>
-
-            {/*error alerts*/}
-            <Stack
-              className="flexCenter"
-              sx={{
-                marginTop: '25px',
-              }}
-            >
-              {otpInvalidError && !verifyingOTP && (
-                <SignUpOTPInvalidErrorAlert />
-              )}
-              {otpExpiredError && !verifyingOTP && (
-                <SignUpOTPExpiredErrorAlert />
-              )}
-            </Stack>
-            <Stack
-              sx={{
-                width: '100%',
-                marginTop: '40px',
-              }}
-            >
-              <Typography color={theme.palette.grey[600]} variant="b1">
-                Did not receive a verification code ?
+              <Typography
+                color="grey.600"
+                sx={{
+                  ml: 0.2,
+                  textTransform: 'none',
+                }}
+                variant="button2"
+              >
+                Change number
               </Typography>
-              <Stack
-                direction="row"
-                sx={{
-                  marginTop: '10px',
-                  width: '100%',
-                }}
-              >
-                <Box
-                  sx={{
-                    width: '50%',
-                    display: 'flex',
-                    justifyContent: 'flex-end',
-                  }}
-                >
-                  <LoadingButton
-                    loading={resendingOTP && !serviceError}
-                    variant="contained"
-                    size="large"
-                    type="button"
-                    buttonStyles={{
-                      backgroundColor: 'primary.light',
-                      height: '20px',
-                    }}
-                    buttonContainerStyles={{
-                      width: '100%',
-                      height: '45px',
-                    }}
-                    label="Resend code"
-                    labelStyles={{
-                      color: 'white',
-                    }}
-                    labelVariant="button1"
-                    progressSize={24}
-                    progressThickness={4}
-                    progressStyles={{
-                      color: 'white',
-                    }}
-                    onClick={resendOTP}
-                  />
-                </Box>
-                <Stack
-                  direction="row"
-                  sx={{
-                    width: '50%',
-                    display: 'flex',
-                    justifyContent: 'flex-end',
-                    alignItems: 'center',
-                  }}
-                >
-                  <ArrowBackIosIcon
-                    sx={{ fontSize: '12px', marginRight: '-9px' }}
-                  />
-                  <Button
-                    onClick={() => {
-                      setSentOTP(false); //back to welcome screen
-                    }}
-                  >
-                    <Typography
-                      color={theme.palette.common.black}
-                      sx={{
-                        textTransform: 'none',
-                      }}
-                      variant="button2"
-                    >
-                      Change number
-                    </Typography>
-                  </Button>
-                </Stack>
-              </Stack>
-
-              {/*error alerts*/}
-              <Stack
-                className="flexCenter"
-                sx={{
-                  marginTop: '25px',
-                }}
-              >
-                {serviceError && <ServiceErrorAlert />}
-                {resentOTP && !resendingOTP && (
-                  <SuccessAlert title="OTP resent successfully" />
-                )}
-              </Stack>
-            </Stack>
+            </Button>
           </Stack>
-        </Grid>
-      </Grid>
+
+          {/*error alerts*/}
+          <Stack
+            className="flexCenter"
+            sx={{
+              marginTop: '25px',
+            }}
+          >
+            {serviceError && <ServiceErrorAlert />}
+            {/* {resentOTP && !resendingOTP && (
+              <SuccessAlert title="OTP resent successfully" />
+            )} */}
+          </Stack>
+        </Stack>
+      </Stack>
+      <CustomSnackBar
+        message={`Sent verification code`}
+        severity="success"
+        color="success"
+        duration={3000}
+        vertical="top"
+        horizontal="center"
+        open={resentOTP}
+        handleClose={() => {
+          setResentOTP(false);
+        }}
+      />
     </Box>
   );
 }

@@ -42,30 +42,23 @@ export default function OrderStatusDialog({ open, handleClose, status }) {
         <DialogContent>
           <DialogContentText id="alert-dialog-slide-description">
             {status === 'accepted' && (
-              <Typography variant="b2">
-                You have accepted this order. Let customer know that their order
-                is confirmed.
+              <Typography variant="b1">
+                Send order confirmation message via Whatsapp
               </Typography>
             )}
             {status === 'rejected' && (
-              <Typography variant="b2">
-                You have declined this order. Let customer know that their order
-                won't be delivered.
+              <Typography variant="b1">
+                Send order rejection message via Whatsapp
               </Typography>
             )}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button
-            variant="contained"
-            size="large"
-            onClick={handleClose}
-            // sx={{ backgroundColor: 'hsl(122, 39%, 49%)' }}
-          >
-            <Typography variant="b1">Message Customer</Typography>
+          <Button variant="contained" size="large" onClick={handleClose}>
+            <Typography variant="button1">Message Customer</Typography>
           </Button>
           <Button variant="text" size="large" onClick={handleClose}>
-            <Typography variant="button1" color={theme.palette.grey[700]}>
+            <Typography variant="button1" color={theme.palette.grey[500]}>
               skip
             </Typography>
           </Button>

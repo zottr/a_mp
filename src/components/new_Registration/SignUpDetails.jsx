@@ -47,23 +47,23 @@ function SignUpDetails({ phone, setSellerRegistered }) {
     resetErrorStates();
     if (isValidFormData(name, businessName, address)) {
       setSellerRegistered(true);
-      // try {
-      //   const response = await axiosClient.post('mpregistration/mpseller', {
-      //     sellerName: name,
-      //     businessName: businessName,
-      //     phoneNumber: phone,
-      //   });
-      //   if (response.data.status === ResponseStatus.SUCCESS)
-      //     setSellerRegistered(true);
-      //   else {
-      //     //ideally axios will throw an exception if nest returns a response with an error
-      //     //code, but I call the error handling code here again just for safety if axios
-      //     //doesn't throw an error for some cases
-      //     handleRegistrationError();
-      //   }
-      // } catch (error) {
-      //   handleRegistrationError();
-      // }
+      try {
+        const response = await axiosClient.post('mpregistration/mpseller', {
+          sellerName: name,
+          businessName: businessName,
+          phoneNumber: phone,
+        });
+        if (response.data.status === ResponseStatus.SUCCESS)
+          setSellerRegistered(true);
+        else {
+          //ideally axios will throw an exception if nest returns a response with an error
+          //code, but I call the error handling code here again just for safety if axios
+          //doesn't throw an error for some cases
+          handleRegistrationError();
+        }
+      } catch (error) {
+        handleRegistrationError();
+      }
     } else {
       applyErrorStates(name, businessName, address);
     }

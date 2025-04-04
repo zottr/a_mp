@@ -1,6 +1,7 @@
 import {
   Avatar,
   Box,
+  Button,
   Divider,
   Grid,
   IconButton,
@@ -11,24 +12,42 @@ import {
   Typography,
 } from '@mui/material';
 import { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import ProductStateInfoAlert from './ProductStateInfoAlert';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import ProductStateInfoAlert from './ServiceStateInfoAlert';
 import ShareIcon from '@mui/icons-material/Share';
 import PhotoIcon from '@mui/icons-material/Photo';
 import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { UPDATE_PRODUCT } from '../../libs/graphql/definitions/product-definitions';
+import { UPDATE_PRODUCT } from '../../../libs/graphql/definitions/product-definitions';
 import { useMutation } from '@apollo/client';
-import CustomSnackBar from '../common/Snackbars/CustomSnackBar';
+import CustomSnackBar from '../../common/Snackbars/CustomSnackBar';
+import DeleteProductDialog from '../../CreateProduct/DeleteProductDialog';
 
-function Item({ item, onItemUpdate, handleEditProduct }) {
+interface ItemProps {
+  item: any;
+  onItemUpdate: any;
+  setProductAction: any;
+  setUpdatedProductName: any;
+  setRefetchProducts: any;
+}
+
+const Item: React.FC<ItemProps> = ({
+  item,
+  onItemUpdate,
+  setProductAction,
+  setUpdatedProductName,
+  setRefetchProducts,
+}) => {
+  const navigate = useNavigate();
   const [checked, setChecked] = useState(true);
   const [statusMessage, setStatusMessage] = useState('');
   const [sendAlert, setSendAlert] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [enableDisableProduct] = useMutation(UPDATE_PRODUCT);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
-  const handleMenuOpen = (event) => {
+  const handleMenuOpen = (event: any) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -40,7 +59,7 @@ function Item({ item, onItemUpdate, handleEditProduct }) {
     setSendAlert(false);
   }
 
-  const toggleProductVisibility = async (event) => {
+  const toggleProductVisibility = async (event: any) => {
     const response = await enableDisableProduct({
       variables: {
         input: {
@@ -61,8 +80,25 @@ function Item({ item, onItemUpdate, handleEditProduct }) {
   };
 
   const handleClickEdit = () => {
-    handleEditProduct(item.id);
+    navigate(`/service/${item.id}`);
+    // handleEditProduct(item.id);
   };
+
+  function afterProductDeleted() {
+    setOpenDeleteDialog(false);
+    setUpdatedProductName(item.name);
+    setProductAction('deleted');
+    setRefetchProducts(true);
+    // const productData = { action: 'deleted', name: item.name };
+    // Store the data in sessionStorage
+    // sessionStorage.setItem('productData', JSON.stringify(productData));
+    // navigate('/services/home');
+  }
+
+  function deleteItem() {
+    handleMenuClose();
+    setOpenDeleteDialog(true);
+  }
 
   return (
     <>
@@ -81,7 +117,7 @@ function Item({ item, onItemUpdate, handleEditProduct }) {
           >
             <Box
               component={RouterLink}
-              to={`/item`}
+              to={`/product/${item.id}`}
               sx={{ textDecoration: 'none', width: '100%', height: '100%' }}
             >
               <Avatar
@@ -102,7 +138,7 @@ function Item({ item, onItemUpdate, handleEditProduct }) {
           <Grid item xs={6}>
             <Box
               component={RouterLink}
-              to={`/item`}
+              to={`/product/${item.id}`}
               sx={{ textDecoration: 'none' }}
             >
               <Typography
@@ -120,35 +156,30 @@ function Item({ item, onItemUpdate, handleEditProduct }) {
             </Box>
           </Grid>
           <Grid container item xs={3} className={'flexCenter'}>
-            <Grid item xs={4} className={'flexRight'}>
+            <Grid item xs={6} className={'flexRight'}>
               <IconButton
                 onClick={handleClickEdit}
-                sx={{
-                  pointerEvents: checked ? 'auto' : 'none',
-                  // opacity: checked ? 1 : 0.5,
-                }}
+                sx={
+                  {
+                    // pointerEvents: checked ? 'auto' : 'none',
+                    // opacity: checked ? 1 : 0.5,
+                  }
+                }
               >
                 <EditIcon fontSize="small" color="primary" />
               </IconButton>
             </Grid>
-            <Grid item xs={4} className={'flexCenter'}>
-              <Switch
-                color="primary"
-                defaultChecked
-                onChange={toggleProductVisibility}
-                checked={item.enabled}
-                size="small"
-              />
-            </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={6} className={'flexRight'}>
               <IconButton
-                onClick={handleMenuOpen}
-                sx={{
-                  pointerEvents: checked ? 'auto' : 'none',
-                  // opacity: checked ? 1 : 0.5,
-                }}
+                onClick={() => {}}
+                sx={
+                  {
+                    // pointerEvents: checked ? 'auto' : 'none',
+                    // opacity: checked ? 1 : 0.5,
+                  }
+                }
               >
-                <MoreVertIcon fontSize="medium" color="primary" />
+                <ShareIcon fontSize="small" color="primary" />
               </IconButton>
             </Grid>
           </Grid>
@@ -185,23 +216,63 @@ function Item({ item, onItemUpdate, handleEditProduct }) {
           },
         }}
       >
-        <MenuItem
-          component={RouterLink}
-          to="/order-history"
-          onClick={handleMenuClose}
-        >
-          Orders
+        <MenuItem>
+          <Button>
+            <Stack
+              gap={1}
+              direction="row"
+              sx={{ display: 'flex', alignItems: 'center' }}
+            >
+              <Typography variant="button2" sx={{ color: 'grey.700' }}>
+                Share
+              </Typography>
+              <ShareIcon fontSize="small" sx={{ color: 'primary.main' }} />
+            </Stack>
+          </Button>
         </MenuItem>
-        <MenuItem
-          component={RouterLink}
-          to="/favourites"
-          onClick={handleMenuClose}
-        >
-          Favorites
+        <Divider />
+        <MenuItem>
+          <Button onClick={deleteItem}>
+            <Stack
+              gap={1}
+              direction="row"
+              sx={{ display: 'flex', alignItems: 'center' }}
+            >
+              <Typography variant="button2" sx={{ color: 'grey.700' }}>
+                Delete
+              </Typography>
+              <DeleteIcon fontSize="small" sx={{ color: 'warning.main' }} />
+            </Stack>
+          </Button>
+        </MenuItem>
+        <Divider />
+        <MenuItem>
+          <Button onClick={handleClickEdit}>
+            <Stack
+              gap={1}
+              direction="row"
+              sx={{ display: 'flex', alignItems: 'center' }}
+            >
+              <Typography variant="button2" sx={{ color: 'grey.700' }}>
+                Edit
+              </Typography>
+              <EditIcon fontSize="small" sx={{ color: 'success.main' }} />
+            </Stack>
+          </Button>
         </MenuItem>
       </Menu>
+      <DeleteProductDialog
+        open={openDeleteDialog}
+        name={item.name}
+        productToEditId={item.id}
+        fetchImages={true}
+        afterProductDeleted={afterProductDeleted}
+        closeDialog={() => {
+          setOpenDeleteDialog(false);
+        }}
+      />
     </>
   );
-}
+};
 
 export default Item;

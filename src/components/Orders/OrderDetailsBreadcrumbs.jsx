@@ -13,7 +13,7 @@ export default function OrderDetailsBreadcrumbs({ id }) {
     >
       <Link
         component={RouterLink}
-        to={'/home'}
+        to={'/seller/home'}
         underline="hover"
         sx={{ display: 'flex', alignItems: 'flex-start' }}
         color="inherit"
@@ -23,7 +23,7 @@ export default function OrderDetailsBreadcrumbs({ id }) {
       </Link>
       <Link
         component={RouterLink}
-        to={'/orders'}
+        to={'/seller/orders'}
         underline="hover"
         sx={{ display: 'flex', alignItems: 'flex-start' }}
         color="inherit"

@@ -1,5 +1,5 @@
 import { Box, Card, Grid, Stack, useMediaQuery, useTheme } from '@mui/material';
-import Logo from './logo_large.png';
+import Logo from '/logos/zottr_logo_large.svg';
 import SignUpLandingPage from './SignUpLandingPage';
 import SignUpOTPVerification from './SignUpOTPVerification';
 import SignUpForm from './forms/SignUpForm';
@@ -9,11 +9,17 @@ import SignUpSuccess from './SignUpSuccess';
 
 function SignUpHome() {
   const theme = useTheme();
+  const [otp, setOTP] = useState('');
   const [sentOTP, setSentOTP] = useState(false);
   const [verifiedOTP, setVerifiedOTP] = useState(false);
   const [sellerRegistered, setSellerRegistered] = useState(false);
   const [phone, setPhone] = useState('');
   const elevation = useMediaQuery(theme.breakpoints.down('sm')) ? 0 : 2;
+
+  const setOTPForReg = (otpVal) => {
+    setOTP(otpVal);
+  };
+
   return (
     <>
       {!sellerRegistered && (
@@ -26,6 +32,7 @@ function SignUpHome() {
             xl={3}
             display="flex"
             justifyContent="center"
+            alignItems="center"
           >
             <Card
               elevation={elevation}
@@ -41,9 +48,9 @@ function SignUpHome() {
                 display="flex"
                 alignItems="center"
                 justifyContent="center"
-                mb={5}
+                sx={{ mb: 3 }}
               >
-                <img src={Logo} alt="marketplace logo" height="40px" />
+                <img src={Logo} alt="zottr logo" height="45px" />
               </Box>
               {!sentOTP && !verifiedOTP && (
                 <SignUpLandingPage
@@ -57,6 +64,7 @@ function SignUpHome() {
                   phone={phone}
                   setSentOTP={setSentOTP}
                   setVerifiedOTP={setVerifiedOTP}
+                  setOTPForReg={setOTPForReg}
                 />
               )}
               {verifiedOTP && (
@@ -69,7 +77,7 @@ function SignUpHome() {
           </Grid>
         </Grid>
       )}
-      {sellerRegistered && <SignUpSuccess />}
+      {sellerRegistered && <SignUpSuccess phone={phone} otp={otp} />}
     </>
   );
 }

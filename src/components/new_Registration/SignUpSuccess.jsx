@@ -1,11 +1,40 @@
 import { Button, Container, Stack, Typography, useTheme } from '@mui/material';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { CheckCircle } from '@mui/icons-material'; // CheckCircleIcon from MUI
 import { motion } from 'framer-motion'; // Import framer-motion
+import { AUTHENTICATE_ADMIN_VIA_OTP } from '../../libs/graphql/definitions/auth-definitions';
+import { useMutation } from '@apollo/client';
+import ServiceErrorAlert from '../common/Alerts/ServiceErrorAlert';
+import { useState } from 'react';
 
-function SignUpSuccess() {
+function SignUpSuccess({ phone, otp }) {
   const theme = useTheme();
-  console.log(theme);
+  const navigate = useNavigate();
+  const [authenticateAdmin] = useMutation(AUTHENTICATE_ADMIN_VIA_OTP);
+
+  const loginAndNavigateToHome = async () => {
+    try {
+      const result = await authenticateAdmin({
+        variables: {
+          phoneNumber: phone,
+          otp: otp,
+        },
+      });
+      switch (result.data.authenticate.__typename) {
+        case 'CurrentUser':
+          navigate('/home');
+          break;
+        case 'InvalidCredentialsError':
+        case 'NativeAuthStrategyError':
+        default:
+          navigate('/login');
+      }
+    } catch (error) {
+      console.log(error);
+      navigate('/login');
+    }
+  };
+
   return (
     <Container
       sx={{
@@ -54,14 +83,11 @@ function SignUpSuccess() {
           Your seller account has been created successfully!
         </Typography>
         <Button
-          component={RouterLink}
-          to={'/home'}
+          onClick={loginAndNavigateToHome}
           variant="contained"
           sx={{ width: '100%', height: '50px', borderRadius: '25px' }}
         >
-          <Typography variant="button1" sx={{}}>
-            Go To Dashboard
-          </Typography>
+          <Typography variant="button1">Go To Dashboard</Typography>
         </Button>
       </Stack>
     </Container>

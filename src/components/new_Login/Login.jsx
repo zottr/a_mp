@@ -1,5 +1,5 @@
 import { Box, Card, Grid, Stack, useMediaQuery, useTheme } from '@mui/material';
-import Logo from './logo.png';
+import Logo from '/logos/zottr_logo_large.svg';
 import LoginForm from './LoginForm';
 import LoginOTPVerification from './LoginOTPVerification';
 import { useState } from 'react';
@@ -29,23 +29,27 @@ function WelcomePage() {
           <Card
             elevation={useMediaQuery(theme.breakpoints.down('sm')) ? 0 : 2}
             sx={{
-              p: 4,
+              py: 2,
+              px: 3,
               zIndex: 1,
               width: '100%',
               maxWidth: '500px',
             }}
           >
-            <Stack spacing={5} display="flex" alignItems="center">
-              <Box display="flex" alignItems="center" justifyContent="center">
-                <img src={Logo} alt="marketplace logo" height="80px" />
-              </Box>
-              {!sentOTP && (
-                <LoginForm setSentOTP={setSentOTP} setPhone={setPhone} />
-              )}
-              {sentOTP && (
-                <LoginOTPVerification phone={phone} setSentOTP={setSentOTP} />
-              )}
-            </Stack>
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              sx={{ mb: 3 }}
+            >
+              <img src={Logo} alt="zottr logo" height="45px" />
+            </Box>
+            {!sentOTP && (
+              <LoginForm setSentOTP={setSentOTP} setPhone={setPhone} />
+            )}
+            {sentOTP && (
+              <LoginOTPVerification phone={phone} setSentOTP={setSentOTP} />
+            )}
           </Card>
         </Grid>
       </Grid>

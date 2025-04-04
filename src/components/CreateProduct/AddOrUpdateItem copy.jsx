@@ -45,11 +45,9 @@ const AddOrUpdateItem = ({
   handleDialogClose,
   adminId,
   adminName,
-  sellerFacetValueId,
+  // sellerFacetValueId,
   callbackOnAdd,
   productToEditId,
-  productToEdit,
-  initialAssets,
 }) => {
   const [createAssets] = useMutation(CREATE_ASSETS);
   const [createProduct] = useMutation(CREATE_PRODUCT);
@@ -61,7 +59,7 @@ const AddOrUpdateItem = ({
   const [creatingOrUpdatingProduct, setCreatingOrUpdatingProduct] =
     useState(false);
   const [productUpdated, setProductUpdated] = useState(false);
-  const [productToEdit2, setProductToEdit2] = useState(null);
+  const [productToEdit, setProductToEdit] = useState(null);
 
   const [existingImages, setExistingImages] = useState([]);
   const [existingImagesToRemove, setExistingImagesToRemove] = useState([]);
@@ -88,14 +86,14 @@ const AddOrUpdateItem = ({
 
   const theme = useTheme();
 
-  const initialData = productToEdit2 || {
+  const initialData = productToEdit || {
     id: '',
     name: '',
     description: '',
     price: null,
     enabled: true,
     categoryId: 'choose_category_label',
-    category: '',
+    categoryName: '',
     mainImage: '',
     previewMainImage: '',
   };
@@ -175,14 +173,14 @@ const AddOrUpdateItem = ({
 
         setExistingImages(updatedAllImages);
 
-        setProductToEdit2({
+        setProductToEdit({
           id: fetchedData.product.id,
           name: fetchedData.product.name,
           description: fetchedData.product.description,
           price: fetchedData.product.variants[0]?.price,
           enabled: fetchedData.product.enabled,
           categoryId: category?.id,
-          category: category?.name ?? '',
+          categoryName: category?.name ?? '',
           mainImage: fetchedData.product.featuredAsset,
           previewMainImage: fetchedData.product.featuredAsset?.preview,
         });
@@ -210,7 +208,7 @@ const AddOrUpdateItem = ({
     setProduct((prev) => ({
       ...prev,
       categoryId: value,
-      category:
+      categoryName:
         categories?.facetValues?.items?.find((obj) => obj.id === value)?.name ??
         '',
     }));
@@ -274,7 +272,7 @@ const AddOrUpdateItem = ({
       price: null,
       enabled: true,
       categoryId: '',
-      category: '',
+      categoryName: '',
       mainImage: '',
       previewMainImage: '',
     });
@@ -306,7 +304,7 @@ const AddOrUpdateItem = ({
   //     }));
   //   }
   //   if (product.name && product.price && product.category) {
-  //     if (productToEditId != null && productToEdit2 != null) {
+  //     if (productToEditId != null && productToEdit != null) {
   //       if (removedImages && removedImages?.length > 0) {
   //         try {
   //           await deleteAssets({
@@ -486,14 +484,14 @@ const AddOrUpdateItem = ({
         price: true,
       }));
     }
-    if (!product.category) {
+    if (!product.categoryName) {
       setValidationErrors((prev) => ({
         ...prev,
         category: true,
       }));
     }
-    if (product.name && product.price && product.category) {
-      if (productToEditId != null && productToEdit2 != null) {
+    if (product.name && product.price && product.categoryName) {
+      if (productToEditId != null && productToEdit != null) {
         updateExistingProduct();
       } else {
         createNewProduct();
@@ -540,7 +538,8 @@ const AddOrUpdateItem = ({
               languageCode: `${import.meta.env.VITE_VENDURE_LANGUAGE_CODE}`,
             },
             enabled: product.enabled,
-            facetValueIds: [sellerFacetValueId, product.categoryId],
+            // facetValueIds: [sellerFacetValueId, product.categoryId],
+            facetValueIds: [product.categoryId],
             featuredAssetId: featuredAsset,
             assetIds: remainingAssets,
             customFields: {
@@ -550,6 +549,7 @@ const AddOrUpdateItem = ({
           },
         },
       });
+      console.log(result);
       const newProd = result?.data?.createProduct;
       if (!!result?.data) {
         const variantsResult = await createProductVariant({
@@ -636,7 +636,8 @@ const AddOrUpdateItem = ({
               languageCode: `${import.meta.env.VITE_VENDURE_LANGUAGE_CODE}`,
             },
             enabled: product.enabled,
-            facetValueIds: [sellerFacetValueId, product.categoryId], //remove only category facet id and add new one
+            // facetValueIds: [sellerFacetValueId, product.categoryId], //remove only category facet id and add new one
+            facetValueIds: [product.categoryId], //remove only category facet id and add new one
             featuredAssetId: featuredAsset,
             assetIds: remainingAssets,
           },
@@ -679,14 +680,14 @@ const AddOrUpdateItem = ({
   }, [fetchProduct, productToEditId]);
 
   useEffect(() => {
-    if (productToEditId != null && productToEdit2 != null) {
-      setProduct(productToEdit2);
+    if (productToEditId != null && productToEdit != null) {
+      setProduct(productToEdit);
       if (existingImages) {
         const index = existingImages?.length ? existingImages.length - 1 : -1;
         setMainImageIndex(`existing-${index}`);
       }
     }
-  }, [productToEdit2, existingImages, productToEditId]);
+  }, [productToEdit, existingImages, productToEditId]);
 
   return (
     <Box sx={{ mb: 5 }}>

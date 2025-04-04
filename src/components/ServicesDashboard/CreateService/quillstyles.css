@@ -1,0 +1,29 @@
+.ql-editor::before {
+  color: #999; /* Placeholder text color */
+  font-style: italic; /* Italic style for placeholder */
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  pointer-events: none; /* Prevents interaction with the placeholder */
+}
+
+.ql-editor {
+  font-family: 'Poppins', sans-serif; /* Use your desired font for react quill editor section*/
+  font-style: 'normal';
+  /* font-size: 0.875rem; */
+  font-size: 0.875rem;
+}
+
+.ql-editor h1 {
+  font-size: 3.75rem;
+  font-weight: 500;
+}
+
+.ql-editor h2 {
+  font-size: 3rem;
+  font-weight: 600;
+}
+
+.ql-editor h3 {
+  font-size: '2.125rem';
+  font-weight: 600;
+}

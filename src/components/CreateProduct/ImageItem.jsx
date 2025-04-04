@@ -10,7 +10,6 @@ function ImageItem({
   handleSelectCoverImage,
   handleRemoveImage,
 }) {
-  console.log('image index: ', index, 'main image index: ', mainImageIndex);
   return (
     <Box
       className="flexCenter"
@@ -22,8 +21,10 @@ function ImageItem({
       }}
       border={
         mainImageIndex === (existing ? `existing-${index}` : `new-${index}`)
-          ? '1px solid #1976d2'
+          ? // ? '1px solid #1976d2'
+            '1px solid #FFA000'
           : '1px solid #e3f2fd'
+        //'1px solid hsl(45, 100%, 85%)'
       }
     >
       <Box

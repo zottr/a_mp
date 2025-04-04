@@ -5,16 +5,22 @@ import StoreIcon from '@mui/icons-material/Store';
 import EditIcon from '@mui/icons-material/Edit';
 import SettingsIcon from '@mui/icons-material/Settings';
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
+import { useNavigate } from 'react-router-dom';
 
-function HomeLinks() {
+function SellerHomeLinks() {
   const theme = useTheme();
+  const navigate = useNavigate();
 
   return (
     <Stack
       direction="row"
       sx={{ display: 'flex', justifyContent: 'space-between' }}
     >
-      <Button>
+      <Button
+        onClick={() => {
+          navigate('/seller/orders');
+        }}
+      >
         <Stack
           sx={{
             display: 'flex',
@@ -28,7 +34,11 @@ function HomeLinks() {
           </Typography>
         </Stack>
       </Button>
-      <Button>
+      <Button
+        onClick={() => {
+          navigate('/seller/customize');
+        }}
+      >
         <Stack
           sx={{
             display: 'flex',
@@ -50,7 +60,11 @@ function HomeLinks() {
           </Typography>
         </Stack>
       </Button>
-      <Button>
+      <Button
+        onClick={() => {
+          navigate('/seller/settings');
+        }}
+      >
         <Stack
           sx={{
             display: 'flex',
@@ -64,7 +78,11 @@ function HomeLinks() {
           </Typography>
         </Stack>
       </Button>
-      <Button>
+      <Button
+        onClick={() => {
+          navigate('/seller/payment-settings');
+        }}
+      >
         <Stack
           sx={{
             display: 'flex',
@@ -82,4 +100,4 @@ function HomeLinks() {
   );
 }
 
-export default HomeLinks;
+export default SellerHomeLinks;

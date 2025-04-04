@@ -335,6 +335,26 @@ export const GET_ORDERS_PREVIEW_LIST = gql`
   ${ORDER_PREVIEW_FRAGMENT}
 `;
 
+export const GET_COUNT_NEW_ORDERS = gql`
+  query GetNewOrdersCount($options: OrderListOptions) {
+    orders(options: $options) {
+      totalItems
+    }
+  }
+`;
+
+export const FETCH_NEW_ORDERS = gql`
+  query GetOrderList($options: OrderListOptions) {
+    orders(options: $options) {
+      items {
+        ...OrderPreview
+      }
+      totalItems
+    }
+  }
+  ${ORDER_PREVIEW_FRAGMENT}
+`;
+
 export const GET_ORDER = gql`
   query GetOrder($id: ID!) {
     order(id: $id) {

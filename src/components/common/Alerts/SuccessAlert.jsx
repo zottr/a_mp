@@ -7,18 +7,15 @@ function SuccessAlert({ title, description }) {
     <>
       <Alert
         severity="success"
+        color=""
         variant="standard"
         icon={<TaskAltIcon fontSize="large" />}
         sx={{ display: 'flex', alignItems: 'center' }}
       >
         <AlertTitle>
-          <Typography variant="heavyb1" sx={{ color: theme.palette.grey[900] }}>
-            {title}
-          </Typography>
+          <Typography variant="heavyb1">{title}</Typography>
         </AlertTitle>
-        <Typography variant="b2" sx={{ color: theme.palette.grey[700] }}>
-          {description}
-        </Typography>
+        <Typography variant="b2">{description}</Typography>
       </Alert>
     </>
   );

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
+import StorefrontIcon from '@mui/icons-material/Storefront';
 import StoreIcon from '@mui/icons-material/Store';
 import EditIcon from '@mui/icons-material/Edit';
 import {
@@ -23,14 +24,14 @@ import {
   ListItemIcon,
   Avatar,
 } from '@mui/material';
-import logo from './logo_small-removebg-preview.png';
+import logo from '/logos/zottr_logo_small1.svg';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import SettingsIcon from '@mui/icons-material/Settings';
 import HomeIcon from '@mui/icons-material/Home';
 import LaunchIcon from '@mui/icons-material/Launch';
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 import ListAltIcon from '@mui/icons-material/ListAlt';
-import PWAInstallButton from './PWAInstallButton';
+import PWAInstallButton from '../PWAInstallButton';
 import { useUserContext } from '../../../hooks/useUserContext';
 import Logout from '../../Logout';
 
@@ -58,7 +59,7 @@ export default function MainAppBar() {
     <Box role="presentation" sx={{ width: '270px' }}>
       <List>
         <Stack
-          gap={1}
+          gap={2}
           direction="row"
           sx={{ display: 'flex', alignItems: 'center', ml: 1, mb: 2, mt: 1 }}
         >
@@ -80,7 +81,7 @@ export default function MainAppBar() {
               },
             }}
           >
-            <StoreIcon sx={{ fontSize: '40px' }} />
+            <StorefrontIcon sx={{ fontSize: '40px' }} />
           </Avatar>
           <Stack>
             <Typography variant="heavyb2" sx={{ color: 'grey.900' }}>
@@ -95,7 +96,7 @@ export default function MainAppBar() {
         <ListItemButton
           // sx={{ mt: 1 }}
           onClick={() => {
-            handleLinkClick(`/home`);
+            handleLinkClick(`/seller/home`);
           }}
         >
           <ListItemIcon>
@@ -118,7 +119,7 @@ export default function MainAppBar() {
         <ListItemButton
           // sx={{ mt: 1 }}
           onClick={() => {
-            handleLinkClick(`/orders`);
+            handleLinkClick(`/seller/orders`);
           }}
         >
           <ListItemIcon>
@@ -141,7 +142,7 @@ export default function MainAppBar() {
         <ListItemButton
           // sx={{ mt: 1 }}
           onClick={() => {
-            handleLinkClick(`/banners`);
+            handleLinkClick(`/seller/customize`);
           }}
         >
           <ListItemIcon>
@@ -169,7 +170,7 @@ export default function MainAppBar() {
         <ListItemButton
           // sx={{ mt: 1 }}
           onClick={() => {
-            handleLinkClick(`/store-settings`);
+            handleLinkClick(`/seller/settings`);
           }}
         >
           <ListItemIcon>
@@ -184,7 +185,7 @@ export default function MainAppBar() {
                 variant="label1"
                 sx={{ color: theme.palette.grey[800] }}
               >
-                Store Settings
+                Account Settings
               </Typography>
             }
           />
@@ -192,7 +193,7 @@ export default function MainAppBar() {
         <ListItemButton
           // sx={{ mt: 1 }}
           onClick={() => {
-            handleLinkClick(`/payment-settings`);
+            handleLinkClick(`/seller/payment-settings`);
           }}
         >
           <ListItemIcon>
@@ -212,8 +213,27 @@ export default function MainAppBar() {
             }
           />
         </ListItemButton>
-        <ListItem>
-          <PWAInstallButton />
+        <ListItem
+          sx={{
+            mt: 3,
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Button
+            variant="contained"
+            sx={{ px: 2, py: 1 }}
+            onClick={() => {
+              handleLinkClick(`/services/home`);
+            }}
+          >
+            <Stack direction="row" gap={1}>
+              <Typography variant="label1">Go To Services</Typography>
+              <LaunchIcon />
+            </Stack>
+          </Button>
         </ListItem>
       </List>
       <Grid
@@ -221,10 +241,23 @@ export default function MainAppBar() {
         rowSpacing={1}
         sx={{
           width: '100%',
-          mt: '80px',
+          mt: '30px',
           mb: '20px',
         }}
       >
+        <Grid
+          item
+          xs={12}
+          sx={{
+            my: 1,
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <PWAInstallButton />
+        </Grid>
         <Grid
           item
           xs={12}
@@ -292,7 +325,7 @@ export default function MainAppBar() {
       <AppBar
         elevation={0}
         sx={{
-          height: '50px',
+          height: '55px',
           bgcolor: 'primary.surface',
         }}
         position="fixed"
@@ -308,7 +341,6 @@ export default function MainAppBar() {
           >
             <Stack
               direction="row"
-              gap={1.5}
               sx={{ display: 'flex', alignItems: 'center' }}
             >
               <IconButton
@@ -322,8 +354,12 @@ export default function MainAppBar() {
                   sx={{ fontSize: '30px', color: theme.palette.primary.main }}
                 />
               </IconButton>
-              <Link to="/home" sx={{ pt: 1 }}>
-                <img src={logo} alt="Logo" style={{ height: '28px' }} />
+              <Link
+                component={RouterLink}
+                to="/seller/home"
+                sx={{ pt: 2, ml: -1 }}
+              >
+                <img src={logo} alt="Logo" style={{ height: '70px' }} />
               </Link>
             </Stack>
             <Stack
@@ -331,23 +367,36 @@ export default function MainAppBar() {
               gap={1}
               sx={{ display: 'flex', alignItems: 'center' }}
             >
-              <Button
-                variant="text"
-                aria-label="menu"
-                onClick={() => {
-                  setOpenLeftDrawer(true);
-                }}
-                sx={{ px: 1, borderRadius: '25px' }}
+              <Link
+                href={`https://urbanahaat.zottr.com/seller/${adminUser?.id}`}
+                target="_blank" //Opens the link in a new tab.
+                rel="noopener noreferrer" //Prevents potential security vulnerabilities (e.g., window.opener access by the new tab).
               >
-                <Typography variant="button3">Visit Store</Typography>
-                <LaunchIcon
+                <Button
+                  variant="contained"
+                  aria-label="menu"
                   sx={{
-                    fontSize: '16px',
-                    ml: 0.5,
+                    px: 1,
+                    borderRadius: '25px',
+                    bgcolor: 'primary.light',
+                    '&:hover, &:focus, &:active': {
+                      backgroundColor: 'primary.light',
+                    },
                   }}
-                />
-              </Button>
-              <IconButton
+                >
+                  <Typography variant="button2" sx={{ color: 'common.white' }}>
+                    View Store
+                  </Typography>
+                  <LaunchIcon
+                    sx={{
+                      fontSize: '16px',
+                      ml: 0.5,
+                      color: 'common.white',
+                    }}
+                  />
+                </Button>
+              </Link>
+              {/* <IconButton
                 aria-label="menu"
                 onClick={() => {
                   setOpenLeftDrawer(true);
@@ -357,7 +406,7 @@ export default function MainAppBar() {
                 <SettingsIcon
                   sx={{ fontSize: '30px', color: theme.palette.primary.main }}
                 />
-              </IconButton>
+              </IconButton> */}
             </Stack>
           </Stack>
         </Toolbar>

@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Box,
   Button,
   InputAdornment,
   Stack,
@@ -19,6 +20,7 @@ import StyledTextField from '../common/styled/StyledTextField';
 
 function LoginForm({ setSentOTP, setPhone }) {
   const theme = useTheme();
+  const [phoneNum, setPhoneNum] = useState(''); // for accessing phone number here
   const [phoneError, setPhoneError] = useState('');
   const [serviceError, setServiceError] = useState(false);
   const [userAccountError, setUserAccountError] = useState(false);
@@ -47,6 +49,7 @@ function LoginForm({ setSentOTP, setPhone }) {
     if (isValidPhone(phone)) {
       try {
         setPhone(phone);
+        setPhoneNum(phone); //for accessing phone number in current page
         setSendingOTP(true);
         resetErrors();
         const response = await axiosClient.post('otp/send-otp-login', {
@@ -72,27 +75,32 @@ function LoginForm({ setSentOTP, setPhone }) {
     <>
       <Stack
         component="form"
-        spacing={3}
+        gap={3}
         sx={{ width: '100%', display: 'flex', alignItems: 'center' }}
         onSubmit={handleSubmit}
         noValidate
       >
         <Typography
-          color="textSecondary"
-          variant="heavyb2"
+          variant="h5"
           sx={{
-            textAlign: 'center',
+            color: theme.palette.grey[900],
           }}
         >
-          Enter your registered Whatsapp number
+          Log In
         </Typography>
-        <Stack spacing={2} sx={{ width: '100%' }}>
+        <Box sx={{ textAlign: 'center' }}>
+          <Typography
+            variant="b1"
+            sx={{ color: theme.palette.grey[700], textAlign: 'center' }}
+          >
+            Enter your Whatsapp phone number
+          </Typography>
           <StyledTextField
             id="phone"
             name="phone"
             variant="outlined"
             type="number"
-            label="Whatsapp Number"
+            // label="Whatsapp Number"
             fullWidth
             InputProps={{
               startAdornment: (
@@ -101,62 +109,75 @@ function LoginForm({ setSentOTP, setPhone }) {
             }}
             helperText={phoneError}
             error={phoneError !== '' ? true : false}
-          />
-          {serviceError && <ServiceErrorAlert />}
-          {userAccountError && <LoginUserAccountErrorAlert />}
-          <LoadingButton
-            loading={sendingOTP && !serviceError}
-            variant="contained"
-            type="submit"
-            buttonStyles={{
-              backgroundColor: 'primary.main',
-              borderRadius: '25px',
-              height: '50px',
-            }}
-            label="Sign in"
-            labelStyles={{
-              color: 'white',
-            }}
-            labelVariant="button1"
-            progressSize={24}
-            progressThickness={5}
-            progressStyles={{
-              color: 'white',
-            }}
-          />
-        </Stack>
-      </Stack>
-      <Stack sx={{ width: '100%' }} spacing={2}>
-        <Typography
-          variant="heavyb2"
-          color="textSecondary"
-          sx={{
-            textAlign: 'center',
-          }}
-        >
-          Don't have an account yet? Sign up now
-        </Typography>
-        <Button
-          sx={{
-            backgroundColor: 'hsl(130, 70%, 40%)',
-            height: '50px',
-          }}
-          variant="contained"
-          size="large"
-          fullWidth
-          component={RouterLink}
-          to={'/signup'}
-          type="button"
-        >
-          <Typography
             sx={{
-              textTransform: 'none',
+              mt: 1.5,
             }}
-            variant="button1"
+          />
+        </Box>
+        {serviceError && <ServiceErrorAlert />}
+        {userAccountError && <LoginUserAccountErrorAlert phone={phoneNum} />}
+        <LoadingButton
+          loading={sendingOTP && !serviceError}
+          // loading={true}
+          variant="contained"
+          type="submit"
+          buttonStyles={{
+            backgroundColor: 'primary.main',
+            borderRadius: '25px',
+          }}
+          buttonContainerStyles={{
+            width: '100%',
+            height: '55px',
+          }}
+          label="Next"
+          labelStyles={{
+            color: 'white',
+          }}
+          loadingLabel="Sending otp..."
+          loadingLabelStyles={{
+            color: 'grey.100',
+          }}
+          labelVariant="button1"
+          progressSize={24}
+          progressThickness={5}
+          progressStyles={{
+            color: 'grey.100',
+          }}
+        />
+        <Stack gap={2} sx={{ mt: 2 }}>
+          <Typography
+            variant="b1"
+            sx={{ color: theme.palette.grey[700], textAlign: 'center' }}
           >
-            Create new account
+            Don't have an account yet? Sign up now
           </Typography>
-        </Button>
+          <Button
+            sx={{
+              backgroundColor: 'secondary.main',
+              '&:hover, &:focus, &:active': {
+                backgroundColor: 'secondary.main',
+              },
+              height: '55px',
+              borderRadius: '25px',
+            }}
+            variant="contained"
+            size="large"
+            fullWidth
+            component={RouterLink}
+            to={'/signup'}
+            type="button"
+          >
+            <Typography
+              sx={{
+                textTransform: 'none',
+                color: 'grey.800',
+              }}
+              variant="button1"
+            >
+              Create new account
+            </Typography>
+          </Button>
+        </Stack>
       </Stack>
     </>
   );

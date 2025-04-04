@@ -1,4 +1,10 @@
-import { Box, Button, CircularProgress, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Stack,
+  Typography,
+} from '@mui/material';
 import React from 'react';
 
 interface LoadingButtonProps {
@@ -8,7 +14,9 @@ interface LoadingButtonProps {
   buttonContainerStyles: any;
   buttonStyles: any;
   label: any;
+  loadingLabel?: any;
   labelStyles: any;
+  loadingLabelStyles?: any;
   labelVariant: any;
   progressSize: any;
   progressThickness: any;
@@ -23,7 +31,9 @@ const LoadingButton: React.FC<LoadingButtonProps> = ({
   buttonContainerStyles,
   buttonStyles,
   label,
+  loadingLabel,
   labelStyles,
+  loadingLabelStyles,
   labelVariant,
   progressSize,
   progressThickness,
@@ -48,7 +58,7 @@ const LoadingButton: React.FC<LoadingButtonProps> = ({
   };
   if (loading) labelStyles.color = buttonStyles.backgroundColor;
   return (
-    <Box sx={{ position: 'relative', ...buttonContainerStyles }}>
+    <Box sx={{ ...buttonContainerStyles }}>
       <Button
         variant={variant}
         fullWidth
@@ -57,31 +67,43 @@ const LoadingButton: React.FC<LoadingButtonProps> = ({
         sx={{ ...buttonSx, width: '100%', height: '100%' }}
         onClick={onClick}
       >
-        <Typography
-          sx={{
-            textTransform: 'none',
-            ...labelStyles,
-          }}
-          variant={labelVariant}
-        >
-          {label}
-        </Typography>
+        {!loading && (
+          <Typography
+            sx={{
+              textTransform: 'none',
+              ...labelStyles,
+            }}
+            variant={labelVariant}
+          >
+            {label}
+          </Typography>
+        )}
+        {loading && (
+          <Stack
+            direction="row"
+            gap={1}
+            sx={{ display: 'flex', alignItems: 'center' }}
+          >
+            <CircularProgress
+              size={progressSize}
+              thickness={progressThickness}
+              sx={{
+                ...progressStyles,
+              }}
+              disableShrink
+            />
+            <Typography
+              sx={{
+                textTransform: 'none',
+                ...loadingLabelStyles,
+              }}
+              variant={labelVariant}
+            >
+              {loadingLabel}
+            </Typography>
+          </Stack>
+        )}
       </Button>
-      {loading && (
-        <CircularProgress
-          size={progressSize}
-          thickness={progressThickness}
-          sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            marginTop: '-12px',
-            marginLeft: '-12px',
-            ...progressStyles,
-          }}
-          disableShrink
-        />
-      )}
     </Box>
   );
 };

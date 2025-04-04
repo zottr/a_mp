@@ -20,6 +20,7 @@ import {
 import MainAppBar from '../common/MainAppBar';
 import OrdersBreadcrumbs from './OrdersBreadcrumbs';
 import LoadingCircle from '../common/LoadingCircle';
+import OrdersSkeleton from './OrdersSkeleton';
 
 function Orders() {
   const ITEMS_PER_LOAD = 10;
@@ -160,6 +161,7 @@ function Orders() {
       <Box
         sx={{
           pt: 8,
+          pb: 2,
           bgcolor: 'primary.surface',
         }}
       >
@@ -167,8 +169,10 @@ function Orders() {
           sx={{
             bgcolor: 'white',
             maxWidth: 'calc(100% - 24px)',
-            borderTopLeftRadius: '10px',
-            borderTopRightRadius: '10px',
+            // borderTopLeftRadius: '10px',
+            // borderTopRightRadius: '10px',
+            borderRadius: '10px',
+            minHeight: '100vh',
             p: 1,
           }}
         >
@@ -190,66 +194,61 @@ function Orders() {
               </Typography>
             </Stack>
           </Stack>
-          {loading && (
+          {/* {loading && (
             <Box sx={{ mt: 15 }}>
               <LoadingCircle message="Fetching orders..." />
             </Box>
-          )}
-          {!loading && (
-            <Stack
-              gap={1}
-              sx={{
-                display: 'flex',
-                width: '100%',
-                mt: 3,
-              }}
-            >
-              <Grid container>
-                <Grid item xs={5}>
-                  <Container>
-                    <Select
-                      variant="outlined"
-                      value={orderListOption}
-                      onChange={changeOrderListOption}
-                      size="small"
-                      sx={{
-                        backgroundColor: 'transparent', // Remove any background color
-                        '&:hover': {
-                          backgroundColor: 'transparent', // No hover background color
-                        },
-                        '&.Mui-focused': {
-                          backgroundColor: 'transparent', // No focus background color
-                        },
-                        '& .MuiSelect-select': {
-                          backgroundColor: 'transparent', // Ensure the inner select field is also transparent
-                        },
-                      }}
-                    >
-                      <MenuItem value={'all'}>
-                        <Typography variant="label2">All Orders</Typography>
-                      </MenuItem>
-                      <MenuItem value={'new'}>
-                        <Typography variant="label2">New Orders </Typography>
-                      </MenuItem>
-                      <MenuItem value={'accepted'}>
-                        <Typography variant="label2">
-                          Accepted Orders
-                        </Typography>
-                      </MenuItem>
-                      <MenuItem value={'rejected'}>
-                        <Typography variant="label2">
-                          Rejected Orders
-                        </Typography>
-                      </MenuItem>
-                      <MenuItem value={'completed'}>
-                        <Typography variant="label2">
-                          Completed Orders
-                        </Typography>
-                      </MenuItem>
-                    </Select>
-                  </Container>
-                </Grid>
-              </Grid>
+          )} */}
+          <Grid container sx={{ my: 2 }}>
+            <Grid item xs={5}>
+              <Container>
+                <Select
+                  variant="outlined"
+                  value={orderListOption}
+                  onChange={changeOrderListOption}
+                  size="small"
+                  sx={{
+                    backgroundColor: 'transparent', // Remove any background color
+                    '&:hover': {
+                      backgroundColor: 'transparent', // No hover background color
+                    },
+                    '&.Mui-focused': {
+                      backgroundColor: 'transparent', // No focus background color
+                    },
+                    '& .MuiSelect-select': {
+                      backgroundColor: 'transparent', // Ensure the inner select field is also transparent
+                    },
+                  }}
+                >
+                  <MenuItem value={'all'}>
+                    <Typography variant="label2">All Orders</Typography>
+                  </MenuItem>
+                  <MenuItem value={'new'}>
+                    <Typography variant="label2">New Orders </Typography>
+                  </MenuItem>
+                  <MenuItem value={'accepted'}>
+                    <Typography variant="label2">Accepted Orders</Typography>
+                  </MenuItem>
+                  <MenuItem value={'rejected'}>
+                    <Typography variant="label2">Rejected Orders</Typography>
+                  </MenuItem>
+                  <MenuItem value={'completed'}>
+                    <Typography variant="label2">Completed Orders</Typography>
+                  </MenuItem>
+                </Select>
+              </Container>
+            </Grid>
+          </Grid>
+          <Stack
+            gap={1}
+            sx={{
+              display: 'flex',
+              width: '100%',
+              mt: 3,
+            }}
+          >
+            {loading && <OrdersSkeleton />}
+            {!loading && (
               <Stack
                 direction="column"
                 sx={{
@@ -320,8 +319,8 @@ function Orders() {
                   </Box>
                 )}
               </Stack>
-            </Stack>
-          )}
+            )}
+          </Stack>
         </Container>
       </Box>
     </>

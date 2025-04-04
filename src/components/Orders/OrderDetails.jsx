@@ -29,6 +29,7 @@ import {
 import { useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 import OrderNotFoundAlert from './OrderNotFoundAlert';
+import OrderDetailsSkeleton from './OrderDetailsSkeleton';
 
 function OrderDetails() {
   // if (!data?.order?.opened) updateOpenedById(data?.order?.id, false);
@@ -135,7 +136,7 @@ function OrderDetails() {
             Order# {query.orderId}
           </Typography>
         </Stack>
-        {(updating || loading) && (
+        {updating && (
           <Box
             sx={{
               position: 'absolute',
@@ -155,6 +156,7 @@ function OrderDetails() {
             <CircularProgress size={40} thickness={4} sx={{ mb: 10 }} />
           </Box>
         )}
+        {loading && <OrderDetailsSkeleton />}
         {!loading && data?.order == null && (
           <Container sx={{ mt: 10, px: 3 }}>
             <OrderNotFoundAlert />

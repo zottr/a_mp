@@ -5,7 +5,13 @@ import HomeIcon from '@mui/icons-material/Home';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { Link as RouterLink } from 'react-router-dom';
 
-export default function StoreSettingsBreadcrumbs() {
+interface AddOrUpdateServiceBreadcrumbsProp {
+  addItem: boolean;
+}
+
+export const AddOrUpdateServiceBreadcrumbs: React.FC<
+  AddOrUpdateServiceBreadcrumbsProp
+> = ({ addItem }) => {
   return (
     <Breadcrumbs
       sx={{ ml: 1 }}
@@ -13,7 +19,7 @@ export default function StoreSettingsBreadcrumbs() {
     >
       <Link
         component={RouterLink}
-        to={'/home'}
+        to={'/services/home'}
         underline="hover"
         sx={{ display: 'flex', alignItems: 'flex-start' }}
         color="inherit"
@@ -22,8 +28,8 @@ export default function StoreSettingsBreadcrumbs() {
         <Typography variant="label2">Home</Typography>
       </Link>
       <Typography variant="label2" sx={{ color: 'text.primary' }}>
-        Store Settings
+        {addItem ? 'Add new service' : 'Edit service'}
       </Typography>
     </Breadcrumbs>
   );
-}
+};

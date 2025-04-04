@@ -12,10 +12,10 @@ import { GET_PRODUCT_PREVIEW_LIST } from '../../libs/graphql/definitions/product
 import { useLazyQuery, useQuery } from '@apollo/client';
 import { useUserContext } from '../../hooks/useUserContext';
 import { useEffect, useRef, useState } from 'react';
-import LoadingCircle from '../common/LoadingCircle';
 import ProductListSkeleton from './ProductListSkeleton';
+import { GET_FACET_VALUE_LIST } from '../../libs/graphql/definitions/facet-definitions';
 
-function Products({ refetchProducts, setRefetchProducts, handleEditProduct }) {
+function Products({ setProductAction, setUpdatedProductName }) {
   const ITEMS_PER_LOAD = 10;
   // const { adminUser } = useUserContext();
   const { adminUser } = useUserContext();
@@ -23,29 +23,72 @@ function Products({ refetchProducts, setRefetchProducts, handleEditProduct }) {
   const [hasMore, setHasMore] = useState(true);
   const [initialLoadCompleted, setInitialLoadCompleted] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [refetchProducts, setRefetchProducts] = useState(false);
+  const [servicesCategoryId, setServicesCategoryId] = useState('');
 
-  const [fetchProducts, { loading, error, data, fetchMore }] = useLazyQuery(
-    // const { loading, error, data, fetchMore } = useQuery(
+  function afterInitialDataFetch(data) {
+    console.log('data fetched for first time: ', data);
+    setServerProductList(data?.products?.items || []);
+    if (!initialLoadCompleted) setInitialLoadCompleted(true);
+    setHasMore(data.products.items.length < data.products.totalItems);
+  }
+
+  //fetch service category facet value id
+  useQuery(GET_FACET_VALUE_LIST, {
+    variables: {
+      options: {
+        filter: {
+          facetId: { eq: `${import.meta.env.VITE_VENDURE_CATEGORY_FACET_ID}` },
+        },
+      },
+    },
+    onCompleted: (fetchedData) => {
+      console.log(fetchedData);
+      // Find the item where code === "services"
+      const servicesCategory = fetchedData?.facetValues?.items?.find(
+        (item) => item.code === 'services'
+      );
+      // If found, set the state
+      if (servicesCategory) {
+        setServicesCategoryId(servicesCategory.id);
+      }
+    },
+  });
+
+  // const [fetchProducts, { loading, error, data, fetchMore }] = useLazyQuery(
+  const { loading, error, data, fetchMore, refetch } = useQuery(
     GET_PRODUCT_PREVIEW_LIST,
     {
       variables: {
         options: {
           skip: 0,
           take: ITEMS_PER_LOAD,
-          filter: { adminId: { eq: adminUser?.id } },
+          filter: {
+            adminId: { eq: adminUser?.id },
+            facetValueId: { notEq: servicesCategoryId }, //fetch all products which aren't services
+          },
           sort: { updatedAt: 'DESC' },
         },
       },
+      skip: !adminUser, // Skip query execution when adminUser is null
       fetchPolicy: 'cache-and-network',
       onCompleted: (fetchedData) => {
-        setServerProductList(fetchedData.products.items);
-        setInitialLoadCompleted(true);
-        setHasMore(
-          fetchedData.products.items.length < fetchedData.products.totalItems
-        );
+        afterInitialDataFetch(fetchedData);
       },
     }
   );
+
+  // Rerun the query when refetchProducts === true
+  useEffect(() => {
+    console.log('refetchProducts: ', refetchProducts);
+    if (refetchProducts) {
+      refetch().then(({ data }) => {
+        console.log('Refetched data:', data);
+        afterInitialDataFetch(data);
+      });
+      setRefetchProducts(false);
+    }
+  }, [refetchProducts, refetch]);
 
   const handleItemUpdate = (updatedItem) => {
     setServerProductList((prevItems) =>
@@ -55,18 +98,18 @@ function Products({ refetchProducts, setRefetchProducts, handleEditProduct }) {
 
   const lastProductRef = useRef();
 
-  useEffect(() => {
-    if (adminUser) {
-      fetchProducts();
-    }
-  }, [adminUser, fetchProducts]);
+  // useEffect(() => {
+  //   if (adminUser) {
+  //     fetchProducts();
+  //   }
+  // }, [adminUser, fetchProducts]);
 
-  useEffect(() => {
-    if (adminUser && refetchProducts) {
-      fetchProducts();
-    }
-    setRefetchProducts(false);
-  }, [adminUser, fetchProducts, refetchProducts, setRefetchProducts]);
+  // useEffect(() => {
+  //   if (adminUser && refetchProducts) {
+  //     fetchProducts();
+  //   }
+  //   setRefetchProducts(false);
+  // }, [adminUser, fetchProducts, refetchProducts, setRefetchProducts]);
 
   useEffect(() => {
     const loadMore = () => {
@@ -83,6 +126,11 @@ function Products({ refetchProducts, setRefetchProducts, handleEditProduct }) {
         },
       })
         .then(({ data: fetchedData }) => {
+          console.log(
+            'number of items already loaded: ',
+            serverProductList.length
+          );
+          console.log('new items loaded: ', fetchedData.products.items);
           const newProducts = fetchedData.products.items;
           setServerProductList((prevProducts) => [
             ...prevProducts,
@@ -97,6 +145,7 @@ function Products({ refetchProducts, setRefetchProducts, handleEditProduct }) {
           console.error('Error fetching more products:', error);
         })
         .finally(() => {
+          console.log('setloadingmore set to false');
           setLoadingMore(false);
         });
     };
@@ -161,7 +210,9 @@ function Products({ refetchProducts, setRefetchProducts, handleEditProduct }) {
                 <Item
                   item={item}
                   onItemUpdate={handleItemUpdate}
-                  handleEditProduct={handleEditProduct}
+                  setProductAction={setProductAction}
+                  setUpdatedProductName={setUpdatedProductName}
+                  setRefetchProducts={setRefetchProducts}
                 />
                 {index !== serverProductList?.length - 1 && (
                   <Divider flexItem variant="fullWidth" sx={{ mt: 2, mb: 1 }} />
@@ -179,7 +230,9 @@ function Products({ refetchProducts, setRefetchProducts, handleEditProduct }) {
                 <Item
                   item={item}
                   onItemUpdate={handleItemUpdate}
-                  handleEditProduct={handleEditProduct}
+                  setProductAction={setProductAction}
+                  setUpdatedProductName={setUpdatedProductName}
+                  setRefetchProducts={setRefetchProducts}
                 />
                 {index !== serverProductList?.length - 1 && (
                   <Divider flexItem variant="fullWidth" sx={{ mt: 2, mb: 1 }} />

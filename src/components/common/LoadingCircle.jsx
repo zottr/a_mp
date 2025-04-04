@@ -1,7 +1,14 @@
 import { CircularProgress, Stack, Typography } from '@mui/material';
 import React from 'react';
 
-function LoadingCircle({ message }) {
+function LoadingCircle({
+  message,
+  textVariant = 'heavylabel1',
+  textColor = 'grey.900',
+  color = 'primary',
+  size = 45,
+  thickness = 4,
+}) {
   return (
     <Stack
       gap={2}
@@ -11,8 +18,14 @@ function LoadingCircle({ message }) {
         justifyContent: 'center',
       }}
     >
-      <CircularProgress size={40} thickness={4} />
-      <Typography variant="b2">{message}</Typography>
+      <CircularProgress size={size} thickness={thickness} color={color} />
+      <Typography
+        variant={textVariant}
+        color={textColor}
+        sx={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}
+      >
+        {message}
+      </Typography>
     </Stack>
   );
 }

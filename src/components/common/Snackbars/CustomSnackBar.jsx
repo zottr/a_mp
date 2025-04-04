@@ -4,7 +4,7 @@ import React from 'react';
 function CustomSnackBar({
   message,
   severity, //error,info,success,warning
-  color,
+  color = 'success',
   duration,
   vertical,
   horizontal,

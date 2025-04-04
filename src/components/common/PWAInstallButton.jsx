@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Typography } from '@mui/material';
 import GetAppIcon from '@mui/icons-material/GetApp';
-import { useInstallPrompt } from '../../../context/InstallPromptContext';
+import { useInstallPrompt } from '../../context/InstallPromptContext';
 
 const PWAInstallButton = () => {
   const { deferredPrompt, isInstalled } = useInstallPrompt();
@@ -29,26 +29,33 @@ const PWAInstallButton = () => {
       onClick={handleInstallClick}
       variant="outlined"
       sx={{
-        mt: 3,
-        width: '100%',
-        borderWidth: '0',
-        backgroundColor: 'hsl(38 88.2% 98%)',
-        '&:hover': {
-          backgroundColor: 'hsl(38 88.2% 98%)',
-          borderWidth: '0',
-        },
-        '&:focus': {
-          backgroundColor: 'hsl(38 88.2% 98%)',
-        },
-        '&:active': {
-          backgroundColor: 'hsl(38 88.2% 98%)',
-        },
+        px: 2,
+        py: 1,
+        borderColor: 'success.main',
+        borderRadius: '20px',
+        // width: '100%',
+        // borderWidth: '0',
+        // backgroundColor: 'hsl(38 88.2% 98%)',
+        // '&:hover': {
+        //   backgroundColor: 'hsl(38 88.2% 98%)',
+        //   borderWidth: '0',
+        // },
+        // '&:focus': {
+        //   backgroundColor: 'hsl(38 88.2% 98%)',
+        // },
+        // '&:active': {
+        //   backgroundColor: 'hsl(38 88.2% 98%)',
+        // },
       }}
       startIcon={
-        <GetAppIcon fontSize="medium" sx={{ color: 'hsl(30 , 100% , 20%)' }} />
+        // <GetAppIcon fontSize="medium" sx={{ color: 'hsl(30 , 100% , 20%)' }} />
+        <GetAppIcon fontSize="medium" sx={{ color: 'success.main' }} />
       }
     >
-      <Typography variant="button1" sx={{ color: 'hsl(30 , 100% , 20%)' }}>
+      {/* <Typography variant="button1" sx={{ color: 'hsl(30 , 100% , 20%)' }}>
+        Install App
+      </Typography> */}
+      <Typography variant="button1" sx={{ color: 'success.main' }}>
         Install App
       </Typography>
     </Button>

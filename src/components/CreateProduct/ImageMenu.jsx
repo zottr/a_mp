@@ -36,7 +36,7 @@ function ImageMenu({
         sx={{ position: 'absolute', top: 1, right: 1, zIndex: 1000, p: 0 }}
       >
         <IconButton onClick={handleImageMenuClick}>
-          <MoreVertIcon fontSize="medium" sx={{ color: 'secondary.light' }} />
+          <MoreVertIcon fontSize="medium" sx={{ color: 'primary.light' }} />
         </IconButton>
       </Tooltip>
       <Menu

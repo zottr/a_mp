@@ -42,7 +42,10 @@ const TopAppBar: React.FC<TopAppBarProps> = ({ logout }) => {
             Hello
           </Typography>
           <Tooltip title="Profile">
-            <IconButton color="inherit" onClick={() => navigate('/home')}>
+            <IconButton
+              color="inherit"
+              onClick={() => navigate('/seller/home')}
+            >
               <HomeIcon />
             </IconButton>
           </Tooltip>

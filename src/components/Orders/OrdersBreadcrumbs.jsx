@@ -13,7 +13,7 @@ export default function OrdersBreadcrumbs() {
     >
       <Link
         component={RouterLink}
-        to={'/home'}
+        to={'/seller/home'}
         underline="hover"
         sx={{ display: 'flex', alignItems: 'flex-start' }}
         color="inherit"

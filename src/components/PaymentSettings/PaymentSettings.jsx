@@ -57,7 +57,7 @@ const PaymentSettings = () => {
     if (adminUser) {
       setSettings({
         name: adminUser?.customFields.upiName,
-        phone: adminUser?.upiPhone,
+        phone: adminUser?.customFields.upiPhone,
         id: adminUser?.customFields.upiId,
       });
       if (adminUser?.customFields?.upiScan) {
@@ -110,11 +110,13 @@ const PaymentSettings = () => {
   };
 
   const isValidPhone = (phone) => {
+    if (phone === null || phone === undefined || phone === '') return true; //an empty phone field is valid and shouldn't fail form submission
     const phoneRegex = /^[0-9]{10}$/;
     return phoneRegex.test(phone);
   };
 
   const isValidId = (id) => {
+    if (id === null || id === undefined || id === '') return true; //an empty upi id field is valid and shouldn't fail form submission
     const upiRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+$/;
     return upiRegex.test(id);
   };
@@ -123,30 +125,30 @@ const PaymentSettings = () => {
     event.preventDefault();
     resetFormStates();
 
-    if (settings.name === '') {
-      setValidationErrors((prev) => ({
-        ...prev,
-        nameEmpty: true,
-      }));
-    }
-    if (settings.phone === '') {
-      setValidationErrors((prev) => ({
-        ...prev,
-        phoneEmpty: true,
-      }));
-    }
+    // if (settings.name === '') {
+    //   setValidationErrors((prev) => ({
+    //     ...prev,
+    //     nameEmpty: true,
+    //   }));
+    // }
+    // if (settings.phone === '') {
+    //   setValidationErrors((prev) => ({
+    //     ...prev,
+    //     phoneEmpty: true,
+    //   }));
+    // }
     if (!isValidPhone(settings.phone)) {
       setValidationErrors((prev) => ({
         ...prev,
         phoneInvalid: true,
       }));
     }
-    if (settings.id === '') {
-      setValidationErrors((prev) => ({
-        ...prev,
-        idEmpty: true,
-      }));
-    }
+    // if (settings.id === '') {
+    //   setValidationErrors((prev) => ({
+    //     ...prev,
+    //     idEmpty: true,
+    //   }));
+    // }
     if (!isValidId(settings.id)) {
       setValidationErrors((prev) => ({
         ...prev,
@@ -154,9 +156,9 @@ const PaymentSettings = () => {
       }));
     }
     if (
-      settings.name !== '' &&
-      settings.id !== '' &&
-      settings.phone !== '' &&
+      // settings.name !== '' &&
+      // settings.id !== '' &&
+      // settings.phone !== '' &&
       isValidPhone(settings.phone) &&
       isValidId(settings.id)
     ) {
@@ -188,6 +190,25 @@ const PaymentSettings = () => {
             input: adminInput,
           },
         });
+        //update local admin user state
+        if (result.data) {
+          setAdminUser((prev) => {
+            if (!prev) return prev; // Avoid modifying if `prev` is null
+            return {
+              ...prev,
+              customFields: {
+                ...prev.customFields,
+                upiId: result.data.updateActiveAdministrator.customFields.upiId,
+                upiName:
+                  result.data.updateActiveAdministrator.customFields.upiName,
+                upiPhone:
+                  result.data.updateActiveAdministrator.customFields.upiPhone,
+                upiScan:
+                  result.data.updateActiveAdministrator.customFields.upiScan,
+              },
+            };
+          });
+        }
         setUpdated(true);
         if (deleteQr) {
           await deleteAssets({
@@ -228,287 +249,312 @@ const PaymentSettings = () => {
   return (
     <>
       <MainAppBar />
-      <Box sx={{ mb: 5 }}>
-        <Stack sx={{ mt: 10 }} gap={2}>
-          <PaymentSettingsBreadcrumbs />
-          <Stack gap={2} sx={{ display: 'flex', alignItems: 'center' }}>
-            <Typography
-              variant="h5"
-              color={theme.palette.grey[900]}
-              sx={{
-                textAlign: 'center',
-                margin: 'auto',
-              }}
-            >
-              UPI Payment Settings
-            </Typography>
-            <Typography
-              variant="b1"
-              color={theme.palette.grey[600]}
-              sx={{
-                textAlign: 'center',
-                margin: 'auto',
-              }}
-            >
-              Display your UPI information for easy customer payments
-            </Typography>
-          </Stack>
-        </Stack>
-        {loading && (
-          <Box
-            sx={{
-              mt: '40%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <CircularProgress size={50} thickness={5} />
-          </Box>
-        )}
-        {!loading && (
-          <Container sx={{ px: 3 }}>
-            <Stack
-              component="form"
-              noValidate
-              autoComplete="off"
-              onSubmit={handleSubmit}
-              gap={3}
-              sx={{ mt: 3, display: 'flex', alignItems: 'center' }}
-            >
-              <Stack width="100%" gap={1}>
-                <Typography variant="heavylabel1" color="grey.800">
-                  Bank Customer Name
-                </Typography>
-                <StyledTextField
-                  id="name"
-                  name="name"
-                  variant="outlined"
-                  value={settings.name}
-                  onChange={handleChangeSettings}
-                  placeholder="Enter your full registered name"
-                  size="small"
-                  helperText={
-                    validationErrors.nameEmpty &&
-                    validationErrorMessages.nameEmpty
-                  }
-                  error={validationErrors.nameEmpty}
-                  sx={{
-                    width: '100%',
-                    '& input::placeholder': {
-                      color: 'grey.900', // Change placeholder color
-                      fontSize: '1rem', // Adjust font size if needed
-                      fontStyle: 'italic', // Optional: Make it italic
-                      fontFamily: 'Poppins, sans-serif',
-                    },
-                  }}
-                />
-              </Stack>
-              <Stack width="100%" gap={1}>
-                <Typography variant="heavylabel1" color="grey.800">
-                  UPI Phone Number
-                </Typography>
-                <StyledTextField
-                  id="phone"
-                  name="phone"
-                  type="number"
-                  variant="outlined"
-                  value={settings.phone}
-                  onChange={handleChangeSettings}
-                  placeholder="10 digit registered UPI number"
-                  size="small"
-                  helperText={
-                    (validationErrors.phoneEmpty &&
-                      validationErrorMessages.phoneEmpty) ||
-                    (validationErrors.phoneInvalid &&
-                      validationErrorMessages.phoneInvalid)
-                  }
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <Typography
-                          variant="label1"
-                          sx={{ color: theme.palette.grey[600] }}
-                        >
-                          +91
-                        </Typography>
-                      </InputAdornment>
-                    ),
-                  }}
-                  error={
-                    validationErrors.phoneEmpty || validationErrors.phoneInvalid
-                  }
-                  sx={{
-                    width: '100%',
-                    '& input::placeholder': {
-                      color: 'grey.900', // Change placeholder color
-                      fontSize: '1rem', // Adjust font size if needed
-                      fontStyle: 'italic', // Optional: Make it italic
-                      fontFamily: 'Poppins, sans-serif',
-                    },
-                  }}
-                />
-              </Stack>
-              <Stack width="100%" gap={1}>
-                <Typography variant="heavylabel1" color="grey.800">
-                  UPI ID
-                </Typography>
-                <StyledTextField
-                  id="id"
-                  name="id"
-                  variant="outlined"
-                  value={settings.id}
-                  onChange={handleChangeSettings}
-                  placeholder="Example: upi@okhdfcbank"
-                  size="small"
-                  helperText={
-                    (validationErrors.idEmpty &&
-                      validationErrorMessages.idEmpty) ||
-                    (validationErrors.idInvalid &&
-                      validationErrorMessages.idInvalid)
-                  }
-                  error={validationErrors.idEmpty || validationErrors.idInvalid}
-                  sx={{
-                    width: '100%',
-                    '& input::placeholder': {
-                      color: 'grey.900', // Change placeholder color
-                      fontSize: '1rem', // Adjust font size if needed
-                      fontStyle: 'italic', // Optional: Make it italic
-                      fontFamily: 'Poppins, sans-serif',
-                    },
-                  }}
-                />
-              </Stack>
-              <Stack width="100%">
-                <Typography variant="heavylabel1" color="grey.800">
-                  UPI QR Code
-                </Typography>
-              </Stack>
-              <Stack
-                direction="row"
-                gap={3}
+      <Box
+        sx={{
+          pt: 8,
+          pb: 2,
+          bgcolor: 'primary.surface',
+        }}
+      >
+        <Container
+          sx={{
+            bgcolor: 'white',
+            maxWidth: 'calc(100% - 24px)',
+            minHeight: '100vh',
+            // borderTopLeftRadius: '10px',
+            // borderTopRightRadius: '10px',
+            borderRadius: '10px',
+            p: 1,
+          }}
+        >
+          <Stack sx={{}} gap={2}>
+            <PaymentSettingsBreadcrumbs />
+            <Stack gap={2} sx={{ display: 'flex', alignItems: 'center' }}>
+              <Typography
+                variant="h6"
+                color={theme.palette.grey[900]}
                 sx={{
-                  width: '100%',
-                  display: 'flex',
-                  alignItems: 'center',
+                  textAlign: 'center',
+                  margin: 'auto',
                 }}
               >
-                {qrPreview !== '' && (
-                  <Box
-                    component="img"
-                    src={qrPreview}
-                    alt={'upi qr code'}
-                    sx={{
-                      bgcolor: 'transparent',
-                      objectFit: 'contain',
-                      objectPosition: 'center',
-                      width: '120px',
-                    }}
-                  />
-                )}
-                <Stack gap={2}>
-                  <Button
-                    component="label"
+                UPI Payment Settings
+              </Typography>
+              <Typography
+                variant="b1"
+                color={theme.palette.grey[600]}
+                sx={{
+                  textAlign: 'center',
+                  margin: 'auto',
+                }}
+              >
+                Display your UPI information for easy customer payments
+              </Typography>
+            </Stack>
+          </Stack>
+          {loading && (
+            <Box
+              sx={{
+                mt: '40%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <CircularProgress size={50} thickness={5} />
+            </Box>
+          )}
+          {!loading && (
+            <Container sx={{ px: 2 }}>
+              <Stack
+                component="form"
+                noValidate
+                autoComplete="off"
+                onSubmit={handleSubmit}
+                gap={3}
+                sx={{ mt: 3, display: 'flex', alignItems: 'center' }}
+              >
+                <Stack width="100%" gap={1}>
+                  <Typography variant="heavylabel1" color="grey.800">
+                    Bank Customer Name
+                  </Typography>
+                  <StyledTextField
+                    id="name"
+                    name="name"
                     variant="outlined"
+                    value={settings.name}
+                    onChange={handleChangeSettings}
+                    placeholder="Enter your full registered name"
+                    size="small"
+                    helperText={
+                      validationErrors.nameEmpty &&
+                      validationErrorMessages.nameEmpty
+                    }
+                    error={validationErrors.nameEmpty}
                     sx={{
-                      height: '40px',
-                      borderRadius: '10px',
-                      borderColor: 'grey.700',
-                      '&:hover, &:focus, &:active': {
-                        borderColor: 'grey.700',
+                      width: '100%',
+                      '& input::placeholder': {
+                        color: 'grey.900', // Change placeholder color
+                        fontSize: '1rem', // Adjust font size if needed
+                        fontStyle: 'italic', // Optional: Make it italic
+                        fontFamily: 'Poppins, sans-serif',
                       },
                     }}
-                  >
-                    {qrPreview !== '' ? (
-                      <EditIcon
-                        fontSize="small"
-                        sx={{ mr: 0.5, color: 'grey.700' }}
-                      />
-                    ) : (
-                      <QrCodeIcon
-                        fontSize="small"
-                        sx={{ mr: 0.5, color: 'grey.700' }}
-                      />
-                    )}
-
-                    <Typography variant="button2" sx={{ color: 'grey.700' }}>
-                      {qrPreview !== '' ? 'Change QR Code' : 'Add QR Code'}
-                    </Typography>
-                    <input
-                      type="file"
-                      hidden
-                      name="qrCodeInput"
-                      onChange={onQrUpload}
-                    />
-                  </Button>
+                  />
+                </Stack>
+                <Stack width="100%" gap={1}>
+                  <Typography variant="heavylabel1" color="grey.800">
+                    UPI Phone Number
+                  </Typography>
+                  <StyledTextField
+                    id="phone"
+                    name="phone"
+                    type="number"
+                    variant="outlined"
+                    value={settings.phone}
+                    onChange={handleChangeSettings}
+                    placeholder="10 digit registered UPI number"
+                    size="small"
+                    helperText={
+                      (validationErrors.phoneEmpty &&
+                        validationErrorMessages.phoneEmpty) ||
+                      (validationErrors.phoneInvalid &&
+                        validationErrorMessages.phoneInvalid)
+                    }
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Typography
+                            variant="label1"
+                            sx={{ color: theme.palette.grey[600] }}
+                          >
+                            +91
+                          </Typography>
+                        </InputAdornment>
+                      ),
+                    }}
+                    error={
+                      validationErrors.phoneEmpty ||
+                      validationErrors.phoneInvalid
+                    }
+                    sx={{
+                      width: '100%',
+                      '& input::placeholder': {
+                        color: 'grey.900', // Change placeholder color
+                        fontSize: '1rem', // Adjust font size if needed
+                        fontStyle: 'italic', // Optional: Make it italic
+                        fontFamily: 'Poppins, sans-serif',
+                      },
+                    }}
+                  />
+                </Stack>
+                <Stack width="100%" gap={1}>
+                  <Typography variant="heavylabel1" color="grey.800">
+                    UPI ID
+                  </Typography>
+                  <StyledTextField
+                    id="id"
+                    name="id"
+                    variant="outlined"
+                    value={settings.id}
+                    onChange={handleChangeSettings}
+                    placeholder="Example: upi@okhdfcbank"
+                    size="small"
+                    helperText={
+                      (validationErrors.idEmpty &&
+                        validationErrorMessages.idEmpty) ||
+                      (validationErrors.idInvalid &&
+                        validationErrorMessages.idInvalid)
+                    }
+                    error={
+                      validationErrors.idEmpty || validationErrors.idInvalid
+                    }
+                    sx={{
+                      width: '100%',
+                      '& input::placeholder': {
+                        color: 'grey.900', // Change placeholder color
+                        fontSize: '1rem', // Adjust font size if needed
+                        fontStyle: 'italic', // Optional: Make it italic
+                        fontFamily: 'Poppins, sans-serif',
+                      },
+                    }}
+                  />
+                </Stack>
+                <Stack width="100%">
+                  <Typography variant="heavylabel1" color="grey.800">
+                    UPI QR Code
+                  </Typography>
+                </Stack>
+                <Stack
+                  direction="row"
+                  gap={3}
+                  sx={{
+                    width: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                  }}
+                >
                   {qrPreview !== '' && (
-                    <Button
-                      variant="outlined"
-                      component="label"
+                    <Box
+                      component="img"
+                      src={qrPreview}
+                      alt={'upi qr code'}
                       sx={{
-                        height: '40px',
-                        borderRadius: '10px',
+                        bgcolor: 'transparent',
+                        objectFit: 'contain',
+                        objectPosition: 'center',
+                        width: '120px',
+                      }}
+                    />
+                  )}
+                  <Stack gap={2}>
+                    <Button
+                      component="label"
+                      variant="outlined"
+                      sx={{
+                        height: '2.8rem',
+                        borderRadius: '25px',
                         borderColor: 'grey.700',
                         '&:hover, &:focus, &:active': {
                           borderColor: 'grey.700',
                         },
                       }}
-                      onClick={() => {
-                        setNewQr(false);
-                        setDeleteQr(true);
-                        setQrPreview('');
-                      }}
                     >
-                      <DeleteIcon
-                        fontSize="small"
-                        sx={{ mr: 0.5, color: 'grey.700' }}
-                      />
+                      {qrPreview !== '' ? (
+                        <EditIcon
+                          fontSize="small"
+                          sx={{ mr: 0.5, color: 'grey.700' }}
+                        />
+                      ) : (
+                        <QrCodeIcon
+                          fontSize="small"
+                          sx={{ mr: 0.5, color: 'grey.700' }}
+                        />
+                      )}
+
                       <Typography variant="button2" sx={{ color: 'grey.700' }}>
-                        Remove QR Code
+                        {qrPreview !== '' ? 'Change Code' : 'Add Code'}
                       </Typography>
+                      <input
+                        type="file"
+                        hidden
+                        name="qrCodeInput"
+                        onChange={onQrUpload}
+                      />
                     </Button>
-                  )}
+                    {qrPreview !== '' && (
+                      <Button
+                        variant="outlined"
+                        component="label"
+                        sx={{
+                          height: '2.8rem',
+                          borderRadius: '25px',
+                          borderColor: 'grey.700',
+                          '&:hover, &:focus, &:active': {
+                            borderColor: 'grey.700',
+                          },
+                        }}
+                        onClick={() => {
+                          setNewQr(false);
+                          setDeleteQr(true);
+                          setQrPreview('');
+                        }}
+                      >
+                        <DeleteIcon
+                          fontSize="small"
+                          sx={{ mr: 0.5, color: 'grey.700' }}
+                        />
+                        <Typography
+                          variant="button2"
+                          sx={{ color: 'grey.700' }}
+                        >
+                          Remove Code
+                        </Typography>
+                      </Button>
+                    )}
+                  </Stack>
                 </Stack>
+                {hasValidationErrors && <ValidationErrorAlert />}
+                {serviceError && <ServiceErrorAlert />}
+                <LoadingButton
+                  loading={false}
+                  variant="contained"
+                  type="submit"
+                  buttonStyles={{
+                    backgroundColor: 'primary.main',
+                    borderRadius: '25px',
+                  }}
+                  buttonContainerStyles={{
+                    width: '100%',
+                    height: '55px',
+                  }}
+                  label="Update Settings"
+                  labelStyles={{
+                    color: 'white',
+                  }}
+                  labelVariant="button1"
+                  progressSize={24}
+                  progressThickness={5}
+                  progressStyles={{
+                    color: 'white',
+                  }}
+                />
+                <CustomSnackBar
+                  message="Settings updated successfully"
+                  severity="success"
+                  color="success"
+                  duration={2000}
+                  vertical="top"
+                  horizontal="center"
+                  open={updated}
+                  handleClose={() => {
+                    setUpdated(false);
+                  }}
+                />
               </Stack>
-              {hasValidationErrors && <ValidationErrorAlert />}
-              {serviceError && <ServiceErrorAlert />}
-              <LoadingButton
-                loading={false}
-                variant="contained"
-                type="submit"
-                buttonStyles={{
-                  backgroundColor: 'secondary.main',
-                  borderRadius: '25px',
-                }}
-                buttonContainerStyles={{
-                  width: '100%',
-                  height: '55px',
-                }}
-                label="Update Settings"
-                labelStyles={{
-                  color: 'white',
-                }}
-                labelVariant="button1"
-                progressSize={24}
-                progressThickness={5}
-                progressStyles={{
-                  color: 'white',
-                }}
-              />
-              <CustomSnackBar
-                message="Settings updated successfully"
-                severity="success"
-                duration={2000}
-                vertical="top"
-                horizontal="center"
-                open={updated}
-                handleClose={() => {
-                  setUpdated(false);
-                }}
-              />
-            </Stack>
-          </Container>
-        )}
+            </Container>
+          )}
+        </Container>
       </Box>
     </>
   );

@@ -8,20 +8,113 @@ const mainTheme = createTheme({
       white: '#fff',
     },
     primary: {
-      main: '#1976d2',
-      light: '#42a5f5',
-      dark: '#1565c0',
-      // surface: '#e3f2fd',
-      surface: 'hsl(208, 92%, 96%)',
+      main: '#673AB7', // Regal purple
+      light: '#9575CD', // Soft lavender
+      dark: '#512DA8', // Deep violet
+      surface: 'hsl(270, 60%, 90%)', // Soft purple background
       contrastText: '#fff',
     },
     secondary: {
-      main: '#9c27b0',
-      light: '#ba68c8',
-      dark: '#7b1fa2',
-      surface: '#f3e5f5',
-      contrastText: '#fff',
+      main: '#FFB300', // Warm Amber
+      light: '#FFD54F', // Soft Gold
+      dark: '#FF8F00', // Deep Golden
+      surface: 'hsl(42, 80%, 90%)', // Light golden cream
+      contrastText: '#000',
     },
+    // secondary: {
+    //   main: '#009688', // Deep Teal
+    //   light: '#4DB6AC', // Soft Aqua
+    //   dark: '#00796B', // Rich Emerald
+    //   surface: 'hsl(180, 60%, 90%)', // Light Mint background
+    //   contrastText: '#fff',
+    // },
+    // secondary: {
+    //   main: '#FFC107', // Vibrant golden amber
+    //   light: '#FFD54F', // Bright warm yellow
+    //   dark: '#FFA000', // Deep mustard amber
+    //   surface: 'hsl(45, 100%, 90%)', // Warm light yellow
+    //   contrastText: '#000',
+    // },
+    // primary: {
+    //   main: '#388E3C', // Rich forest green
+    //   light: '#66BB6A', // Fresh grass green
+    //   dark: '#1B5E20', // Deep evergreen
+    //   surface: 'hsl(140, 40%, 85%)', // Muted green background
+    //   contrastText: '#fff',
+    // },
+
+    //deepblue-orange
+    // primary: {
+    //   main: '#1565C0', // Deep, rich blue
+    //   light: '#42A5F5', // Bright sky blue
+    //   dark: '#0D47A1', // Dark navy
+    //   surface: 'hsl(220, 90%, 95%)', // Light background
+    //   contrastText: '#fff',
+    // },
+    // secondary: {
+    //   main: '#FF7043', // Bold burnt orange
+    //   light: '#FFAB91', // Warm pastel orange
+    //   dark: '#D84315', // Deep rusty orange
+    //   surface: 'hsl(15, 80%, 90%)', // Soft orange tint
+    //   contrastText: '#fff',
+    // },
+    // secondary: {
+    //   main: '#00BCD4', // Bright electric cyan
+    //   light: '#4DD0E1', // Soft sky blue
+    //   dark: '#00838F', // Deep teal-blue
+    //   surface: 'hsl(190, 80%, 90%)', // Cool blue tint
+    //   contrastText: '#000',
+    // },
+    //    brown-amber
+    // primary: {
+    //   main: '#795548', // Rich brown (similar depth to your current blue)
+    //   light: '#A1887F', // Lighter brown for hover states, highlights
+    //   dark: '#5D4037', // Darker brown for contrast
+    //   surface: 'hsl(25, 30%, 90%)', // Light brownish-beige for background surfaces
+    //   contrastText: '#fff', // White for readability
+    // },
+    // secondary: {
+    //   main: '#FFC107', // Bold golden amber
+    //   light: '#FFD54F', // Soft pastel yellow-orange
+    //   dark: '#FFA000', // Deep rich amber
+    //   surface: 'hsl(45, 100%, 90%)', // Light warm yellow for backgrounds
+    //   contrastText: '#000', // High contrast for text
+    // },
+
+    //Teal secondary
+    // secondary: {
+    //   main: '#009688', // Vibrant teal, works as a strong contrast to brown
+    //   light: '#4DB6AC', // Softer teal for subtle highlights
+    //   dark: '#00796B', // Deep teal for buttons, accents
+    //   surface: 'hsl(174, 50%, 90%)', // Light minty-teal for backgrounds
+    //   contrastText: '#fff', // White for readability on teal elements
+    // },
+    //blue primary
+    // primary: {
+    //   main: '#1976d2',
+    //   light: '#42a5f5',
+    //   dark: '#1565c0',
+    //   // surface: '#e3f2fd',
+    //   surface: 'hsl(208, 92%, 96%)',
+    //   contrastText: '#fff',
+    // },
+    //brown primary
+    //orange secondary
+    // secondary: {
+    //   main: '#ff9800', // Vibrant amber-orange
+    //   light: '#ffb74d', // Softer pastel shade
+    //   dark: '#f57c00', // Rich, deep orange
+    //   surface: 'hsl(36, 92%, 96%)', // Soft warm background tone
+    //   contrastText: '#000', // Black text for readability
+    // },
+    //purple secondary
+    // secondary: {
+    //   main: '#9c27b0',
+    //   light: '#ba68c8',
+    //   dark: '#7b1fa2',
+    //   surface: '#f3e5f5',
+    //   contrastText: '#fff',
+    // },
     error: {
       main: '#d32f2f',
       light: '#ef5350',
