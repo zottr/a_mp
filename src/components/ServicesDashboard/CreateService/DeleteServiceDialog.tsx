@@ -19,7 +19,7 @@ interface DeleteServiceDialogProps {
   open: boolean;
   name: string;
   productToEditId: string;
-  existingImages?: object[];
+  existingImages?: any[];
   fetchImages: boolean; //is true when calling delete from homescreen as we won't have pre-fetched asset data when calling delete directly from homescreen
   afterProductDeleted: () => void;
   closeDialog: () => void;

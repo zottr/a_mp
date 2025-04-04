@@ -5,7 +5,13 @@ import HomeIcon from '@mui/icons-material/Home';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { Link as RouterLink } from 'react-router-dom';
 
-export default function AccountCustomizationBreadcrumbs({ type }) {
+interface AccountCustomizationBreadcrumbsProps {
+  type: any;
+}
+
+export const AccountCustomizationBreadcrumbs: React.FC<
+  AccountCustomizationBreadcrumbsProps
+> = ({ type }) => {
   return (
     <Breadcrumbs
       sx={{ ml: 1 }}
@@ -26,4 +32,4 @@ export default function AccountCustomizationBreadcrumbs({ type }) {
       </Typography>
     </Breadcrumbs>
   );
-}
+};

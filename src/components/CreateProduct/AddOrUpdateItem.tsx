@@ -229,7 +229,9 @@ const AddOrUpdateItem: React.FC<AddOrUpdateItemProps> = ({
     setImageDrawerOpen(false);
     if (event.target.files) {
       const files = Array.from(event.target.files);
-      const previewImages = files.map((file) => URL.createObjectURL(file));
+      const previewImages = files.map((file) =>
+        URL.createObjectURL(file as Blob)
+      );
       setNewImages((prev) => [...prev, ...files]);
       setNewImagePreviews((prev) => [...prev, ...previewImages]);
       if (existingImages.length === 0 && newImages.length === 0) {

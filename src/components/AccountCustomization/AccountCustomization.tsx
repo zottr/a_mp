@@ -11,6 +11,7 @@ import {
   useTheme,
 } from '@mui/material';
 import LoadingButton from '../common/LoadingButton';
+import logo1 from '/logos/zottr_logo_small1_white.svg';
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import { useUserContext } from '../../hooks/useUserContext';
 import { UPDATE_ACTIVE_ADMINISTRATOR } from '../../libs/graphql/definitions/administrator-definitions';
@@ -24,11 +25,17 @@ import ServiceErrorAlert from '../common/Alerts/ServiceErrorAlert';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
-import StoreCustomizationBreadcrumbs from './AccountCustomizationBreadcrumbs';
+import { AccountCustomizationBreadcrumbs } from './AccountCustomizationBreadcrumbs';
 import StyledTextField from '../common/styled/StyledTextField';
 import PersonIcon from '@mui/icons-material/Person';
 
-const AccountCustomization = ({ type }) => {
+interface AccountCustomizationProps {
+  type: any;
+}
+
+const AccountCustomization: React.FC<AccountCustomizationProps> = ({
+  type,
+}) => {
   const theme = useTheme();
   const { adminUser, setAdminUser } = useUserContext();
   const [loading, setLoading] = useState(true);
@@ -229,7 +236,7 @@ const AccountCustomization = ({ type }) => {
           }}
         >
           <Stack sx={{}} gap={2}>
-            <StoreCustomizationBreadcrumbs type={type} />
+            <AccountCustomizationBreadcrumbs type={type} />
             <Stack
               direction="row"
               sx={{ display: 'flex', alignItems: 'center' }}
@@ -308,7 +315,8 @@ const AccountCustomization = ({ type }) => {
                         },
                       }}
                     >
-                      <StorefrontIcon sx={{ fontSize: '80px' }} />
+                      {/* <StorefrontIcon sx={{ fontSize: '80px' }} /> */}
+                      <img src={logo1} alt="Logo" style={{ height: '65px' }} />
                     </Avatar>
                     <Stack gap={1}>
                       <Button

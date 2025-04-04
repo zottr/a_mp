@@ -16,6 +16,7 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import ProductStateInfoAlert from './ServiceStateInfoAlert';
 import ShareIcon from '@mui/icons-material/Share';
 import PhotoIcon from '@mui/icons-material/Photo';
+import logo from '/logos/zottr_logo_small2_white.svg';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -117,7 +118,7 @@ const Item: React.FC<ItemProps> = ({
           >
             <Box
               component={RouterLink}
-              to={`/product/${item.id}`}
+              to={`/service/${item.id}`}
               sx={{ textDecoration: 'none', width: '100%', height: '100%' }}
             >
               <Avatar
@@ -129,16 +130,17 @@ const Item: React.FC<ItemProps> = ({
                   height: '100%',
                   aspectRatio: 1,
                   opacity: item.enabled ? 1 : 0.5,
+                  bgcolor: 'grey.300',
                 }}
               >
-                <PhotoIcon sx={{ fontSize: '64px' }} />
+                <img src={logo} alt="Logo" style={{ height: '50px' }} />
               </Avatar>
             </Box>
           </Grid>
           <Grid item xs={6}>
             <Box
               component={RouterLink}
-              to={`/product/${item.id}`}
+              to={`/service/${item.id}`}
               sx={{ textDecoration: 'none' }}
             >
               <Typography

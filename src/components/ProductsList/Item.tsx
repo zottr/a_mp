@@ -13,6 +13,8 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import logo from '/logos/zottr_logo_small2_white.svg';
+// import logo from '/logos/zottr_logo_small2.svg';
 import ProductStateInfoAlert from './ProductStateInfoAlert';
 import ShareIcon from '@mui/icons-material/Share';
 import PhotoIcon from '@mui/icons-material/Photo';
@@ -129,9 +131,10 @@ const Item: React.FC<ItemProps> = ({
                   height: '100%',
                   aspectRatio: 1,
                   opacity: item.enabled ? 1 : 0.5,
+                  bgcolor: 'grey.300',
                 }}
               >
-                <PhotoIcon sx={{ fontSize: '64px' }} />
+                <img src={logo} alt="Logo" style={{ height: '50px' }} />
               </Avatar>
             </Box>
           </Grid>

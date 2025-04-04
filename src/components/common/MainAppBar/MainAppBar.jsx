@@ -2,6 +2,7 @@ import * as React from 'react';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import StorefrontIcon from '@mui/icons-material/Storefront';
+import logo1 from '/logos/zottr_logo_small1_white.svg';
 import StoreIcon from '@mui/icons-material/Store';
 import EditIcon from '@mui/icons-material/Edit';
 import {
@@ -24,7 +25,7 @@ import {
   ListItemIcon,
   Avatar,
 } from '@mui/material';
-import logo from '/logos/zottr_logo_small1.svg';
+import logo from '/logos/zottr_logo_large.svg';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import SettingsIcon from '@mui/icons-material/Settings';
 import HomeIcon from '@mui/icons-material/Home';
@@ -81,7 +82,8 @@ export default function MainAppBar() {
               },
             }}
           >
-            <StorefrontIcon sx={{ fontSize: '40px' }} />
+            {/* <StorefrontIcon sx={{ fontSize: '40px' }} /> */}
+            <img src={logo1} alt="Logo" style={{ height: '35px' }} />
           </Avatar>
           <Stack>
             <Typography variant="heavyb2" sx={{ color: 'grey.900' }}>
@@ -357,9 +359,9 @@ export default function MainAppBar() {
               <Link
                 component={RouterLink}
                 to="/seller/home"
-                sx={{ pt: 2, ml: -1 }}
+                sx={{ pt: 0, ml: 1 }}
               >
-                <img src={logo} alt="Logo" style={{ height: '70px' }} />
+                <img src={logo} alt="Logo" style={{ height: '25px' }} />
               </Link>
             </Stack>
             <Stack
