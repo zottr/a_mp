@@ -13,7 +13,8 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import logo from '/logos/zottr_logo_small2_white.svg';
+// import logo from '/logos/zottr_logo_small2_white_medium_grey.svg';
+import logo from '/logos/zottr_logo_small2_white_light_grey.svg';
 // import logo from '/logos/zottr_logo_small2.svg';
 import ProductStateInfoAlert from './ProductStateInfoAlert';
 import ShareIcon from '@mui/icons-material/Share';

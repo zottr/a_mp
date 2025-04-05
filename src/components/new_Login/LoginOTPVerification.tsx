@@ -20,35 +20,59 @@ import { useNavigate } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 import SuccessAlert from '../common/Alerts/SuccessAlert';
 import CustomSnackBar from '../common/Snackbars/CustomSnackBar';
+import OTPExpiredErrorAlert from '../common/Alerts/OTPExpiredErrorAlert';
+import { ResponseStatus } from '../../utils/ResponseStatus';
 
-function LoginOTPVerification({ phone, setSentOTP }) {
+interface LoginOTPVerificationProps {
+  phone: any;
+  setSentOTP: any;
+}
+
+const LoginOTPVerification: React.FC<LoginOTPVerificationProps> = ({
+  phone,
+  setSentOTP,
+}) => {
   const theme = useTheme();
   const navigate = useNavigate();
-  const [networkError, setNetworkError] = useState(false);
-  const [otpVerificationError, setOtpVerificationError] = useState(false);
   const [resendingOTP, setResendingOTP] = useState(false);
   const [verifyingOTP, setVerifyingOTP] = useState(false);
   const [resentOTP, setResentOTP] = useState(false);
   const [otp, setOTP] = useState('');
+
+  //error states
+  const [serviceError, setServiceError] = useState(false);
+  const [otpInvalidError, setInvalidError] = useState(false);
+  const [otpExpiredError, setOtpExpiredError] = useState(false);
+
   const [authenticateAdmin] = useMutation(AUTHENTICATE_ADMIN_VIA_OTP);
 
   // countdown states
   const [timer, setTimer] = useState(600); // 10 minutes in seconds
   const [isTimerActive, setIsTimerActive] = useState(true);
 
+  function resetErrorStates() {
+    setServiceError(false);
+    setInvalidError(false);
+    setOtpExpiredError(false);
+  }
   const resendOTP = async () => {
     try {
       setOTP('');
       setResendingOTP(true);
       setResentOTP(false);
-      setNetworkError(false);
-      setOtpVerificationError(false);
+      resetErrorStates();
       setTimer(600); // Reset the timer
 
-      await axiosClient.post('otp/send-otp-login', { phoneNumber: phone });
-      setResentOTP(true);
+      const response = await axiosClient.post('otp/send-otp-login', {
+        phoneNumber: phone,
+      });
+      console.log(response);
+      if (response.data.status === ResponseStatus.SUCCESS) setResentOTP(true);
+      else {
+        setServiceError(true);
+      }
     } catch (error) {
-      setNetworkError(true);
+      setServiceError(true);
       console.log(error);
     } finally {
       setResendingOTP(false);
@@ -58,9 +82,9 @@ function LoginOTPVerification({ phone, setSentOTP }) {
   useEffect(() => {
     const verifyOTP = async () => {
       try {
+        setResentOTP(false);
         setVerifyingOTP(true);
-        setNetworkError(false);
-        setOtpVerificationError(false);
+        resetErrorStates();
 
         const result = await authenticateAdmin({
           variables: {
@@ -78,10 +102,10 @@ function LoginOTPVerification({ phone, setSentOTP }) {
           case 'InvalidCredentialsError':
           case 'NativeAuthStrategyError':
           default:
-            setOtpVerificationError(true);
+            setInvalidError(true);
         }
       } catch (error) {
-        setNetworkError(true);
+        setServiceError(true);
         console.log(error);
       } finally {
         setVerifyingOTP(false);
@@ -115,7 +139,7 @@ function LoginOTPVerification({ phone, setSentOTP }) {
     }
   }, [resentOTP, isTimerActive]);
 
-  const formatTime = (timeInSeconds) => {
+  const formatTime = (timeInSeconds: any) => {
     const minutes = Math.floor(timeInSeconds / 60);
     const seconds = timeInSeconds % 60;
     return `${minutes < 10 ? '0' : ''}${minutes}:${
@@ -142,13 +166,13 @@ function LoginOTPVerification({ phone, setSentOTP }) {
           Log In
         </Typography>
         <Stack sx={{ display: 'flex', alignItems: 'center' }}>
-          <Typography variant="h7" sx={{ color: 'grey.700' }}>
+          <Typography variant="h6" sx={{ color: 'grey.800' }}>
             Enter 6-digit verification code
           </Typography>
           <Typography
             variant="b1"
             align="center"
-            color={theme.palette.grey[600]}
+            color={theme.palette.grey[700]}
           >
             received on Whatsapp +91{phone}
           </Typography>
@@ -180,7 +204,7 @@ function LoginOTPVerification({ phone, setSentOTP }) {
           <Typography
             sx={{
               marginTop: 2,
-              color: theme.palette.warning.main,
+              color: theme.palette.warning.dark,
               // Using the default monospaced font so the text doesn't
               // move horizontally with changing timeer digits as mono-
               //-space letters all have same widths
@@ -191,9 +215,14 @@ function LoginOTPVerification({ phone, setSentOTP }) {
             Code expiring in: {formatTime(timer)}
           </Typography>
           {/*error alerts*/}
-          {otpVerificationError && !verifyingOTP && (
+          {otpInvalidError && !verifyingOTP && (
             <Box sx={{ marginTop: '20px' }}>
               <OTPInvalidErrorAlert />
+            </Box>
+          )}
+          {otpExpiredError && !verifyingOTP && (
+            <Box sx={{ marginTop: '20px' }}>
+              <OTPExpiredErrorAlert />
             </Box>
           )}
         </Stack>
@@ -203,7 +232,7 @@ function LoginOTPVerification({ phone, setSentOTP }) {
             marginTop: '20px',
           }}
         >
-          <Typography color={theme.palette.grey[700]} variant="b1">
+          <Typography color={theme.palette.grey[800]} variant="b1">
             Did not receive a verification code ?
           </Typography>
           <Stack
@@ -217,9 +246,8 @@ function LoginOTPVerification({ phone, setSentOTP }) {
             }}
           >
             <LoadingButton
-              loading={resendingOTP && !networkError}
+              loading={resendingOTP && !serviceError}
               variant="contained"
-              size="large"
               type="button"
               buttonStyles={{
                 backgroundColor: 'primary.light',
@@ -256,7 +284,7 @@ function LoginOTPVerification({ phone, setSentOTP }) {
                 }}
               />
               <Typography
-                color="grey.600"
+                color="grey.800"
                 sx={{
                   ml: 0.2,
                   textTransform: 'none',
@@ -283,6 +311,6 @@ function LoginOTPVerification({ phone, setSentOTP }) {
       />
     </>
   );
-}
+};
 
 export default LoginOTPVerification;

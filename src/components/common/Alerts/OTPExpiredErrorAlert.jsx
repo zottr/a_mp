@@ -1,6 +1,6 @@
 import ErrorAlert from './ErrorAlert';
 
-export default function SignUpOTPExpiredErrorAlert() {
+export default function OTPExpiredErrorAlert() {
   return (
     <ErrorAlert
       title="Verification code expired"

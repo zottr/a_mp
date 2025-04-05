@@ -6,14 +6,17 @@ import { AUTHENTICATE_ADMIN_VIA_OTP } from '../../libs/graphql/definitions/auth-
 import { useMutation } from '@apollo/client';
 import ServiceErrorAlert from '../common/Alerts/ServiceErrorAlert';
 import { useState } from 'react';
+import LoadingButton from '../common/LoadingButton';
 
 function SignUpSuccess({ phone, otp }) {
   const theme = useTheme();
   const navigate = useNavigate();
   const [authenticateAdmin] = useMutation(AUTHENTICATE_ADMIN_VIA_OTP);
+  const [loggingIn, setLoggingIn] = useState(false);
 
   const loginAndNavigateToHome = async () => {
     try {
+      setLoggingIn(true);
       const result = await authenticateAdmin({
         variables: {
           phoneNumber: phone,
@@ -22,7 +25,7 @@ function SignUpSuccess({ phone, otp }) {
       });
       switch (result.data.authenticate.__typename) {
         case 'CurrentUser':
-          navigate('/home');
+          navigate('/welcome');
           break;
         case 'InvalidCredentialsError':
         case 'NativeAuthStrategyError':
@@ -33,6 +36,7 @@ function SignUpSuccess({ phone, otp }) {
       console.log(error);
       navigate('/login');
     }
+    setLoggingIn(false);
   };
 
   return (
@@ -62,33 +66,57 @@ function SignUpSuccess({ phone, otp }) {
             }}
           >
             <CheckCircle
-              sx={{ fontSize: '120px', color: theme.palette.success.main }}
+              sx={{ fontSize: '150px', color: theme.palette.success.main }}
             />
           </motion.div>
-          <Typography
-            variant="h5"
-            color="success.light"
-            sx={{ fontWeight: '500' }}
-          >
+          <Typography variant="h5" color="success.main">
             Congratulations
           </Typography>
         </Stack>
         <Typography
-          variant="heavyb1"
+          variant="h7"
           sx={{
             textAlign: 'center',
-            color: theme.palette.grey[600],
+            color: theme.palette.grey[700],
           }}
         >
-          Your seller account has been created successfully!
+          Your account has been created successfully!
         </Typography>
-        <Button
+        {/* <Button
           onClick={loginAndNavigateToHome}
           variant="contained"
           sx={{ width: '100%', height: '50px', borderRadius: '25px' }}
         >
-          <Typography variant="button1">Go To Dashboard</Typography>
-        </Button>
+          <Typography variant="button1">Let's go</Typography>
+        </Button> */}
+        <LoadingButton
+          loading={loggingIn}
+          variant="contained"
+          type="button"
+          buttonStyles={{
+            backgroundColor: 'primary.main',
+            borderRadius: '25px',
+          }}
+          buttonContainerStyles={{
+            width: '100%',
+            height: '55px',
+          }}
+          label="Let's go"
+          labelStyles={{
+            color: 'white',
+          }}
+          loadingLabel="logging in..."
+          loadingLabelStyles={{
+            color: 'white',
+          }}
+          labelVariant="button1"
+          progressSize={24}
+          progressThickness={4}
+          progressStyles={{
+            color: 'white',
+          }}
+          onClick={loginAndNavigateToHome}
+        />
       </Stack>
     </Container>
   );

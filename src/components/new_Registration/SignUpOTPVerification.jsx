@@ -15,11 +15,11 @@ import { ATTEMPT_LOGIN } from '../../libs/graphql/definitions/auth-definitions';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ServiceErrorAlert from '../common/Alerts/ServiceErrorAlert';
 import SuccessAlert from '../common/Alerts/SuccessAlert';
-import SignUpOTPInvalidErrorAlert from '../common/Alerts/OTPInvalidErrorAlert';
+import OTPInvalidErrorAlert from '../common/Alerts/OTPInvalidErrorAlert';
 import { useMutation } from '@apollo/client';
 import { ResponseStatus } from '../../utils/ResponseStatus';
 import { ErrorCode } from '../../utils/ErrorCodes';
-import SignUpOTPExpiredErrorAlert from '../common/Alerts/SignUpOTPExpiredErrorAlert';
+import OTPExpiredErrorAlert from '../common/Alerts/OTPExpiredErrorAlert';
 import EditIcon from '@mui/icons-material/Edit';
 import CustomSnackBar from '../common/Snackbars/CustomSnackBar';
 
@@ -180,13 +180,13 @@ function SignUpOTPVerification({
           Create New Account
         </Typography>
         <Stack sx={{ display: 'flex', alignItems: 'center' }}>
-          <Typography variant="h7" sx={{ color: 'grey.700' }}>
+          <Typography variant="h6" sx={{ color: 'grey.800' }}>
             Enter 6-digit verification code
           </Typography>
           <Typography
             variant="b1"
             align="center"
-            color={theme.palette.grey[600]}
+            color={theme.palette.grey[700]}
           >
             received on Whatsapp +91{phone}
           </Typography>
@@ -217,7 +217,7 @@ function SignUpOTPVerification({
           <Typography
             sx={{
               marginTop: 2,
-              color: theme.palette.warning.main,
+              color: theme.palette.warning.dark,
               // Using the default monospaced font so the text doesn't
               // move horizontally with changing timeer digits as mono-
               //-space letters all have same widths
@@ -227,16 +227,15 @@ function SignUpOTPVerification({
           >
             Code expiring in: {formatTime(timer)}
           </Typography>
-
           {/*error alerts*/}
           {otpInvalidError && !verifyingOTP && (
             <Box sx={{ marginTop: '20px' }}>
-              <SignUpOTPInvalidErrorAlert />
+              <OTPInvalidErrorAlert />
             </Box>
           )}
           {otpExpiredError && !verifyingOTP && (
             <Box sx={{ marginTop: '20px' }}>
-              <SignUpOTPExpiredErrorAlert />
+              <OTPExpiredErrorAlert />
             </Box>
           )}
         </Stack>
@@ -246,7 +245,7 @@ function SignUpOTPVerification({
             marginTop: '20px',
           }}
         >
-          <Typography color={theme.palette.grey[700]} variant="b1">
+          <Typography color={theme.palette.grey[800]} variant="b1">
             Did not receive a verification code ?
           </Typography>
           <Stack
@@ -299,7 +298,7 @@ function SignUpOTPVerification({
                 }}
               />
               <Typography
-                color="grey.600"
+                color="grey.800"
                 sx={{
                   ml: 0.2,
                   textTransform: 'none',

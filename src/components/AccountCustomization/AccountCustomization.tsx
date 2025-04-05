@@ -305,9 +305,7 @@ const AccountCustomization: React.FC<AccountCustomizationProps> = ({
                         height: '100px',
                         padding: 1.5,
                         bgcolor:
-                          logoPreview !== ''
-                            ? 'transparent'
-                            : 'primary.surface',
+                          logoPreview !== '' ? 'transparent' : 'grey.300',
                         // border: '1px solid grey',
                         '& img': {
                           objectFit: 'contain', // Ensures image covers the Avatar

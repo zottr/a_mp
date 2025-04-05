@@ -23,7 +23,12 @@ function SignUpHome() {
   return (
     <>
       {!sellerRegistered && (
-        <Grid container sx={{ marginTop: '30px' }}>
+        <Grid
+          container
+          spacing={0}
+          justifyContent="center"
+          sx={{ marginTop: '30px' }}
+        >
           <Grid
             item
             xs={12}

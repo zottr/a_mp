@@ -8,7 +8,6 @@ import {
   Menu,
   MenuItem,
   Stack,
-  Switch,
   Typography,
 } from '@mui/material';
 import { useState } from 'react';
@@ -16,7 +15,7 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import ProductStateInfoAlert from './ServiceStateInfoAlert';
 import ShareIcon from '@mui/icons-material/Share';
 import PhotoIcon from '@mui/icons-material/Photo';
-import logo from '/logos/zottr_logo_small2_white.svg';
+import logo from '/logos/zottr_logo_small2_white_light_grey.svg';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import MoreVertIcon from '@mui/icons-material/MoreVert';

@@ -91,7 +91,7 @@ function LoginForm({ setSentOTP, setPhone }) {
         <Box sx={{ textAlign: 'center' }}>
           <Typography
             variant="b1"
-            sx={{ color: theme.palette.grey[700], textAlign: 'center' }}
+            sx={{ color: theme.palette.grey[800], textAlign: 'center' }}
           >
             Enter your Whatsapp phone number
           </Typography>
@@ -147,7 +147,7 @@ function LoginForm({ setSentOTP, setPhone }) {
         <Stack gap={2} sx={{ mt: 2 }}>
           <Typography
             variant="b1"
-            sx={{ color: theme.palette.grey[700], textAlign: 'center' }}
+            sx={{ color: theme.palette.grey[800], textAlign: 'center' }}
           >
             Don't have an account yet? Sign up now
           </Typography>

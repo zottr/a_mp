@@ -104,7 +104,7 @@ function SignUpLandingPage({ setSentOTP, setPhone, phone }) {
       <Box sx={{ textAlign: 'center' }}>
         <Typography
           variant="b1"
-          sx={{ color: theme.palette.grey[700], textAlign: 'center' }}
+          sx={{ color: theme.palette.grey[800], textAlign: 'center' }}
         >
           Enter your Whatsapp phone number
         </Typography>
@@ -183,7 +183,7 @@ function SignUpLandingPage({ setSentOTP, setPhone, phone }) {
       />
       <Typography
         variant="b1"
-        sx={{ color: theme.palette.grey[700], textAlign: 'center' }}
+        sx={{ color: theme.palette.grey[800], textAlign: 'center' }}
       >
         Already have an account?{' '}
         <Link component={RouterLink} to="/login" underline="none">
