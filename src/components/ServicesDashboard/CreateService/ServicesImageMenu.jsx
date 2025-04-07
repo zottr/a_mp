@@ -65,7 +65,7 @@ function ServicesImageMenu({
         <MenuItem>
           <Button
             variant="text"
-            onClick={() => handleRemoveImage(index, true, closeImageMenu)}
+            onClick={() => handleRemoveImage(index, !existing, closeImageMenu)}
             sx={{ color: 'grey.700' }}
           >
             <DeleteIcon sx={{ mr: 1 }} />

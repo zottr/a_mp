@@ -450,7 +450,7 @@ const AddOrUpdateItem: React.FC<AddOrUpdateItemProps> = ({
 
   const updateExistingProduct = async () => {
     let featuredAsset;
-    let remainingAssets = [];
+    let remainingAssetIdsWithoutFeaturesAsset = [];
     if (existingImageIdsToRemove && existingImageIdsToRemove?.length > 0) {
       try {
         await deleteAssets({
@@ -479,16 +479,28 @@ const AddOrUpdateItem: React.FC<AddOrUpdateItemProps> = ({
         console.error('Failed to add assets:', err);
       }
     }
+    /**we need to remove featured asset id from existingImages & newlyAddedAssets arrays as updateProuct call expect us to pass featuredAsset id and rest of the assets in separate properties*/
+    let existingImagesWithoutFeaturedAsset = [...existingImages];
+    let newlyAddedAssetsWithoutFeaturedAsset = [...newlyAddedAssets];
     if (mainImageIndex && mainImageIndex.startsWith('existing-')) {
       const mainIndex = parseInt(mainImageIndex.split('-')[1], 10);
-      featuredAsset = existingImages.splice(mainIndex, 1)[0]?.id;
+      featuredAsset = existingImagesWithoutFeaturedAsset.splice(mainIndex, 1)[0]
+        ?.id;
     } else if (mainImageIndex && mainImageIndex.startsWith('new-')) {
       const mainIndex = parseInt(mainImageIndex.split('-')[1], 10);
-      featuredAsset = newlyAddedAssets.splice(mainIndex, 1)[0]?.id;
+      featuredAsset = newlyAddedAssetsWithoutFeaturedAsset.splice(
+        mainIndex,
+        1
+      )[0]?.id;
     }
-    const existingAssetIds = existingImages?.map((asset) => asset.id);
-    const newAssetIds = newlyAddedAssets?.map((asset: any) => asset.id);
-    remainingAssets = [...existingAssetIds, ...newAssetIds];
+    const existingAssetIdsWithoutFeaturedAsset =
+      existingImagesWithoutFeaturedAsset?.map((asset) => asset.id);
+    const newAssetIdsWithoutFeaturesAsset =
+      newlyAddedAssetsWithoutFeaturedAsset?.map((asset: any) => asset.id);
+    remainingAssetIdsWithoutFeaturesAsset = [
+      ...existingAssetIdsWithoutFeaturedAsset,
+      ...newAssetIdsWithoutFeaturesAsset,
+    ];
     try {
       const result = await updateProduct({
         variables: {
@@ -504,7 +516,7 @@ const AddOrUpdateItem: React.FC<AddOrUpdateItemProps> = ({
             // facetValueIds: [sellerFacetValueId, product.categoryId], //remove only category facet id and add new one
             facetValueIds: [product.categoryId], //remove only category facet id and add new one
             featuredAssetId: featuredAsset,
-            assetIds: remainingAssets,
+            assetIds: remainingAssetIdsWithoutFeaturesAsset,
           },
         },
       });

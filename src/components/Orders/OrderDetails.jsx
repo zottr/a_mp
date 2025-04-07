@@ -30,6 +30,7 @@ import { useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 import OrderNotFoundAlert from './OrderNotFoundAlert';
 import OrderDetailsSkeleton from './OrderDetailsSkeleton';
+import { initiateAudioCall, openWhatsAppChat } from '../../utils/CommonUtils';
 
 function OrderDetails() {
   // if (!data?.order?.opened) updateOpenedById(data?.order?.id, false);
@@ -278,6 +279,9 @@ function OrderDetails() {
                     borderRadius: '25px',
                     borderColor: theme.palette.grey[500],
                   }}
+                  onClick={() =>
+                    openWhatsAppChat(data?.order?.customer?.phoneNumber)
+                  }
                 >
                   <Typography variant="button2" color={theme.palette.grey[700]}>
                     Chat With Customer
@@ -295,6 +299,9 @@ function OrderDetails() {
                     borderRadius: '25px',
                     borderColor: theme.palette.grey[500],
                   }}
+                  onClick={() =>
+                    initiateAudioCall(data?.order?.customer?.phoneNumber)
+                  }
                 >
                   <Typography variant="button2" color={theme.palette.grey[700]}>
                     Call Customer
@@ -487,6 +494,8 @@ function OrderDetails() {
           open={openDialog}
           handleClose={handleCloseDialog}
           status={data?.order?.customFields?.adminStatus}
+          phoneNumber={data?.order?.customer?.phoneNumber}
+          orderId={data?.order?.id}
         />
       </Box>
     </>

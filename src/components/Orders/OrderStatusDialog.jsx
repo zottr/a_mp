@@ -8,13 +8,33 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import { Typography } from '@mui/material';
 import { useTheme } from '@mui/material';
+import { openWhatsAppChat } from '../../utils/CommonUtils';
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function OrderStatusDialog({ open, handleClose, status }) {
+export default function OrderStatusDialog({
+  open,
+  handleClose,
+  status,
+  phoneNumber,
+  orderId,
+}) {
   const theme = useTheme();
+
+  const handleMessageCustomer = () => {
+    let message = '';
+    if (status === 'accepted') {
+      message = `We have received your order with order id #${orderId}, we will deliver it soon.`;
+    } else if (status === 'rejected') {
+      message = `Sorry, we won't be able to deliver your order with order id #${orderId}`;
+    }
+    openWhatsAppChat(phoneNumber, message);
+    handleClose();
+  };
+
   return (
     <React.Fragment>
       <Dialog
@@ -54,9 +74,27 @@ export default function OrderStatusDialog({ open, handleClose, status }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button variant="contained" size="large" onClick={handleClose}>
+          <Button
+            variant="contained"
+            size="medium"
+            onClick={handleMessageCustomer}
+            sx={{
+              backgroundColor: 'hsl(142.4,70.2%,42.6%)',
+              '&:hover': {
+                backgroundColor: 'hsl(142.4,70.2%,35%)',
+              },
+              color: 'white', // Sets text and icon color to white
+              display: 'flex',
+              gap: 1,
+              alignItems: 'center',
+              height: '3rem',
+              borderRadius: '40px',
+            }}
+          >
+            <WhatsAppIcon fontSize="medium" />
             <Typography variant="button1">Message Customer</Typography>
           </Button>
+
           <Button variant="text" size="large" onClick={handleClose}>
             <Typography variant="button1" color={theme.palette.grey[500]}>
               skip
