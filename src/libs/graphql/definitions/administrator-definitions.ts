@@ -27,7 +27,6 @@ export const ADMINISTRATOR_FRAGMENT = gql`
     emailAddress
     customFields {
       phoneNumber
-      whatsapp
       upiId
       upiPhone
       upiName
@@ -41,12 +40,6 @@ export const ADMINISTRATOR_FRAGMENT = gql`
         ...Asset
       }
       banner1 {
-        ...Asset
-      }
-      banner2 {
-        ...Asset
-      }
-      banner3 {
         ...Asset
       }
     }
@@ -177,7 +170,6 @@ export const READ_ADMINISTRATORS = gql`
         emailAddress
         customFields {
           phoneNumber
-          whatsapp
           business
           upiId
           upiPhone

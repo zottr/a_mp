@@ -27,7 +27,6 @@ function Products({ setProductAction, setUpdatedProductName }) {
   const [servicesCategoryId, setServicesCategoryId] = useState('');
 
   function afterInitialDataFetch(data) {
-    console.log('data fetched for first time: ', data);
     setServerProductList(data?.products?.items || []);
     if (!initialLoadCompleted) setInitialLoadCompleted(true);
     setHasMore(data.products.items.length < data.products.totalItems);
@@ -43,7 +42,6 @@ function Products({ setProductAction, setUpdatedProductName }) {
       },
     },
     onCompleted: (fetchedData) => {
-      console.log(fetchedData);
       // Find the item where code === "services"
       const servicesCategory = fetchedData?.facetValues?.items?.find(
         (item) => item.code === 'services'
@@ -80,10 +78,8 @@ function Products({ setProductAction, setUpdatedProductName }) {
 
   // Rerun the query when refetchProducts === true
   useEffect(() => {
-    console.log('refetchProducts: ', refetchProducts);
     if (refetchProducts) {
       refetch().then(({ data }) => {
-        console.log('Refetched data:', data);
         afterInitialDataFetch(data);
       });
       setRefetchProducts(false);
@@ -126,11 +122,6 @@ function Products({ setProductAction, setUpdatedProductName }) {
         },
       })
         .then(({ data: fetchedData }) => {
-          console.log(
-            'number of items already loaded: ',
-            serverProductList.length
-          );
-          console.log('new items loaded: ', fetchedData.products.items);
           const newProducts = fetchedData.products.items;
           setServerProductList((prevProducts) => [
             ...prevProducts,
@@ -145,7 +136,6 @@ function Products({ setProductAction, setUpdatedProductName }) {
           console.error('Error fetching more products:', error);
         })
         .finally(() => {
-          console.log('setloadingmore set to false');
           setLoadingMore(false);
         });
     };
@@ -249,7 +239,7 @@ function Products({ setProductAction, setUpdatedProductName }) {
                 justifyContent: 'center',
               }}
             >
-              <Typography variant="heavyb2" color="brown">
+              <Typography variant="heavyb2" color="secondary.dark">
                 That's all!
               </Typography>
               <Typography variant="b1" sx={{ fontSize: '20px' }}>

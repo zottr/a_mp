@@ -15,8 +15,6 @@ const ViewProfile: React.FC = () => {
     setShowEdit(false);
   };
 
-  if (adminUser) console.log(adminUser);
-
   if (!adminUser) {
     return <Typography variant="h6">No user data available</Typography>;
   }

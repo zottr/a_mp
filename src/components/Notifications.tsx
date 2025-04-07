@@ -37,7 +37,6 @@ const Notifications: React.FC<NotifificationsProps> = ({ type }) => {
 
   useEffect(() => {
     if (adminUser != null) {
-      console.log(adminUser);
       if (adminUser.customFields.businessLogo != null)
         setStoreLogoPresent(true);
       if (

@@ -44,7 +44,6 @@ function SellerHome() {
     const storedData = sessionStorage.getItem('productData');
     if (storedData) {
       const parsedData = JSON.parse(storedData);
-      console.log(parsedData);
       setProductAction(parsedData.action);
       setUpdatedProductName(parsedData.name);
       // Remove from sessionStorage after reading

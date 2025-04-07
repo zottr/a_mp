@@ -60,7 +60,6 @@ function SignUpDetails({ phone, setSellerRegistered }) {
           businessName: businessName,
           phoneNumber: phone,
         });
-        console.log(response);
         if (response.data.status === ResponseStatus.SUCCESS)
           setSellerRegistered(true);
         else {

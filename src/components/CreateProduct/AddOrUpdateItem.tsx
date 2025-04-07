@@ -286,21 +286,6 @@ const AddOrUpdateItem: React.FC<AddOrUpdateItemProps> = ({
     setMainImageIndex(existing ? `existing-${index}` : `new-${index}`);
   };
 
-  // const resetForm = () => {
-  //   console.log('reset form called');
-  //   setProduct({
-  //     id: '',
-  //     name: '',
-  //     description: '',
-  //     price: null,
-  //     enabled: true,
-  //     categoryId: '',
-  //     categoryName: '',
-  //     mainImage: '',
-  //     previewMainImage: '',
-  //   });
-  // };
-
   const handleSubmit = async (event: any) => {
     event.preventDefault();
     setCreatingOrUpdatingProduct(true);

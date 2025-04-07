@@ -91,7 +91,6 @@ function Orders() {
     if (loading || !hasMore) return;
 
     const handleIntersect = (entries) => {
-      console.log(entries);
       const [entry] = entries;
       if (entry.isIntersecting) {
         loadMore();
@@ -292,7 +291,7 @@ function Orders() {
                       justifyContent: 'center',
                     }}
                   >
-                    <Typography variant="heavyb2" color="brown">
+                    <Typography variant="heavyb2" color="secondary.dark">
                       That's all!
                     </Typography>
                     <Typography variant="b1" sx={{ fontSize: '20px' }}>

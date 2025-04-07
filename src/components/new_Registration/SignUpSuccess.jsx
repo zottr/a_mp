@@ -33,7 +33,7 @@ function SignUpSuccess({ phone, otp }) {
           navigate('/login');
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       navigate('/login');
     }
     setLoggingIn(false);

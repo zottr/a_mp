@@ -61,7 +61,7 @@ function LoginForm({ setSentOTP, setPhone }) {
           handleOTPError(response.data.errorCode);
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
         handleOTPError(error.response?.data.errorCode);
       } finally {
         setSendingOTP(false);

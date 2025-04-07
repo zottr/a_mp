@@ -67,7 +67,6 @@ function SignUpOTPVerification({
       const response = await axiosClient.post('otp/send-otp-signup', {
         phoneNumber: phone,
       });
-      console.log(response);
       if (response.data.status === ResponseStatus.SUCCESS) setResentOTP(true);
       else {
         //ideally axios will throw an exception if nest returns a response with an error

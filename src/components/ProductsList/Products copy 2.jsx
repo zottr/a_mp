@@ -197,7 +197,7 @@ function Products({ setProductAction, setUpdatedProductName }) {
                 justifyContent: 'center',
               }}
             >
-              <Typography variant="heavyb2" color="brown">
+              <Typography variant="heavyb2" color="secondary.dark">
                 That's all!
               </Typography>
               <Typography variant="b1" sx={{ fontSize: '20px' }}>

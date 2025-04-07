@@ -134,7 +134,6 @@ const AddOrUpdateService: React.FC<AddOrUpdateItemProps> = ({
       },
     },
     onCompleted: (fetchedData) => {
-      console.log(fetchedData);
       // Find the item where code === "services"
       const servicesCategory = fetchedData?.facetValues?.items?.find(
         (item: any) => item.code === 'services'

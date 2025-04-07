@@ -32,7 +32,6 @@ function SecondaryInfoForm({ sellerData, setSellerData }) {
         businessName: '',
       });
     }
-    console.log(sellerData);
     //send sellerData to REST endpoint in a POST request
     // Construct FormData object
     const formData = new FormData();
@@ -68,7 +67,6 @@ function SecondaryInfoForm({ sellerData, setSellerData }) {
           },
         }
       );
-      console.log('Response:', response.data);
     } catch (error) {
       console.error(
         'Error uploading form data:',

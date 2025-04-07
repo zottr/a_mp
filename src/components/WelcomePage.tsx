@@ -146,7 +146,7 @@ function WelcomePage() {
               variant="h6"
               sx={{ fontWeight: 600, color: 'grey.900' }}
             >
-              Provide A Service
+              Provide Services
             </Typography>
           </Button>
           <Box

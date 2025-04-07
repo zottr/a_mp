@@ -47,8 +47,6 @@ const DeleteServiceDialog: React.FC<DeleteServiceDialogProps> = ({
       },
       fetchPolicy: 'cache-and-network',
       onCompleted: (fetchedData) => {
-        console.log('fetched all images');
-        console.log(fetchedData);
         //create images by adding cover image as well
         const allImages = [...fetchedData.product.assets];
         if (allImages && fetchedData.product.featuredAsset) {

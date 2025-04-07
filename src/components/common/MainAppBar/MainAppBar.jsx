@@ -90,7 +90,7 @@ export default function MainAppBar() {
               {adminUser?.customFields.businessName}
             </Typography>
             <Typography variant="heavyb3" sx={{ color: 'grey.700' }}>
-              {adminUser?.customFields.whatsapp}
+              {adminUser?.customFields.phoneNumber}
             </Typography>
           </Stack>
         </Stack>

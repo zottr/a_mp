@@ -67,7 +67,6 @@ const EditProfile = ({ onUpdateCallback, onCancelCallback }) => {
   };
 
   const handleSubmit = async (event) => {
-    console.log(formData);
     event.preventDefault();
     let validationErrors = {
       name: '',
@@ -150,7 +149,7 @@ const EditProfile = ({ onUpdateCallback, onCancelCallback }) => {
           }
         }
       } catch (err) {
-        console.log('Failed to create asset' + err);
+        console.error('Failed to create asset' + err);
       }
 
       const adminInput = {
@@ -174,7 +173,6 @@ const EditProfile = ({ onUpdateCallback, onCancelCallback }) => {
             input: adminInput,
           },
         });
-        console.log(updateResult);
         onUpdateCallback(updateResult.data.updateActiveAdministrator);
       } catch (err) {
         if (err instanceof ApolloError) {
@@ -219,7 +217,6 @@ const EditProfile = ({ onUpdateCallback, onCancelCallback }) => {
     }
 
     event.target.value = null;
-    console.log(formData);
   }
 
   const handleFileDelete = (file, name) => {

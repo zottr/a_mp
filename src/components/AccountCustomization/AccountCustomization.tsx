@@ -66,7 +66,6 @@ const AccountCustomization: React.FC<AccountCustomizationProps> = ({
 
   //Update settings when adminUser changes
   useEffect(() => {
-    console.log(adminUser);
     if (adminUser !== null) {
       if (adminUser?.customFields?.businessLogo !== null) {
         setLogoPreview(adminUser?.customFields?.businessLogo?.preview);
@@ -138,7 +137,6 @@ const AccountCustomization: React.FC<AccountCustomizationProps> = ({
       });
       //update local admin user state
       if (result.data) {
-        console.log(result.data);
         setAdminUser((prev) => {
           if (!prev) return prev; // Avoid modifying if `prev` is null
           return {

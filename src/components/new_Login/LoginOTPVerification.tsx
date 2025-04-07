@@ -66,14 +66,13 @@ const LoginOTPVerification: React.FC<LoginOTPVerificationProps> = ({
       const response = await axiosClient.post('otp/send-otp-login', {
         phoneNumber: phone,
       });
-      console.log(response);
       if (response.data.status === ResponseStatus.SUCCESS) setResentOTP(true);
       else {
         setServiceError(true);
       }
     } catch (error) {
       setServiceError(true);
-      console.log(error);
+      console.error(error);
     } finally {
       setResendingOTP(false);
     }
@@ -92,7 +91,6 @@ const LoginOTPVerification: React.FC<LoginOTPVerificationProps> = ({
             otp: otp,
           },
         });
-        console.log(result);
         switch (result.data.authenticate.__typename) {
           case 'CurrentUser':
             // handle success
@@ -106,7 +104,7 @@ const LoginOTPVerification: React.FC<LoginOTPVerificationProps> = ({
         }
       } catch (error) {
         setServiceError(true);
-        console.log(error);
+        console.error(error);
       } finally {
         setVerifyingOTP(false);
       }

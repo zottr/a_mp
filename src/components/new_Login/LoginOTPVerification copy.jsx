@@ -40,7 +40,7 @@ function LoginOTPVerification({ phone, setSentOTP }) {
       setResentOTP(true);
     } catch (error) {
       setNetworkError(true);
-      console.log(error);
+      console.error(error);
     } finally {
       setResendingOTP(false);
     }
@@ -59,7 +59,6 @@ function LoginOTPVerification({ phone, setSentOTP }) {
             otp: otp,
           },
         });
-        console.log(result);
         switch (result.data.authenticate.__typename) {
           case 'CurrentUser':
             // handle success
@@ -73,7 +72,7 @@ function LoginOTPVerification({ phone, setSentOTP }) {
         }
       } catch (error) {
         setNetworkError(true);
-        console.log(error);
+        console.error(error);
       } finally {
         setVerifyingOTP(false);
       }
