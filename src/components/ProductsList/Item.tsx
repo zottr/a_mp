@@ -26,6 +26,7 @@ import { UPDATE_PRODUCT } from '../../libs/graphql/definitions/product-definitio
 import { useMutation } from '@apollo/client';
 import CustomSnackBar from '../common/Snackbars/CustomSnackBar';
 import DeleteProductDialog from '../CreateProduct/DeleteProductDialog';
+import ShareButton from '../common/ShareButton';
 
 interface ItemProps {
   item: any;
@@ -103,6 +104,10 @@ const Item: React.FC<ItemProps> = ({
     setOpenDeleteDialog(true);
   }
 
+  function handleCloseBeforeShare() {
+    handleMenuClose();
+  }
+
   return (
     <>
       <Box>
@@ -176,7 +181,6 @@ const Item: React.FC<ItemProps> = ({
             <Grid item xs={4} className={'flexCenter'}>
               <Switch
                 color="primary"
-                defaultChecked
                 onChange={toggleProductVisibility}
                 checked={item.enabled}
                 size="small"
@@ -230,18 +234,12 @@ const Item: React.FC<ItemProps> = ({
         }}
       >
         <MenuItem>
-          <Button>
-            <Stack
-              gap={1}
-              direction="row"
-              sx={{ display: 'flex', alignItems: 'center' }}
-            >
-              <Typography variant="button2" sx={{ color: 'grey.700' }}>
-                Share
-              </Typography>
-              <ShareIcon fontSize="small" sx={{ color: 'primary.main' }} />
-            </Stack>
-          </Button>
+          <ShareButton
+            preShareAction={handleCloseBeforeShare}
+            text={item.description}
+            title={item.name}
+            url={`https://urbanahaat.zottr.com/product/${item?.slug}/share`}
+          />
         </MenuItem>
         <Divider />
         <MenuItem>

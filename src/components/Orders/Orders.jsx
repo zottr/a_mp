@@ -281,7 +281,7 @@ function Orders() {
                       {index !== orders.length - 1 && <Divider />}
                     </div>
                   ))}
-                {!hasMore && (
+                {!hasMore && data?.orders?.totalItems > 5 && (
                   <Stack
                     direction="row"
                     sx={{
@@ -292,10 +292,7 @@ function Orders() {
                     }}
                   >
                     <Typography variant="heavyb2" color="secondary.dark">
-                      That's all!
-                    </Typography>
-                    <Typography variant="b1" sx={{ fontSize: '20px' }}>
-                      &#x1F44B;
+                      👀 You’ve seen it all!
                     </Typography>
                   </Stack>
                 )}

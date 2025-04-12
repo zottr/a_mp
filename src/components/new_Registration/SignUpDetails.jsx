@@ -58,6 +58,7 @@ function SignUpDetails({ phone, setSellerRegistered }) {
         const response = await axiosClient.post('mpregistration/mpseller', {
           sellerName: name,
           businessName: businessName,
+          businessAddress: address,
           phoneNumber: phone,
         });
         if (response.data.status === ResponseStatus.SUCCESS)

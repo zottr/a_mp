@@ -46,16 +46,35 @@ const Notifications: React.FC<NotifificationsProps> = ({ type }) => {
         setStoreTaglinePresent(true);
       if (
         type === 'seller' &&
-        (adminUser.customFields.upiId !== '' ||
-          adminUser.customFields.upiPhone !== '' ||
+        (adminUser.customFields.upiId !== null ||
+          adminUser.customFields.upiPhone !== null ||
           adminUser.customFields.upiScan !== null)
       )
         setUpiInfoPresent(true);
     }
   }, [adminUser]);
 
+  if (
+    (type === 'seller' &&
+      upiInfoPresent &&
+      storeLogoPresent &&
+      storeTaglinePresent &&
+      !hasNewOrders) ||
+    (type === 'services' && storeLogoPresent && storeTaglinePresent)
+  ) {
+    return;
+  }
+
   return (
-    <>
+    <Box
+      sx={{
+        borderRadius: '10px',
+        p: 1,
+        mx: 1.5,
+        mt: 1,
+        bgcolor: 'white',
+      }}
+    >
       <Typography
         variant="h7"
         color="grey.800"
@@ -243,7 +262,7 @@ const Notifications: React.FC<NotifificationsProps> = ({ type }) => {
           )}
         </Stack>
       )}
-    </>
+    </Box>
   );
 };
 

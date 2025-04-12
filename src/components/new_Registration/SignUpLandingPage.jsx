@@ -129,7 +129,6 @@ function SignUpLandingPage({ setSentOTP, setPhone, phone }) {
       </Box>
       <Stack direction="row" sx={{ display: 'flex', alignItems: 'flex-start' }}>
         <Checkbox
-          defaultChecked
           disabled
           checked
           sx={{

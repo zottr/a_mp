@@ -4,39 +4,48 @@ import {
   Button,
   Container,
   Drawer,
+  FormControl,
+  FormHelperText,
   Grid,
+  IconButton,
+  MenuItem,
+  Paper,
+  Select,
   Stack,
+  Switch,
   Typography,
   useTheme,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { GET_FACET_VALUE_LIST } from '../../../libs/graphql/definitions/facet-definitions';
+import { GET_FACET_VALUE_LIST } from '../../libs/graphql/definitions/facet-definitions';
 import {
   CREATE_ASSETS,
   CREATE_PRODUCT,
   CREATE_PRODUCT_VARIANTS,
   DELETE_ASSETS,
+  DELETE_PRODUCT,
   GET_PRODUCT_TO_EDIT,
   UPDATE_PRODUCT,
   UPDATE_PRODUCT_VARIANTS,
-} from '../../../libs/graphql/definitions/product-definitions';
+} from '../../libs/graphql/definitions/product-definitions';
 import UploadIcon from '@mui/icons-material/Upload';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
-import LoadingButton from '../../common/LoadingButton';
+import LoadingButton from '../common/LoadingButton';
+import DescriptionEditor from './DescriptionEditor';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
-import ImageItem from './ServiceImageItem';
-import StyledTextField from '../../common/styled/StyledTextField';
-import ValidationErrorAlert from '../../common/Alerts/ValidationErrorAlert';
-import ServiceErrorAlert from '../../common/Alerts/ServiceErrorAlert';
-import UpdateItemSkeleton from './UpdateServiceSkeleton';
-import CustomSnackBar from '../../common/Snackbars/CustomSnackBar';
-import { useUserContext } from '../../../hooks/useUserContext';
+import ImageItem from './ImageItem';
+import StyledTextField from '../common/styled/StyledTextField';
+import ValidationErrorAlert from '../common/Alerts/ValidationErrorAlert';
+import ServiceErrorAlert from '../common/Alerts/ServiceErrorAlert';
+import { GET_PRODUCT_SIMPLE } from '../../libs/graphql/definitions/product-definitions';
+import UpdateItemSkeleton from './UpdateItemSkeleton';
+import CustomSnackBar from '../common/Snackbars/CustomSnackBar';
+import { useUserContext } from '../../hooks/useUserContext';
 import { useNavigate } from 'react-router-dom';
-import { AddOrUpdateServiceBreadcrumbs } from './AddOrUpdateServiceBreadcrumbs';
-import Error404Alert from '../../common/Alerts/Error404Alert';
-import DeleteServiceDialog from './DeleteServiceDialog';
-import ServiceDescriptionEditor from './ServiceDescriptionEditor';
-import ServicesMainAppBar from '../../common/ServicesMainAppBar';
+import MainAppBar from '../common/MainAppBar';
+import { AddOrUpdateItemBreadcrumbs } from './AddOrUpdateItemBreadcrumbs';
+import DeleteProductDialog from './DeleteProductDialog';
+import Error404Alert from '../common/Alerts/Error404Alert';
 
 interface ProductType {
   id: string;
@@ -54,7 +63,7 @@ interface AddOrUpdateItemProps {
   productToEditId?: string; // Assuming it's an optional string
 }
 
-const AddOrUpdateService: React.FC<AddOrUpdateItemProps> = ({
+const AddOrUpdateItem: React.FC<AddOrUpdateItemProps> = ({
   productToEditId = '',
 }) => {
   const navigate = useNavigate();
@@ -62,6 +71,7 @@ const AddOrUpdateService: React.FC<AddOrUpdateItemProps> = ({
   const [createProduct] = useMutation(CREATE_PRODUCT);
   const [createProductVariant] = useMutation(CREATE_PRODUCT_VARIANTS);
   const [deleteAssets] = useMutation(DELETE_ASSETS);
+  const [deleteProduct] = useMutation(DELETE_PRODUCT);
   const [updateProduct] = useMutation(UPDATE_PRODUCT);
   const [updateProductVariant] = useMutation(UPDATE_PRODUCT_VARIANTS);
   const [mainImageIndex, setMainImageIndex] = useState('');
@@ -107,6 +117,11 @@ const AddOrUpdateService: React.FC<AddOrUpdateItemProps> = ({
   const [validationErrors, setValidationErrors] = useState({
     name: false,
     description: false,
+    price: false,
+    image: false,
+    category: false,
+    mainImage: false,
+    images: false,
   });
   const [serviceError, setServiceError] = useState(false);
   const [hasValidationErrors, setHasValidationErrors] = useState(false);
@@ -116,13 +131,23 @@ const AddOrUpdateService: React.FC<AddOrUpdateItemProps> = ({
     setValidationErrors({
       name: false,
       description: false,
+      price: false,
+      image: false,
+      category: false,
+      mainImage: false,
+      images: false,
     });
     setHasValidationErrors(false);
   };
 
   const validationErrorMessages = {
-    name: 'Enter a valid service name',
-    description: 'Enter a valid service description',
+    name: 'Enter a valid product name',
+    description: '',
+    price: 'Enter a valid product price',
+    image: '',
+    category: 'Choose a category',
+    mainImage: '',
+    images: '',
   };
 
   const { data: categories } = useQuery(GET_FACET_VALUE_LIST, {
@@ -132,20 +157,6 @@ const AddOrUpdateService: React.FC<AddOrUpdateItemProps> = ({
           facetId: { eq: `${import.meta.env.VITE_VENDURE_CATEGORY_FACET_ID}` },
         },
       },
-    },
-    onCompleted: (fetchedData) => {
-      // Find the item where code === "services"
-      const servicesCategory = fetchedData?.facetValues?.items?.find(
-        (item: any) => item.code === 'services'
-      );
-      // If found, set the state
-      if (servicesCategory) {
-        setProduct((prev) => ({
-          ...prev,
-          categoryId: servicesCategory.id,
-          categoryName: servicesCategory.name,
-        }));
-      }
     },
   });
 
@@ -164,15 +175,18 @@ const AddOrUpdateService: React.FC<AddOrUpdateItemProps> = ({
               obj.facetId ===
               `${import.meta.env.VITE_VENDURE_CATEGORY_FACET_ID}`
           );
-          //create images by adding cover image as well (it already includes feature asset)
+          //create images by adding cover image as well
           const allImages = [...fetchedData.product.assets];
+          if (allImages && fetchedData.product.featuredAsset) {
+            allImages.push(fetchedData.product.featuredAsset);
+          }
           setExistingImages(allImages);
 
           setProductToEdit({
             id: fetchedData.product.id,
             name: fetchedData.product.name,
             description: fetchedData.product.description,
-            price: Number(fetchedData.product.variants[0]?.price) / 100, //we need to convert it to rupees
+            price: fetchedData.product.variants[0]?.price,
             enabled: fetchedData.product.enabled,
             categoryId: category?.id,
             categoryName: category?.name ?? '',
@@ -198,6 +212,17 @@ const AddOrUpdateService: React.FC<AddOrUpdateItemProps> = ({
       description: value,
     }));
   }
+
+  const handleCategoryChange = (event: any) => {
+    const { value } = event.target;
+    setProduct((prev) => ({
+      ...prev,
+      categoryId: value,
+      categoryName:
+        categories?.facetValues?.items?.find((obj: any) => obj.id === value)
+          ?.name ?? '',
+    }));
+  };
 
   const handleNewImage = (event: any) => {
     //close image drawer
@@ -271,13 +296,19 @@ const AddOrUpdateService: React.FC<AddOrUpdateItemProps> = ({
         name: true,
       }));
     }
-    if (!product.description) {
+    if (!product.price) {
       setValidationErrors((prev) => ({
         ...prev,
-        description: true,
+        price: true,
       }));
     }
-    if (product.name && product.description) {
+    if (!product.categoryName) {
+      setValidationErrors((prev) => ({
+        ...prev,
+        category: true,
+      }));
+    }
+    if (product.name && product.price && product.categoryName) {
       if (productToEditId !== '' && productToEdit != null) {
         updateExistingProduct();
       } else {
@@ -290,8 +321,8 @@ const AddOrUpdateService: React.FC<AddOrUpdateItemProps> = ({
   };
 
   const createNewProduct = async () => {
-    let featuredAssetId;
-    let allAssets;
+    let featuredAsset;
+    let remainingAssets = [];
     //upload assets first
     if (newImages.length > 0) {
       try {
@@ -302,12 +333,12 @@ const AddOrUpdateService: React.FC<AddOrUpdateItemProps> = ({
             })),
           },
         });
-        allAssets = result?.data?.createAssets;
+        const allAssets = result?.data?.createAssets;
         if (allAssets.length === 1) {
-          featuredAssetId = allAssets[0].id;
+          featuredAsset = allAssets[0].id;
         } else {
-          const mainIndex = parseInt(mainImageIndex.split('-')[1], 10);
-          featuredAssetId = allAssets[mainIndex]?.id;
+          featuredAsset = allAssets.splice(mainImageIndex, 1)[0]?.id;
+          remainingAssets = allAssets.map((asset: any) => asset.id);
         }
       } catch (err) {
         console.error('Failed to add assets:', err);
@@ -318,22 +349,20 @@ const AddOrUpdateService: React.FC<AddOrUpdateItemProps> = ({
       const result = await createProduct({
         variables: {
           input: {
-            translations: [
-              {
-                name: product.name,
-                description: product.description,
-                slug: product.name?.trim()?.replace(/\W+/g, '-').toLowerCase(),
-                languageCode: `${import.meta.env.VITE_VENDURE_LANGUAGE_CODE}`,
-              },
-            ],
+            translations: {
+              name: product.name,
+              description: product.description,
+              slug: product.name?.trim()?.replace(/\W+/g, '-').toLowerCase(),
+              languageCode: `${import.meta.env.VITE_VENDURE_LANGUAGE_CODE}`,
+            },
             enabled: product.enabled,
             // facetValueIds: [sellerFacetValueId, product.categoryId],
             facetValueIds: [product.categoryId],
-            featuredAssetId: featuredAssetId,
-            assetIds: Array.from([...allAssets.map((asset: any) => asset.id)]),
+            featuredAssetId: featuredAsset,
+            assetIds: remainingAssets,
             customFields: {
               adminId: adminUser?.id,
-              adminName: adminUser?.customFields?.businessName,
+              adminName: adminUser?.firstName,
             },
           },
         },
@@ -348,13 +377,11 @@ const AddOrUpdateService: React.FC<AddOrUpdateItemProps> = ({
                 result?.data?.createProduct?.slug +
                 '-' +
                 result?.data?.createProduct?.id,
-              price: Number(product.price) * 100,
-              translations: [
-                {
-                  name: product.name,
-                  languageCode: 'en',
-                },
-              ],
+              price: Number(product.price),
+              translations: {
+                name: product.name,
+                languageCode: 'en',
+              },
             },
           },
         });
@@ -407,7 +434,8 @@ const AddOrUpdateService: React.FC<AddOrUpdateItemProps> = ({
   // };
 
   const updateExistingProduct = async () => {
-    let featuredAssetId;
+    let featuredAsset;
+    let remainingAssetIdsWithoutFeaturesAsset = [];
     if (existingImageIdsToRemove && existingImageIdsToRemove?.length > 0) {
       try {
         await deleteAssets({
@@ -436,41 +464,45 @@ const AddOrUpdateService: React.FC<AddOrUpdateItemProps> = ({
         console.error('Failed to add assets:', err);
       }
     }
-
     /**we need to remove featured asset id from existingImages & newlyAddedAssets arrays as updateProuct call expect us to pass featuredAsset id and rest of the assets in separate properties*/
+    let existingImagesWithoutFeaturedAsset = [...existingImages];
+    let newlyAddedAssetsWithoutFeaturedAsset = [...newlyAddedAssets];
     if (mainImageIndex && mainImageIndex.startsWith('existing-')) {
       const mainIndex = parseInt(mainImageIndex.split('-')[1], 10);
-      featuredAssetId = existingImages[mainIndex]?.id;
+      featuredAsset = existingImagesWithoutFeaturedAsset.splice(mainIndex, 1)[0]
+        ?.id;
     } else if (mainImageIndex && mainImageIndex.startsWith('new-')) {
       const mainIndex = parseInt(mainImageIndex.split('-')[1], 10);
-      featuredAssetId = newlyAddedAssets[mainIndex]?.id;
+      featuredAsset = newlyAddedAssetsWithoutFeaturedAsset.splice(
+        mainIndex,
+        1
+      )[0]?.id;
     }
+    const existingAssetIdsWithoutFeaturedAsset =
+      existingImagesWithoutFeaturedAsset?.map((asset) => asset.id);
+    const newAssetIdsWithoutFeaturesAsset =
+      newlyAddedAssetsWithoutFeaturedAsset?.map((asset: any) => asset.id);
+    remainingAssetIdsWithoutFeaturesAsset = [
+      ...existingAssetIdsWithoutFeaturedAsset,
+      ...newAssetIdsWithoutFeaturesAsset,
+    ];
     try {
-      const updateInput = {
-        id: product.id,
-        translations: [
-          {
-            name: product.name,
-            description: product.description,
-            slug: product.name?.trim()?.replace(/\W+/g, '-').toLowerCase(),
-            languageCode: import.meta.env.VITE_VENDURE_LANGUAGE_CODE,
-          },
-        ],
-        enabled: product.enabled,
-        // facetValueIds: [sellerFacetValueId, product.categoryId], //remove only category facet id and add new one
-        facetValueIds: [product.categoryId], //remove only category facet id and add new one
-        featuredAssetId: featuredAssetId,
-        assetIds: Array.from(
-          new Set([
-            ...existingImages.map((img: any) => img.id),
-            ...newlyAddedAssets.map((img: any) => img.id),
-          ])
-        ),
-      };
-
       const result = await updateProduct({
         variables: {
-          input: updateInput,
+          input: {
+            id: product.id,
+            translations: {
+              name: product.name,
+              description: product.description,
+              slug: product.name?.trim()?.replace(/\W+/g, '-').toLowerCase(),
+              languageCode: `${import.meta.env.VITE_VENDURE_LANGUAGE_CODE}`,
+            },
+            enabled: product.enabled,
+            // facetValueIds: [sellerFacetValueId, product.categoryId], //remove only category facet id and add new one
+            facetValueIds: [product.categoryId], //remove only category facet id and add new one
+            featuredAssetId: featuredAsset,
+            assetIds: remainingAssetIdsWithoutFeaturesAsset,
+          },
         },
       });
       const updatedProd = result?.data?.updateProduct;
@@ -479,7 +511,7 @@ const AddOrUpdateService: React.FC<AddOrUpdateItemProps> = ({
           variables: {
             input: {
               id: updatedProd?.variantList?.items[0].id,
-              price: Number(product.price) * 100,
+              price: Number(product.price),
             },
           },
         });
@@ -498,7 +530,7 @@ const AddOrUpdateService: React.FC<AddOrUpdateItemProps> = ({
     const productData = { action: 'created', name: product.name };
     // Store the data in sessionStorage
     sessionStorage.setItem('productData', JSON.stringify(productData));
-    navigate('/services/home');
+    navigate('/seller/home');
   }
 
   function afterProductDeleted() {
@@ -506,7 +538,7 @@ const AddOrUpdateService: React.FC<AddOrUpdateItemProps> = ({
     const productData = { action: 'deleted', name: product.name };
     // Store the data in sessionStorage
     sessionStorage.setItem('productData', JSON.stringify(productData));
-    navigate('/services/home');
+    navigate('/seller/home');
   }
 
   useEffect(() => {
@@ -519,12 +551,8 @@ const AddOrUpdateService: React.FC<AddOrUpdateItemProps> = ({
     if (productToEditId !== '' && productToEdit != null) {
       setProduct(productToEdit);
       if (existingImages) {
-        const index = existingImages.findIndex(
-          (image) => image.id === productToEdit?.mainImage?.id
-        );
-        if (index !== -1) {
-          setMainImageIndex(`existing-${index}`);
-        }
+        const index = existingImages?.length ? existingImages.length - 1 : -1;
+        setMainImageIndex(`existing-${index}`);
       }
     }
   }, [productToEdit, existingImages, productToEditId]);
@@ -535,9 +563,9 @@ const AddOrUpdateService: React.FC<AddOrUpdateItemProps> = ({
 
   return (
     <>
-      <ServicesMainAppBar />
+      <MainAppBar />
 
-      <Box sx={{ mb: 5, pt: 8, bgcolor: 'primary.surface' }}>
+      <Box sx={{ pb: 2, pt: 8, bgcolor: 'primary.surface' }}>
         {invalidProductId && (
           <Container sx={{ bgcolor: 'white', pt: 20 }}>
             <Error404Alert />
@@ -548,13 +576,15 @@ const AddOrUpdateService: React.FC<AddOrUpdateItemProps> = ({
             sx={{
               bgcolor: 'white',
               maxWidth: 'calc(100% - 24px)',
-              borderTopLeftRadius: '10px',
-              borderTopRightRadius: '10px',
+              // borderTopLeftRadius: '10px',
+              // borderTopRightRadius: '10px',
+              borderRadius: '10px',
+              minHeight: '100vh',
               p: 1,
             }}
           >
             <Stack gap={1}>
-              <AddOrUpdateServiceBreadcrumbs addItem={productToEditId === ''} />
+              <AddOrUpdateItemBreadcrumbs addItem={productToEditId === ''} />
               <Stack
                 direction="row"
                 sx={{ display: 'flex', alignItems: 'center' }}
@@ -567,7 +597,7 @@ const AddOrUpdateService: React.FC<AddOrUpdateItemProps> = ({
                     margin: 'auto',
                   }}
                 >
-                  {productToEditId !== '' ? 'Edit service' : 'Add new service'}
+                  {productToEditId !== '' ? 'Edit Product' : 'Add new product'}
                 </Typography>
               </Stack>
             </Stack>
@@ -581,11 +611,11 @@ const AddOrUpdateService: React.FC<AddOrUpdateItemProps> = ({
                   autoComplete="off"
                   onSubmit={handleSubmit}
                   gap={3}
-                  sx={{ mt: 4, display: 'flex', alignItems: 'center' }}
+                  sx={{ mt: 3, display: 'flex', alignItems: 'center' }}
                 >
                   <Stack width="100%" gap={1}>
                     <Typography variant="heavylabel1" color="grey.800">
-                      Service Name
+                      Product Name
                     </Typography>
                     <StyledTextField
                       id="name"
@@ -593,7 +623,7 @@ const AddOrUpdateService: React.FC<AddOrUpdateItemProps> = ({
                       variant="outlined"
                       value={product.name}
                       onChange={handleChange}
-                      placeholder="Enter name of service"
+                      placeholder="Enter name of product"
                       size="small"
                       helperText={
                         validationErrors.name && validationErrorMessages.name
@@ -612,21 +642,120 @@ const AddOrUpdateService: React.FC<AddOrUpdateItemProps> = ({
                   </Stack>
                   <Stack width="100%" gap={1}>
                     <Typography variant="heavylabel1" color="grey.800">
-                      Service Description
+                      Product Description
                     </Typography>
-                    <ServiceDescriptionEditor
+                    <DescriptionEditor
                       value={product.description}
                       setValue={setDescription}
-                      error={validationErrors.description}
                     />
-                    {validationErrors.description && (
-                      <Typography
-                        variant="b2"
-                        sx={{ color: 'error.dark', ml: 1 }}
+                  </Stack>
+                  <Stack width="100%" gap={1}>
+                    <Typography variant="heavylabel1" color="grey.800">
+                      Product Price
+                    </Typography>
+                    <StyledTextField
+                      id="price"
+                      name="price"
+                      variant="outlined"
+                      type="number"
+                      value={product.price}
+                      onChange={handleChange}
+                      placeholder="Enter product price in rupees (₹)"
+                      size="small"
+                      helperText={
+                        validationErrors.price && validationErrorMessages.price
+                      }
+                      error={validationErrors.price}
+                      sx={{
+                        width: '100%',
+                        borderWidth: '20px',
+                        '& input::placeholder': {
+                          color: 'grey.900', // Change placeholder color
+                          fontSize: '1rem', // Adjust font size if needed
+                          fontStyle: 'italic', // Optional: Make it italic
+                          fontFamily: 'Poppins, sans-serif',
+                        },
+                      }}
+                    />
+                  </Stack>
+                  <Stack width="100%" gap={1}>
+                    <Typography variant="heavylabel1" color="grey.800">
+                      Product Category
+                    </Typography>
+                    <FormControl
+                      fullWidth
+                      error={validationErrors.category}
+                      sx={{
+                        '& .MuiFormLabel-root.Mui-error': {
+                          color: theme.palette.error.main,
+                        },
+                        '& .MuiOutlinedInput-root': {
+                          borderRadius: '8px', // Adjust the border radius as needed
+                          borderStyle: 'solid',
+                          borderWidth: '1px',
+                          borderColor: 'grey.600',
+                        },
+                        '& .MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline':
+                          {
+                            borderWidth: '1.5px',
+                            borderStyle: 'solid',
+                          },
+                        '& .MuiFormHelperText-root.Mui-error': {
+                          color: theme.palette.error.main,
+                          fontSize: '0.875rem',
+                          fontWeight: 400,
+                          lineHeight: 1.43,
+                          letterSpacing: '0.01071em',
+                          fontStyle: 'normal',
+                        },
+                        '& .MuiOutlinedInput-root.Mui-error': {
+                          borderColor: theme.palette.error.main,
+                        },
+                      }}
+                    >
+                      <Select
+                        name="category"
+                        value={product.categoryId}
+                        onChange={handleCategoryChange}
                       >
-                        {validationErrorMessages.description}
-                      </Typography>
-                    )}
+                        <MenuItem value="choose_category_label" disabled>
+                          <Typography
+                            variant="b1"
+                            sx={{ color: 'grey.500', fontStyle: 'italic' }}
+                          >
+                            Choose a category
+                          </Typography>
+                        </MenuItem>
+                        {categories?.facetValues?.items?.map(
+                          (item: any) =>
+                            item.code !== 'services' && (
+                              <MenuItem key={item.id} value={item.id}>
+                                {item.name}
+                              </MenuItem>
+                            )
+                        )}
+                      </Select>
+                      {validationErrors.category && (
+                        <FormHelperText error>
+                          {validationErrorMessages.category}
+                        </FormHelperText>
+                      )}
+                    </FormControl>
+                  </Stack>
+                  <Stack width="100%" gap={1}>
+                    <Typography variant="heavylabel1" color="grey.800">
+                      Display on store
+                    </Typography>
+                    <Switch
+                      color="primary"
+                      checked={product.enabled}
+                      onChange={(event) => {
+                        setProduct((prev) => ({
+                          ...prev,
+                          enabled: event.target.checked,
+                        }));
+                      }}
+                    />
                   </Stack>
                   <Stack
                     width="100%"
@@ -698,9 +827,10 @@ const AddOrUpdateService: React.FC<AddOrUpdateItemProps> = ({
                       }}
                       label={
                         productToEditId === ''
-                          ? 'Create Service'
-                          : 'Update Service'
+                          ? 'Create Product'
+                          : 'Update Product'
                       }
+                      loadingLabel="Updating..."
                       labelStyles={{
                         color: 'white',
                       }}
@@ -730,7 +860,8 @@ const AddOrUpdateService: React.FC<AddOrUpdateItemProps> = ({
                               width: '100%',
                               height: '45px',
                             }}
-                            label={'Delete Service'}
+                            label={'Delete Product'}
+                            loadingLabel="Deleting..."
                             labelStyles={{
                               color: 'common.white',
                             }}
@@ -747,7 +878,7 @@ const AddOrUpdateService: React.FC<AddOrUpdateItemProps> = ({
                         <Button
                           variant="outlined"
                           onClick={() => {
-                            navigate('/services/home');
+                            navigate('/seller/home');
                           }}
                           fullWidth
                           sx={{
@@ -793,7 +924,7 @@ const AddOrUpdateService: React.FC<AddOrUpdateItemProps> = ({
                 }}
               >
                 <Typography variant="h7" sx={{ color: 'grey.800' }}>
-                  Add service images
+                  Add product images
                 </Typography>
                 <Container sx={{ px: 1 }}>
                   <Stack direction="column" gap={1.5} sx={{ mt: 2 }}>
@@ -837,16 +968,16 @@ const AddOrUpdateService: React.FC<AddOrUpdateItemProps> = ({
                         py: 1.5,
                         // borderColor: 'primary.main',
                         borderRadius: '25px',
-                        bgcolor: 'secondary.dark',
+                        bgcolor: 'secondary.main',
                         '&:hover, &:focus, &:active': {
-                          bgcolor: 'secondary.dark',
+                          bgcolor: 'secondary.main',
                         },
                       }}
                     >
-                      <UploadIcon sx={{ mr: 1, color: 'common.white' }} />
+                      <UploadIcon sx={{ mr: 1, color: 'common.black' }} />
                       <Typography
                         variant="button1"
-                        sx={{ color: 'common.white' }}
+                        sx={{ color: 'common.black' }}
                       >
                         Upload from gallery
                       </Typography>
@@ -863,7 +994,7 @@ const AddOrUpdateService: React.FC<AddOrUpdateItemProps> = ({
               </Box>
             </Drawer>
             <CustomSnackBar
-              message="Service updated successfully"
+              message="Product updated successfully"
               severity="success"
               color="success"
               duration={3000}
@@ -877,7 +1008,7 @@ const AddOrUpdateService: React.FC<AddOrUpdateItemProps> = ({
           </Container>
         )}
       </Box>
-      <DeleteServiceDialog
+      <DeleteProductDialog
         open={openDeleteDialog}
         name={product.name}
         productToEditId={productToEditId}
@@ -892,4 +1023,4 @@ const AddOrUpdateService: React.FC<AddOrUpdateItemProps> = ({
   );
 };
 
-export default AddOrUpdateService;
+export default AddOrUpdateItem;

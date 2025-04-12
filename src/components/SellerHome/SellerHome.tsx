@@ -114,17 +114,8 @@ function SellerHome() {
           Hello, {adminUser?.firstName}
         </Typography>
 
-        <Box
-          sx={{
-            borderRadius: '10px',
-            p: 1,
-            mx: 1.5,
-            mt: 1,
-            bgcolor: 'white',
-          }}
-        >
-          <Notifications type="seller" />
-        </Box>
+        <Notifications type="seller" />
+
         <Box
           sx={{
             borderRadius: '10px',

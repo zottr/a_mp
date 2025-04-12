@@ -483,6 +483,7 @@ export const PRODUCT_FOR_LIST_FRAGMENT = gql`
 export const PRODUCT_FOR_PREVIEW_LIST_FRAGMENT = gql`
   fragment ProductForPreviewList on Product {
     id
+    slug
     enabled
     name
     featuredAsset {

@@ -7,9 +7,7 @@ import {
   FormControl,
   FormHelperText,
   Grid,
-  IconButton,
   MenuItem,
-  Paper,
   Select,
   Stack,
   Switch,
@@ -37,7 +35,6 @@ import ImageItem from './ImageItem';
 import StyledTextField from '../common/styled/StyledTextField';
 import ValidationErrorAlert from '../common/Alerts/ValidationErrorAlert';
 import ServiceErrorAlert from '../common/Alerts/ServiceErrorAlert';
-import { GET_PRODUCT_SIMPLE } from '../../libs/graphql/definitions/product-definitions';
 import UpdateItemSkeleton from './UpdateItemSkeleton';
 import CustomSnackBar from '../common/Snackbars/CustomSnackBar';
 import { useUserContext } from '../../hooks/useUserContext';
@@ -175,18 +172,15 @@ const AddOrUpdateItem: React.FC<AddOrUpdateItemProps> = ({
               obj.facetId ===
               `${import.meta.env.VITE_VENDURE_CATEGORY_FACET_ID}`
           );
-          //create images by adding cover image as well
+          //create images by adding cover image as well (it already includes feature asset)
           const allImages = [...fetchedData.product.assets];
-          if (allImages && fetchedData.product.featuredAsset) {
-            allImages.push(fetchedData.product.featuredAsset);
-          }
           setExistingImages(allImages);
 
           setProductToEdit({
             id: fetchedData.product.id,
             name: fetchedData.product.name,
             description: fetchedData.product.description,
-            price: fetchedData.product.variants[0]?.price,
+            price: Number(fetchedData.product.variants[0]?.price) / 100, //we need to convert it to rupees
             enabled: fetchedData.product.enabled,
             categoryId: category?.id,
             categoryName: category?.name ?? '',
@@ -321,8 +315,8 @@ const AddOrUpdateItem: React.FC<AddOrUpdateItemProps> = ({
   };
 
   const createNewProduct = async () => {
-    let featuredAsset;
-    let remainingAssets = [];
+    let featuredAssetId;
+    let allAssets;
     //upload assets first
     if (newImages.length > 0) {
       try {
@@ -333,12 +327,12 @@ const AddOrUpdateItem: React.FC<AddOrUpdateItemProps> = ({
             })),
           },
         });
-        const allAssets = result?.data?.createAssets;
+        allAssets = result?.data?.createAssets;
         if (allAssets.length === 1) {
-          featuredAsset = allAssets[0].id;
+          featuredAssetId = allAssets[0].id;
         } else {
-          featuredAsset = allAssets.splice(mainImageIndex, 1)[0]?.id;
-          remainingAssets = allAssets.map((asset: any) => asset.id);
+          const mainIndex = parseInt(mainImageIndex.split('-')[1], 10);
+          featuredAssetId = allAssets[mainIndex]?.id;
         }
       } catch (err) {
         console.error('Failed to add assets:', err);
@@ -349,20 +343,22 @@ const AddOrUpdateItem: React.FC<AddOrUpdateItemProps> = ({
       const result = await createProduct({
         variables: {
           input: {
-            translations: {
-              name: product.name,
-              description: product.description,
-              slug: product.name?.trim()?.replace(/\W+/g, '-').toLowerCase(),
-              languageCode: `${import.meta.env.VITE_VENDURE_LANGUAGE_CODE}`,
-            },
+            translations: [
+              {
+                name: product.name,
+                description: product.description,
+                slug: product.name?.trim()?.replace(/\W+/g, '-').toLowerCase(),
+                languageCode: `${import.meta.env.VITE_VENDURE_LANGUAGE_CODE}`,
+              },
+            ],
             enabled: product.enabled,
             // facetValueIds: [sellerFacetValueId, product.categoryId],
             facetValueIds: [product.categoryId],
-            featuredAssetId: featuredAsset,
-            assetIds: remainingAssets,
+            featuredAssetId: featuredAssetId,
+            assetIds: Array.from([...allAssets.map((asset: any) => asset.id)]),
             customFields: {
               adminId: adminUser?.id,
-              adminName: adminUser?.firstName,
+              adminName: adminUser?.customFields?.businessName,
             },
           },
         },
@@ -377,11 +373,13 @@ const AddOrUpdateItem: React.FC<AddOrUpdateItemProps> = ({
                 result?.data?.createProduct?.slug +
                 '-' +
                 result?.data?.createProduct?.id,
-              price: Number(product.price),
-              translations: {
-                name: product.name,
-                languageCode: 'en',
-              },
+              price: Number(product.price) * 100,
+              translations: [
+                {
+                  name: product.name,
+                  languageCode: 'en',
+                },
+              ],
             },
           },
         });
@@ -434,8 +432,7 @@ const AddOrUpdateItem: React.FC<AddOrUpdateItemProps> = ({
   // };
 
   const updateExistingProduct = async () => {
-    let featuredAsset;
-    let remainingAssetIdsWithoutFeaturesAsset = [];
+    let featuredAssetId;
     if (existingImageIdsToRemove && existingImageIdsToRemove?.length > 0) {
       try {
         await deleteAssets({
@@ -465,44 +462,38 @@ const AddOrUpdateItem: React.FC<AddOrUpdateItemProps> = ({
       }
     }
     /**we need to remove featured asset id from existingImages & newlyAddedAssets arrays as updateProuct call expect us to pass featuredAsset id and rest of the assets in separate properties*/
-    let existingImagesWithoutFeaturedAsset = [...existingImages];
-    let newlyAddedAssetsWithoutFeaturedAsset = [...newlyAddedAssets];
     if (mainImageIndex && mainImageIndex.startsWith('existing-')) {
       const mainIndex = parseInt(mainImageIndex.split('-')[1], 10);
-      featuredAsset = existingImagesWithoutFeaturedAsset.splice(mainIndex, 1)[0]
-        ?.id;
+      featuredAssetId = existingImages[mainIndex]?.id;
     } else if (mainImageIndex && mainImageIndex.startsWith('new-')) {
       const mainIndex = parseInt(mainImageIndex.split('-')[1], 10);
-      featuredAsset = newlyAddedAssetsWithoutFeaturedAsset.splice(
-        mainIndex,
-        1
-      )[0]?.id;
+      featuredAssetId = newlyAddedAssets[mainIndex]?.id;
     }
-    const existingAssetIdsWithoutFeaturedAsset =
-      existingImagesWithoutFeaturedAsset?.map((asset) => asset.id);
-    const newAssetIdsWithoutFeaturesAsset =
-      newlyAddedAssetsWithoutFeaturedAsset?.map((asset: any) => asset.id);
-    remainingAssetIdsWithoutFeaturesAsset = [
-      ...existingAssetIdsWithoutFeaturedAsset,
-      ...newAssetIdsWithoutFeaturesAsset,
-    ];
     try {
+      const updateInput = {
+        id: product.id,
+        translations: [
+          {
+            name: product.name,
+            description: product.description,
+            slug: product.name?.trim()?.replace(/\W+/g, '-').toLowerCase(),
+            languageCode: import.meta.env.VITE_VENDURE_LANGUAGE_CODE,
+          },
+        ],
+        enabled: product.enabled,
+        facetValueIds: [product.categoryId],
+        featuredAssetId: featuredAssetId,
+        assetIds: Array.from(
+          new Set([
+            ...existingImages.map((img: any) => img.id),
+            ...newlyAddedAssets.map((img: any) => img.id),
+          ])
+        ),
+      };
+
       const result = await updateProduct({
         variables: {
-          input: {
-            id: product.id,
-            translations: {
-              name: product.name,
-              description: product.description,
-              slug: product.name?.trim()?.replace(/\W+/g, '-').toLowerCase(),
-              languageCode: `${import.meta.env.VITE_VENDURE_LANGUAGE_CODE}`,
-            },
-            enabled: product.enabled,
-            // facetValueIds: [sellerFacetValueId, product.categoryId], //remove only category facet id and add new one
-            facetValueIds: [product.categoryId], //remove only category facet id and add new one
-            featuredAssetId: featuredAsset,
-            assetIds: remainingAssetIdsWithoutFeaturesAsset,
-          },
+          input: updateInput,
         },
       });
       const updatedProd = result?.data?.updateProduct;
@@ -511,7 +502,7 @@ const AddOrUpdateItem: React.FC<AddOrUpdateItemProps> = ({
           variables: {
             input: {
               id: updatedProd?.variantList?.items[0].id,
-              price: Number(product.price),
+              price: Number(product.price) * 100,
             },
           },
         });
@@ -551,8 +542,12 @@ const AddOrUpdateItem: React.FC<AddOrUpdateItemProps> = ({
     if (productToEditId !== '' && productToEdit != null) {
       setProduct(productToEdit);
       if (existingImages) {
-        const index = existingImages?.length ? existingImages.length - 1 : -1;
-        setMainImageIndex(`existing-${index}`);
+        const index = existingImages.findIndex(
+          (image) => image.id === productToEdit?.mainImage?.id
+        );
+        if (index !== -1) {
+          setMainImageIndex(`existing-${index}`);
+        }
       }
     }
   }, [productToEdit, existingImages, productToEditId]);
@@ -784,7 +779,7 @@ const AddOrUpdateItem: React.FC<AddOrUpdateItemProps> = ({
                     </Button>
                     <Grid container spacing={1}>
                       {existingImages.map((asset, index) => (
-                        <Grid item xs={6}>
+                        <Grid key={asset.id} item xs={6}>
                           <ImageItem
                             existing={true}
                             index={index}
@@ -796,7 +791,7 @@ const AddOrUpdateItem: React.FC<AddOrUpdateItemProps> = ({
                         </Grid>
                       ))}
                       {newImagePreviews.map((image, index) => (
-                        <Grid item xs={6}>
+                        <Grid key={image.id} item xs={6}>
                           <ImageItem
                             existing={false}
                             index={index}

@@ -101,17 +101,8 @@ function ServicesHome() {
           Hello, {adminUser?.firstName}
         </Typography>
 
-        <Box
-          sx={{
-            borderRadius: '10px',
-            p: 1,
-            mx: 1.5,
-            mt: 1,
-            bgcolor: 'white',
-          }}
-        >
-          <Notifications type="services" />
-        </Box>
+        <Notifications type="services" />
+
         <Box
           sx={{
             bgcolor: 'white',
