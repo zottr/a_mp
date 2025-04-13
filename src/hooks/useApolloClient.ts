@@ -52,7 +52,7 @@ const useApolloClient = () => {
       // If we have stored the authToken from a previous
       // response, we attach it to all subsequent requests.
       setContext((request, operation) => {
-        const channelToken = '8d8f0da4-d470-41fc-897c-7604c139f8cb';
+        const channelToken = '8d8f0da4-d470-41fc-897c-7604c139f8cb'; //sample store token
         //const channelToken = '';
         let headers: Record<string, any> = {};
         if (authToken) {

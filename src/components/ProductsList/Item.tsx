@@ -236,8 +236,8 @@ const Item: React.FC<ItemProps> = ({
         <MenuItem>
           <ShareButton
             preShareAction={handleCloseBeforeShare}
-            text={item.description}
             title={item.name}
+            text={item.description}
             url={`https://urbanahaat.zottr.com/product/${item?.slug}/share`}
           />
         </MenuItem>

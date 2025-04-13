@@ -355,7 +355,9 @@ const AddOrUpdateItem: React.FC<AddOrUpdateItemProps> = ({
             // facetValueIds: [sellerFacetValueId, product.categoryId],
             facetValueIds: [product.categoryId],
             featuredAssetId: featuredAssetId,
-            assetIds: Array.from([...allAssets.map((asset: any) => asset.id)]),
+            assetIds: Array.from([
+              ...(allAssets ?? []).map((asset: any) => asset.id),
+            ]),
             customFields: {
               adminId: adminUser?.id,
               adminName: adminUser?.customFields?.businessName,
@@ -485,8 +487,8 @@ const AddOrUpdateItem: React.FC<AddOrUpdateItemProps> = ({
         featuredAssetId: featuredAssetId,
         assetIds: Array.from(
           new Set([
-            ...existingImages.map((img: any) => img.id),
-            ...newlyAddedAssets.map((img: any) => img.id),
+            ...(existingImages ?? []).map((img: any) => img.id),
+            ...(newlyAddedAssets ?? [])?.map((img: any) => img.id),
           ])
         ),
       };
@@ -825,8 +827,13 @@ const AddOrUpdateItem: React.FC<AddOrUpdateItemProps> = ({
                           ? 'Create Product'
                           : 'Update Product'
                       }
-                      loadingLabel="Updating..."
+                      loadingLabel={
+                        productToEditId === '' ? 'Creating...' : 'Updating...'
+                      }
                       labelStyles={{
+                        color: 'white',
+                      }}
+                      loadingLabelStyles={{
                         color: 'white',
                       }}
                       labelVariant="button1"

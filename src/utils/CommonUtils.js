@@ -44,3 +44,7 @@ export const getDateTimeString = (order) => {
     return formattedDate + ' @ ' + time;
   } else return '';
 };
+
+export const stripHtml = (html) => {
+  return html?.replace(/<[^>]*>?/gm, '');
+};
