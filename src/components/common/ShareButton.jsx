@@ -3,6 +3,7 @@ import ShareIcon from '@mui/icons-material/Share';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import CloseIcon from '@mui/icons-material/Close';
 import { useState } from 'react';
+import { stripHtml } from '../../utils/CommonUtils';
 
 const ShareButton = ({ title, text, url, preShareAction }) => {
   const [toastOpen, setToastOpen] = useState(false);
