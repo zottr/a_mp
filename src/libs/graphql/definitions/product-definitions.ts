@@ -486,6 +486,7 @@ export const PRODUCT_FOR_PREVIEW_LIST_FRAGMENT = gql`
     slug
     enabled
     name
+    description
     featuredAsset {
       preview
     }
