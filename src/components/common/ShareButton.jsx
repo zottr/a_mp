@@ -10,10 +10,10 @@ const ShareButton = ({ title, text, url, preShareAction }) => {
 
   const handleShare = async () => {
     preShareAction();
-    const description = stripHtml(text);
+    const message = `${stripHtml(text)}\n\n${url}`;
     if (navigator.share) {
       try {
-        await navigator.share({ title, text: description, url });
+        await navigator.share({ text: message });
       } catch (error) {
         console.error('Error sharing:', error);
       }
