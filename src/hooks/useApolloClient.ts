@@ -67,7 +67,19 @@ const useApolloClient = () => {
       httpLink,
     ]),
     // cache: new InMemoryCache(),
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache({
+      typePolicies: {
+        Product: {
+          fields: {
+            assets: {
+              merge(existing = [], incoming: any[]) {
+                return incoming;
+              },
+            },
+          },
+        },
+      },
+    }),
   });
   return client;
 };

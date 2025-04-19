@@ -1,3 +1,5 @@
+import imageCompression from 'browser-image-compression';
+
 export const isLocalStorageAvailable = () => {
   try {
     // Try to access localStorage
@@ -47,4 +49,28 @@ export const getDateTimeString = (order) => {
 
 export const stripHtml = (html) => {
   return html?.replace(/<[^>]*>?/gm, '');
+};
+
+export const compressImage = async (file) => {
+  const sizeInMB = file.size / 1024 / 1024;
+
+  // Skip compression if image is already 1MB or smaller
+  if (sizeInMB <= 1) {
+    return file;
+  }
+
+  const options = {
+    maxSizeMB: 0.7, // Lower target size for faster loading
+    maxWidthOrHeight: 1080, // Ideal for mobile screens
+    initialQuality: 0.85, // Good balance of quality vs size
+    useWebWorker: true,
+  };
+
+  try {
+    const compressedFile = await imageCompression(file, options);
+    return compressedFile;
+  } catch (error) {
+    console.warn('Compression failed, using original image:', error);
+    return file; // Fallback to original image if compression fails
+  }
 };

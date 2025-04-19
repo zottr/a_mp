@@ -1,8 +1,8 @@
 import { Box } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
-import 'react-quill/dist/quill.bubble.css';
+import ReactQuill from 'react-quill-new';
+import 'react-quill-new/dist/quill.snow.css';
+import 'react-quill-new/dist/quill.bubble.css';
 import './quillstyles.css';
 
 function DescriptionEditor({ value, setValue }) {

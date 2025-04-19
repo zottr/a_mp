@@ -17,7 +17,6 @@ import { GET_FACET_VALUE_LIST } from '../../libs/graphql/definitions/facet-defin
 
 function Products({ setProductAction, setUpdatedProductName }) {
   const ITEMS_PER_LOAD = 10;
-  // const { adminUser } = useUserContext();
   const { adminUser } = useUserContext();
   const [serverProductList, setServerProductList] = useState([]);
   const [hasMore, setHasMore] = useState(true);

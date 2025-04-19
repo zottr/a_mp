@@ -1,4 +1,4 @@
-import { Box, Card, Grid, Stack, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Card, Grid, useMediaQuery, useTheme } from '@mui/material';
 import Logo from '/logos/zottr_logo_large.svg';
 import LoginForm from './LoginForm';
 import LoginOTPVerification from './LoginOTPVerification';

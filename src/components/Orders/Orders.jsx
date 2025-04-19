@@ -21,10 +21,13 @@ import MainAppBar from '../common/MainAppBar';
 import OrdersBreadcrumbs from './OrdersBreadcrumbs';
 import LoadingCircle from '../common/LoadingCircle';
 import OrdersSkeleton from './OrdersSkeleton';
+import { useUserContext } from '../../hooks/useUserContext';
 
 function Orders() {
   const ITEMS_PER_LOAD = 10;
+  const { adminUser } = useUserContext();
   const [filterString, setFilterString] = React.useState({
+    adminId: { eq: adminUser?.id },
     adminStatus: { in: ['new', 'accepted', 'rejected', 'completed'] },
   });
   const [orderListOption, setOrderListOption] = React.useState('all');
@@ -117,10 +120,14 @@ function Orders() {
   const changeOrderListOption = (event) => {
     if (event.target.value == 'all') {
       setFilterString({
+        adminId: { eq: adminUser?.id },
         adminStatus: { in: ['new', 'accepted', 'rejected', 'completed'] },
       });
     } else {
-      setFilterString({ adminStatus: { eq: event.target.value } });
+      setFilterString({
+        adminId: { eq: adminUser?.id },
+        adminStatus: { eq: event.target.value },
+      });
     }
     setOrderListOption(event.target.value);
     setOrders([]);

@@ -37,12 +37,13 @@ import Error404Alert from '../../common/Alerts/Error404Alert';
 import DeleteServiceDialog from './DeleteServiceDialog';
 import ServiceDescriptionEditor from './ServiceDescriptionEditor';
 import ServicesMainAppBar from '../../common/ServicesMainAppBar';
+import { compressImage } from '../../../utils/CommonUtils';
 
 interface ProductType {
   id: string;
   name: string;
   description: string;
-  price?: number | null;
+  price?: number | undefined;
   enabled: boolean;
   categoryId?: string;
   categoryName: string;
@@ -96,7 +97,7 @@ const AddOrUpdateService: React.FC<AddOrUpdateItemProps> = ({
     id: '',
     name: '',
     description: '',
-    price: null,
+    price: undefined,
     enabled: true,
     categoryId: 'choose_category_label',
     categoryName: '',
@@ -199,18 +200,23 @@ const AddOrUpdateService: React.FC<AddOrUpdateItemProps> = ({
     }));
   }
 
-  const handleNewImage = (event: any) => {
-    //close image drawer
+  const handleNewImage = async (event: any) => {
+    // Close the image drawer
     setImageDrawerOpen(false);
     if (event.target.files) {
       const files = Array.from(event.target.files);
-      const previewImages = files.map((file) =>
-        URL.createObjectURL(file as Blob)
+      // Compress each image (if needed), one by one
+      const compressedFilesPromises = files.map((file) => compressImage(file));
+      const compressedFiles = await Promise.all(compressedFilesPromises);
+      // Create preview URLs from the (possibly compressed) files
+      const previewImages = compressedFiles.map((file) =>
+        URL.createObjectURL(file)
       );
-      setNewImages((prev) => [...prev, ...files]);
+      // Add to state
+      setNewImages((prev) => [...prev, ...compressedFiles]);
       setNewImagePreviews((prev) => [...prev, ...previewImages]);
       if (existingImages.length === 0 && newImages.length === 0) {
-        //first image, set as featured asset
+        // First image, set as featured
         setMainImageIndex(`new-0`);
       }
     }
@@ -312,6 +318,8 @@ const AddOrUpdateService: React.FC<AddOrUpdateItemProps> = ({
       } catch (err) {
         console.error('Failed to add assets:', err);
         setServiceError(true);
+        setCreatingOrUpdatingProduct(false);
+        return;
       }
     }
     try {
@@ -436,6 +444,8 @@ const AddOrUpdateService: React.FC<AddOrUpdateItemProps> = ({
       } catch (err) {
         setServiceError(true);
         console.error('Failed to add assets:', err);
+        setCreatingOrUpdatingProduct(false);
+        return;
       }
     }
 
@@ -657,7 +667,7 @@ const AddOrUpdateService: React.FC<AddOrUpdateItemProps> = ({
                     </Button>
                     <Grid container spacing={1}>
                       {existingImages.map((asset, index) => (
-                        <Grid item xs={6}>
+                        <Grid key={asset.id || index} item xs={6}>
                           <ImageItem
                             existing={true}
                             index={index}
@@ -669,7 +679,7 @@ const AddOrUpdateService: React.FC<AddOrUpdateItemProps> = ({
                         </Grid>
                       ))}
                       {newImagePreviews.map((image, index) => (
-                        <Grid item xs={6}>
+                        <Grid key={`new-${index}`} item xs={6}>
                           <ImageItem
                             existing={false}
                             index={index}

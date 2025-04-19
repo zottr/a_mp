@@ -229,7 +229,7 @@ function Services({ setProductAction, setUpdatedProductName }) {
                 )}
               </Box>
             ))}
-          {!hasMore && serverProductList.length !== 0 && (
+          {!hasMore && data?.products?.totalItems > 3 && (
             <Stack
               direction="row"
               sx={{
@@ -239,8 +239,8 @@ function Services({ setProductAction, setUpdatedProductName }) {
                 justifyContent: 'center',
               }}
             >
-              <Typography variant="heavyb2" color="brown">
-                That's all!
+              <Typography variant="heavyb2" color="secondary.dark">
+                That’s everything for now!
               </Typography>
               <Typography variant="b1" sx={{ fontSize: '20px' }}>
                 &#x1F44B;

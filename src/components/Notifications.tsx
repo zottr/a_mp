@@ -24,6 +24,7 @@ const Notifications: React.FC<NotifificationsProps> = ({ type }) => {
     variables: {
       options: {
         filter: {
+          adminId: { eq: adminUser?.id },
           adminStatus: { in: ['new'] },
         },
       },

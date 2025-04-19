@@ -19,7 +19,6 @@ export const InstallPromptProvider = ({ children }) => {
     const handleBeforeInstallPrompt = (e) => {
       e.preventDefault(); // Prevent Chrome's mini-infobar
       setDeferredPrompt(e); // Save the event for triggering later
-      console.log('beforeinstallprompt fired');
     };
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
