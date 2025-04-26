@@ -28,7 +28,7 @@ export const AccountCustomizationBreadcrumbs: React.FC<
         <Typography variant="label2">Home</Typography>
       </Link>
       <Typography variant="label2" sx={{ color: 'text.primary' }}>
-        Customize Store
+        Customize Profile
       </Typography>
     </Breadcrumbs>
   );

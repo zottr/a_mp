@@ -14,8 +14,10 @@ import { useUserContext } from '../../hooks/useUserContext';
 import { useEffect, useRef, useState } from 'react';
 import ProductListSkeleton from './ProductListSkeleton';
 import { GET_FACET_VALUE_LIST } from '../../libs/graphql/definitions/facet-definitions';
+import { useNavigate } from 'react-router-dom';
 
 function Products({ setProductAction, setUpdatedProductName }) {
+  const navigate = useNavigate();
   const ITEMS_PER_LOAD = 10;
   const { adminUser } = useUserContext();
   const [serverProductList, setServerProductList] = useState([]);
@@ -50,6 +52,19 @@ function Products({ setProductAction, setUpdatedProductName }) {
         setServicesCategoryId(servicesCategory.id);
       }
     },
+    onError: (error) => {
+      console.error('Error fetching products:', error);
+      if (
+        error.graphQLErrors?.some(
+          (err) =>
+            err.extensions?.code === 'FORBIDDEN' ||
+            err.extensions?.code === 'UNAUTHORIZED'
+        )
+      ) {
+        localStorage.removeItem('zottrAdminAuthToken');
+        navigate('/login', { replace: true });
+      }
+    },
   });
 
   // const [fetchProducts, { loading, error, data, fetchMore }] = useLazyQuery(
@@ -71,6 +86,19 @@ function Products({ setProductAction, setUpdatedProductName }) {
       fetchPolicy: 'cache-and-network',
       onCompleted: (fetchedData) => {
         afterInitialDataFetch(fetchedData);
+      },
+      onError: (error) => {
+        console.error('Error fetching products:', error);
+        if (
+          error.graphQLErrors?.some(
+            (err) =>
+              err.extensions?.code === 'FORBIDDEN' ||
+              err.extensions?.code === 'UNAUTHORIZED'
+          )
+        ) {
+          localStorage.removeItem('zottrAdminAuthToken');
+          navigate('/login', { replace: true });
+        }
       },
     }
   );

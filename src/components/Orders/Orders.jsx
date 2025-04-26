@@ -22,8 +22,10 @@ import OrdersBreadcrumbs from './OrdersBreadcrumbs';
 import LoadingCircle from '../common/LoadingCircle';
 import OrdersSkeleton from './OrdersSkeleton';
 import { useUserContext } from '../../hooks/useUserContext';
+import { useNavigate } from 'react-router-dom';
 
 function Orders() {
+  const navigate = useNavigate();
   const ITEMS_PER_LOAD = 10;
   const { adminUser } = useUserContext();
   const [filterString, setFilterString] = React.useState({
@@ -53,6 +55,19 @@ function Orders() {
         setHasMore(
           fetchedData.orders.items.length < fetchedData.orders.totalItems
         );
+      },
+      onError: (error) => {
+        console.error('Error fetching orders:', error);
+        if (
+          error.graphQLErrors?.some(
+            (err) =>
+              err.extensions?.code === 'FORBIDDEN' ||
+              err.extensions?.code === 'UNAUTHORIZED'
+          )
+        ) {
+          localStorage.removeItem('zottrAdminAuthToken');
+          navigate('/login', { replace: true });
+        }
       },
     }
   );
@@ -317,7 +332,7 @@ function Orders() {
                     </Box>
                   )}
                 {loadingMore && (
-                  <Box sx={{ height: '50px' }}>
+                  <Box sx={{ height: '50px', mt: 1 }}>
                     <LoadingCircle message="Loading more..." />
                   </Box>
                 )}

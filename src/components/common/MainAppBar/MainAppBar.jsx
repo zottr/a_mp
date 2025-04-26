@@ -164,7 +164,7 @@ export default function MainAppBar() {
                 variant="label1"
                 sx={{ color: theme.palette.grey[800] }}
               >
-                Customize Store
+                Customize Profile
               </Typography>
             }
           />

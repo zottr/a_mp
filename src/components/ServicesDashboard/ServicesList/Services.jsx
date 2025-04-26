@@ -16,6 +16,7 @@ import ProductListSkeleton from './ServicesListSkeleton';
 import { GET_FACET_VALUE_LIST } from '../../../libs/graphql/definitions/facet-definitions';
 
 function Services({ setProductAction, setUpdatedProductName }) {
+  const navigate = useNavigate();
   const ITEMS_PER_LOAD = 10;
   // const { adminUser } = useUserContext();
   const { adminUser } = useUserContext();
@@ -51,6 +52,19 @@ function Services({ setProductAction, setUpdatedProductName }) {
         setServicesCategoryId(servicesCategory.id);
       }
     },
+    onError: (error) => {
+      console.error('Error fetching services:', error);
+      if (
+        error.graphQLErrors?.some(
+          (err) =>
+            err.extensions?.code === 'FORBIDDEN' ||
+            err.extensions?.code === 'UNAUTHORIZED'
+        )
+      ) {
+        localStorage.removeItem('zottrAdminAuthToken');
+        navigate('/login', { replace: true });
+      }
+    },
   });
 
   // const [fetchProducts, { loading, error, data, fetchMore }] = useLazyQuery(
@@ -72,6 +86,19 @@ function Services({ setProductAction, setUpdatedProductName }) {
       fetchPolicy: 'cache-and-network',
       onCompleted: (fetchedData) => {
         afterInitialDataFetch(fetchedData);
+      },
+      onError: (error) => {
+        console.error('Error fetching products:', error);
+        if (
+          error.graphQLErrors?.some(
+            (err) =>
+              err.extensions?.code === 'FORBIDDEN' ||
+              err.extensions?.code === 'UNAUTHORIZED'
+          )
+        ) {
+          localStorage.removeItem('zottrAdminAuthToken');
+          navigate('/login', { replace: true });
+        }
       },
     }
   );

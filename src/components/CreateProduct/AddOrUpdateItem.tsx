@@ -49,7 +49,7 @@ interface ProductType {
   id: string;
   name: string;
   description: string;
-  price?: number | undefined;
+  price?: string | undefined;
   enabled: boolean;
   categoryId?: string;
   categoryName: string;
@@ -104,7 +104,7 @@ const AddOrUpdateItem: React.FC<AddOrUpdateItemProps> = ({
     id: '',
     name: '',
     description: '',
-    price: 0,
+    price: '',
     enabled: true,
     categoryId: 'choose_category_label',
     categoryName: '',
@@ -181,7 +181,9 @@ const AddOrUpdateItem: React.FC<AddOrUpdateItemProps> = ({
             id: fetchedData.product.id,
             name: fetchedData.product.name,
             description: fetchedData.product.description,
-            price: Number(fetchedData.product.variants[0]?.price) / 100, //we need to convert it to rupees
+            price: (
+              Number(fetchedData.product.variants[0]?.price) / 100
+            ).toString(), //we need to convert it to rupees
             enabled: fetchedData.product.enabled,
             categoryId: category?.id,
             categoryName: category?.name ?? '',
@@ -383,7 +385,7 @@ const AddOrUpdateItem: React.FC<AddOrUpdateItemProps> = ({
                 result?.data?.createProduct?.slug +
                 '-' +
                 result?.data?.createProduct?.id,
-              price: Number(product.price) * 100,
+              price: Math.round(Number(product.price) * 100),
               translations: [
                 {
                   name: product.name,
@@ -514,7 +516,13 @@ const AddOrUpdateItem: React.FC<AddOrUpdateItemProps> = ({
           variables: {
             input: {
               id: updatedProd?.variantList?.items[0].id,
-              price: Number(product.price) * 100,
+              price: Math.round(Number(product.price) * 100),
+              translations: [
+                {
+                  name: product.name,
+                  languageCode: import.meta.env.VITE_VENDURE_LANGUAGE_CODE,
+                },
+              ],
             },
           },
         });

@@ -8,20 +8,10 @@ import Notifications from '../Notifications';
 import { useNavigate } from 'react-router-dom';
 import Services from './ServicesList/Services';
 
-// const Transition = React.forwardRef(function Transition(props, ref) {
-//   return <Slide direction="up" ref={ref} {...props} />;
-// });
-
 function ServicesHome() {
   const navigate = useNavigate();
   const theme = useTheme();
   const { adminUser } = useUserContext();
-  // const [sellerFacetValueId, setSellerFacetValueId] = useState('');
-  // const [productToEditId, setProductToEditId] = useState(null);
-
-  // const [dialogOpen, setDialogOpen] = useState(false); // State for dialog visibility
-  // const [refetchProducts, setRefetchProducts] = useState(false); // State for dialog visibility
-
   const [productAction, setProductAction] = useState('');
   const [updatedProductName, setUpdatedProductName] = useState('');
 
@@ -37,53 +27,6 @@ function ServicesHome() {
       sessionStorage.removeItem('productData');
     }
   }, []);
-
-  // // Handle opening and closing the dialog
-  // const handleDialogClose = () => {
-  //   setDialogOpen(false);
-  //   setRefetchProducts(true);
-  //   if (productToEditId != null) setProductToEditId(null);
-  // };
-
-  // const handleEditProduct = (id: any) => {
-  //   setProductToEditId(id);
-  //   // handleDialogOpen();
-  // };
-
-  // const handleDialogOpen = () => {
-  //   setDialogOpen(true);
-  // };
-
-  // const [fetchFacets, { data: fValueData }] = useLazyQuery(
-  //   GET_FACET_VALUE_LIST,
-  //   {
-  //     fetchPolicy: 'cache-and-network',
-  //     variables: {
-  //       options: {
-  //         filter: { name: { eq: adminUser?.customFields?.phone } },
-  //       },
-  //     },
-  //   }
-  // );
-
-  //bug fix: reseting scroll position to the top when page is refreshed, otherwise page was loading from the middle due to Product container retaining scroll position history
-  // useEffect(() => {
-  //   window.history.scrollRestoration = 'manual';
-  //   // window.scrollTo(0, 0);
-  // }, []);
-
-  // useEffect(() => {
-  //   if (adminUser) {
-  //     fetchFacets();
-  //     console.log(fValueData);
-  //     if (
-  //       fValueData?.facetValues?.totalItems &&
-  //       fValueData?.facetValues?.totalItems > 0
-  //     ) {
-  //       setSellerFacetValueId(fValueData?.facetValues.items[0].id);
-  //     }
-  //   }
-  // }, [adminUser, fetchFacets, fValueData]);
 
   return (
     <>
@@ -154,23 +97,7 @@ function ServicesHome() {
           </Typography>
         </Fab>
       </Box>
-      {/* <Dialog
-        open={dialogOpen}
-        onClose={handleDialogClose}
-        fullScreen
-        TransitionComponent={Transition}
-      >
-        <AddOrUpdateItem
-          // handleDialogClose={handleDialogClose}
-          // adminId={adminUser?.id ?? ''}
-          // adminName={adminUser?.firstName ?? ''}
-          // sellerFacetValueId={sellerFacetValueId}
-          // callbackOnAdd={() => {
-          //   setNewProductCreated(true);
-          // }}
-          productToEditId={productToEditId}
-        />
-      </Dialog> */}
+
       <CustomSnackBar
         message={
           productAction === 'created'
