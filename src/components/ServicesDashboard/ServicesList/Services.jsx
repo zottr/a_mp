@@ -15,6 +15,7 @@ import { useEffect, useRef, useState } from 'react';
 import ProductListSkeleton from './ServicesListSkeleton';
 import { GET_FACET_VALUE_LIST } from '../../../libs/graphql/definitions/facet-definitions';
 import { useNavigate } from 'react-router-dom';
+import useLogout from '../../../hooks/useLogout';
 
 function Services({ setProductAction, setUpdatedProductName }) {
   const navigate = useNavigate();
@@ -27,6 +28,7 @@ function Services({ setProductAction, setUpdatedProductName }) {
   const [loadingMore, setLoadingMore] = useState(false);
   const [refetchProducts, setRefetchProducts] = useState(false);
   const [servicesCategoryId, setServicesCategoryId] = useState('');
+  const handleLogout = useLogout();
 
   function afterInitialDataFetch(data) {
     setServerProductList(data?.products?.items || []);
@@ -62,8 +64,7 @@ function Services({ setProductAction, setUpdatedProductName }) {
             err.extensions?.code === 'UNAUTHORIZED'
         )
       ) {
-        localStorage.removeItem('zottrAdminAuthToken');
-        navigate('/login', { replace: true });
+        handleLogout();
       }
     },
   });
@@ -97,8 +98,7 @@ function Services({ setProductAction, setUpdatedProductName }) {
               err.extensions?.code === 'UNAUTHORIZED'
           )
         ) {
-          localStorage.removeItem('zottrAdminAuthToken');
-          navigate('/login', { replace: true });
+          handleLogout();
         }
       },
     }

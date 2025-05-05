@@ -344,6 +344,7 @@ const AddOrUpdateService: React.FC<AddOrUpdateItemProps> = ({
             customFields: {
               adminId: adminUser?.id,
               adminName: adminUser?.customFields?.businessName,
+              itemType: 'service',
             },
           },
         },

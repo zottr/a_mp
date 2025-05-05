@@ -15,6 +15,7 @@ import { useEffect, useRef, useState } from 'react';
 import ProductListSkeleton from './ProductListSkeleton';
 import { GET_FACET_VALUE_LIST } from '../../libs/graphql/definitions/facet-definitions';
 import { useNavigate } from 'react-router-dom';
+import useLogout from '../../hooks/useLogout';
 
 function Products({ setProductAction, setUpdatedProductName }) {
   const navigate = useNavigate();
@@ -26,6 +27,8 @@ function Products({ setProductAction, setUpdatedProductName }) {
   const [loadingMore, setLoadingMore] = useState(false);
   const [refetchProducts, setRefetchProducts] = useState(false);
   const [servicesCategoryId, setServicesCategoryId] = useState('');
+  const [redirectToLogin, setRedirectToLogin] = useState(false);
+  const handleLogout = useLogout();
 
   function afterInitialDataFetch(data) {
     setServerProductList(data?.products?.items || []);
@@ -53,7 +56,7 @@ function Products({ setProductAction, setUpdatedProductName }) {
       }
     },
     onError: (error) => {
-      console.error('Error fetching products:', error);
+      console.error('Error fetching service category id:', error);
       if (
         error.graphQLErrors?.some(
           (err) =>
@@ -61,8 +64,7 @@ function Products({ setProductAction, setUpdatedProductName }) {
             err.extensions?.code === 'UNAUTHORIZED'
         )
       ) {
-        localStorage.removeItem('zottrAdminAuthToken');
-        navigate('/login', { replace: true });
+        handleLogout();
       }
     },
   });
@@ -96,8 +98,7 @@ function Products({ setProductAction, setUpdatedProductName }) {
               err.extensions?.code === 'UNAUTHORIZED'
           )
         ) {
-          localStorage.removeItem('zottrAdminAuthToken');
-          navigate('/login', { replace: true });
+          handleLogout();
         }
       },
     }
@@ -112,6 +113,13 @@ function Products({ setProductAction, setUpdatedProductName }) {
       setRefetchProducts(false);
     }
   }, [refetchProducts, refetch]);
+
+  useEffect(() => {
+    if (redirectToLogin) {
+      console.log('Navigating to /login...');
+      navigate('/login', { replace: true });
+    }
+  }, [redirectToLogin, navigate]);
 
   const handleItemUpdate = (updatedItem) => {
     setServerProductList((prevItems) =>
