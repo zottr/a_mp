@@ -12,6 +12,7 @@ const mainTheme = createTheme({
       light: '#9575CD', // Soft lavender
       dark: '#512DA8', // Deep violet
       surface: 'hsl(270, 60%, 90%)', // Soft purple background
+      lightsurface: 'hsl(270, 60%, 99%)', // Soft purple background
       contrastText: '#fff',
     },
     secondary: {
@@ -19,6 +20,7 @@ const mainTheme = createTheme({
       light: '#FFD54F', // Soft Gold
       dark: '#FF8F00', // Deep Golden
       surface: 'hsl(42, 80%, 90%)', // Light golden cream
+      lightsurface: 'hsl(42, 80%, 99%)', // Light golden cream
       contrastText: '#000',
     },
     // secondary: {

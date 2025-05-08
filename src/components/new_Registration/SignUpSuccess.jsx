@@ -47,8 +47,8 @@ function SignUpSuccess({ phone, otp }) {
         animation: 'slideInFromRight 0.2s ease-out', // Applying the animation
       }}
     >
-      <Stack className="flexCenter" gap={5}>
-        <Stack gap={1} className="flexCenter">
+      <Stack className="fcc" gap={5}>
+        <Stack gap={1} className="fcc">
           {/* Animated CheckCircle Icon */}
           <motion.div
             initial={{ scale: 0 }}

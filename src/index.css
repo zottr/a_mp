@@ -1,21 +1,48 @@
-.flexCenter {
+.fcc {
   display: flex;
-  align-items: center;
   justify-content: center;
-}
-
-.flexLeft {
-  display: flex;
   align-items: center;
+}
+.fcs {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+.fce {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+.fsc {
+  display: flex;
   justify-content: flex-start;
-}
-
-.flexRight {
-  display: flex;
   align-items: center;
-  justify-content: flex-end;
 }
-
+.fss {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+.fse {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+}
+.fec {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.fes {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+}
+.fee {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
 @keyframes slideInFromRight {
   0% {
     transform: translateX(100%);

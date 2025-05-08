@@ -209,7 +209,7 @@ function Services({ setProductAction, setUpdatedProductName }) {
       {!loading && (
         <Stack
           direction="column"
-          gap={1}
+          gap={2}
           sx={{
             display: 'flex',
             flexDirection: 'column',
@@ -233,7 +233,7 @@ function Services({ setProductAction, setUpdatedProductName }) {
                   setRefetchProducts={setRefetchProducts}
                 />
                 {index !== serverProductList?.length - 1 && (
-                  <Divider flexItem variant="fullWidth" sx={{ mt: 2, mb: 1 }} />
+                  <Divider flexItem variant="fullWidth" sx={{ mt: 3, mb: 1 }} />
                 )}
               </Box>
             ))}
@@ -253,11 +253,11 @@ function Services({ setProductAction, setUpdatedProductName }) {
                   setRefetchProducts={setRefetchProducts}
                 />
                 {index !== serverProductList?.length - 1 && (
-                  <Divider flexItem variant="fullWidth" sx={{ mt: 2, mb: 1 }} />
+                  <Divider flexItem variant="fullWidth" sx={{ mt: 3, mb: 1 }} />
                 )}
               </Box>
             ))}
-          {!hasMore && data?.products?.totalItems > 3 && (
+          {!hasMore && serverProductList.length > 3 && initialLoadCompleted && (
             <Stack
               direction="row"
               sx={{
@@ -268,7 +268,7 @@ function Services({ setProductAction, setUpdatedProductName }) {
               }}
             >
               <Typography variant="heavyb2" color="secondary.dark">
-                That’s everything for now!
+                That’s everything!
               </Typography>
               <Typography variant="b1" sx={{ fontSize: '20px' }}>
                 &#x1F44B;

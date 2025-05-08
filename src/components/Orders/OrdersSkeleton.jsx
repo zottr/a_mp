@@ -9,14 +9,34 @@ function OrderSkeletonItem() {
     >
       <Grid item xs={8}>
         <Stack gap={1.5}>
-          <Skeleton variant="rounded" width="100%" height="2rem" />
-          <Skeleton variant="rounded" width="100%" height="1.4rem" />
+          <Skeleton
+            variant="rounded"
+            width="100%"
+            height="2rem"
+            animation="wave"
+          />
+          <Skeleton
+            variant="rounded"
+            width="100%"
+            height="1.4rem"
+            animation="wave"
+          />
         </Stack>
       </Grid>
       <Grid item xs={4}>
         <Stack gap={1.5}>
-          <Skeleton variant="rounded" width="100%" height="2rem" />
-          <Skeleton variant="rounded" width="100%" height="1.4rem" />
+          <Skeleton
+            variant="rounded"
+            width="100%"
+            height="2rem"
+            animation="wave"
+          />
+          <Skeleton
+            variant="rounded"
+            width="100%"
+            height="1.4rem"
+            animation="wave"
+          />
         </Stack>
       </Grid>
     </Grid>

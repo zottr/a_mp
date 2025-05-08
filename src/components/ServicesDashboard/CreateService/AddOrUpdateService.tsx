@@ -38,6 +38,7 @@ import DeleteServiceDialog from './DeleteServiceDialog';
 import ServiceDescriptionEditor from './ServiceDescriptionEditor';
 import ServicesMainAppBar from '../../common/ServicesMainAppBar';
 import { compressImage } from '../../../utils/CommonUtils';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 interface ProductType {
   id: string;
@@ -550,7 +551,7 @@ const AddOrUpdateService: React.FC<AddOrUpdateItemProps> = ({
     <>
       <ServicesMainAppBar />
 
-      <Box sx={{ mb: 5, pt: 8, bgcolor: 'primary.surface' }}>
+      <Box sx={{ pb: 2, pt: 8, bgcolor: 'primary.surface' }}>
         {invalidProductId && (
           <Container sx={{ bgcolor: 'white', pt: 20 }}>
             <Error404Alert />
@@ -561,8 +562,8 @@ const AddOrUpdateService: React.FC<AddOrUpdateItemProps> = ({
             sx={{
               bgcolor: 'white',
               maxWidth: 'calc(100% - 24px)',
-              borderTopLeftRadius: '10px',
-              borderTopRightRadius: '10px',
+              borderRadius: '10px',
+              minHeight: '100vh',
               p: 1,
             }}
           >
@@ -643,7 +644,7 @@ const AddOrUpdateService: React.FC<AddOrUpdateItemProps> = ({
                   </Stack>
                   <Stack
                     width="100%"
-                    gap={3}
+                    gap={2}
                     sx={{ display: 'flex', alignItems: 'flex-start' }}
                   >
                     <Button
@@ -695,7 +696,7 @@ const AddOrUpdateService: React.FC<AddOrUpdateItemProps> = ({
                   </Stack>
                   {hasValidationErrors && <ValidationErrorAlert />}
                   {serviceError && <ServiceErrorAlert />}
-                  <Stack sx={{ width: '100%' }} gap={1.5}>
+                  <Stack sx={{ width: '100%' }} gap={3}>
                     <LoadingButton
                       onClick={() => {}}
                       loading={creatingOrUpdatingProduct}

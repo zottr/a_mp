@@ -30,7 +30,7 @@ function Orders() {
   const { adminUser } = useUserContext();
   const [filterString, setFilterString] = React.useState({
     adminId: { eq: adminUser?.id },
-    adminStatus: { in: ['new', 'accepted', 'rejected', 'completed'] },
+    adminStatus: { in: ['new', 'accepted', 'rejected', 'delivered'] },
   });
   const [orderListOption, setOrderListOption] = React.useState('all');
   const [orders, setOrders] = useState([]); //contains all the fetched orders, this variable is needed to enable infinite scroll functionality
@@ -136,7 +136,7 @@ function Orders() {
     if (event.target.value == 'all') {
       setFilterString({
         adminId: { eq: adminUser?.id },
-        adminStatus: { in: ['new', 'accepted', 'rejected', 'completed'] },
+        adminStatus: { in: ['new', 'accepted', 'rejected', 'delivered'] },
       });
     } else {
       setFilterString({
@@ -253,7 +253,7 @@ function Orders() {
                   <MenuItem value={'rejected'}>
                     <Typography variant="label2">Rejected Orders</Typography>
                   </MenuItem>
-                  <MenuItem value={'completed'}>
+                  <MenuItem value={'delivered'}>
                     <Typography variant="label2">Completed Orders</Typography>
                   </MenuItem>
                 </Select>

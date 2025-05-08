@@ -28,7 +28,7 @@ function OrderItem({ order }) {
     case 'new':
       statusLabelColor = 'hsl(0, 65%, 51%)';
       break;
-    case 'completed':
+    case 'delivered':
       statusLabelColor = 'hsl(123,46.2%,33%)';
       break;
     default:

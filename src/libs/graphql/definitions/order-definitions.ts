@@ -203,6 +203,7 @@ export const ORDER_DETAIL_FRAGMENT = gql`
     customFields {
       adminId
       adminStatus
+      notes
     }
     aggregateOrder {
       id

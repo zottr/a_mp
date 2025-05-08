@@ -311,7 +311,7 @@ function SignUpOTPVerification({
 
           {/*error alerts*/}
           <Stack
-            className="flexCenter"
+            className="fcc"
             sx={{
               marginTop: '25px',
             }}

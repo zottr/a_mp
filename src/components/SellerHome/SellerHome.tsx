@@ -1,25 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import MainAppBar from '../common/MainAppBar';
 import Products from '../ProductsList';
-import {
-  Box,
-  Dialog,
-  Fab,
-  Slide,
-  Stack,
-  Typography,
-  useTheme,
-} from '@mui/material';
+import { Box, Fab, Stack, Typography, useTheme } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useUserContext } from '../../hooks/useUserContext';
-import { GET_FACET_VALUE_LIST } from '../../libs/graphql/definitions/facet-definitions';
-import AddOrUpdateItem from '../CreateProduct/AddOrUpdateItem';
-import { useLazyQuery } from '@apollo/client';
 import CustomSnackBar from '../common/Snackbars/CustomSnackBar';
 import Notifications from '../Notifications';
 import HomeLinks from './SellerHomeLinks';
 import { useNavigate } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
 
 // const Transition = React.forwardRef(function Transition(props, ref) {
 //   return <Slide direction="up" ref={ref} {...props} />;
@@ -139,8 +127,8 @@ function SellerHome() {
             borderRadius: '10px',
           }}
         >
-          <Stack gap={2}>
-            <Typography variant="h7" color={theme.palette.grey[800]}>
+          <Stack gap={3}>
+            <Typography variant="h6" color={theme.palette.grey[900]}>
               Your Products
             </Typography>
             <Products

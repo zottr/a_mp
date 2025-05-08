@@ -12,7 +12,7 @@ function ImageItem({
 }) {
   return (
     <Box
-      className="flexCenter"
+      className="fcc"
       key={index}
       sx={{
         position: 'relative',
@@ -22,7 +22,7 @@ function ImageItem({
       border={
         mainImageIndex === (existing ? `existing-${index}` : `new-${index}`)
           ? // ? '1px solid #1976d2'
-            '1px solid #FFA000'
+            '1px solid #673AB7'
           : '1px solid #e3f2fd'
         //'1px solid hsl(45, 100%, 85%)'
       }

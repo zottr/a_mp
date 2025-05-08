@@ -2,6 +2,7 @@ import {
   Avatar,
   Box,
   Button,
+  CircularProgress,
   Divider,
   Grid,
   IconButton,
@@ -16,7 +17,6 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // import logo from '/logos/zottr_logo_small2_white_medium_grey.svg';
 import logo from '/logos/zottr_logo_small2_white_light_grey.svg';
 // import logo from '/logos/zottr_logo_small2.svg';
-import ShareIcon from '@mui/icons-material/Share';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -48,6 +48,7 @@ const Item: React.FC<ItemProps> = ({
   const [anchorEl, setAnchorEl] = useState(null);
   const [enableDisableProduct] = useMutation(UPDATE_PRODUCT);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [togglingVisibility, setTogglingVisibility] = useState(false);
 
   const handleMenuOpen = (event: any) => {
     setAnchorEl(event.currentTarget);
@@ -62,22 +63,29 @@ const Item: React.FC<ItemProps> = ({
   }
 
   const toggleProductVisibility = async (event: any) => {
-    const response = await enableDisableProduct({
-      variables: {
-        input: {
-          id: item.id,
-          enabled: event.target.checked,
+    try {
+      setTogglingVisibility(true);
+      const response = await enableDisableProduct({
+        variables: {
+          input: {
+            id: item.id,
+            enabled: event.target.checked,
+          },
         },
-      },
-    });
-    if (response.data) {
-      const updatedItem = response.data.updateProduct;
-      setChecked(updatedItem.enabled);
-      if (updatedItem.enabled)
-        setStatusMessage(`${item.name} will be visible in store`);
-      else setStatusMessage(`${item.name} won't be visible in store`);
-      setSendAlert(true);
-      onItemUpdate(updatedItem);
+      });
+      if (response.data) {
+        const updatedItem = response.data.updateProduct;
+        setChecked(updatedItem.enabled);
+        if (updatedItem.enabled)
+          setStatusMessage(`${item.name} will be visible in store`);
+        else setStatusMessage(`${item.name} will be hidden from store`);
+        setSendAlert(true);
+        onItemUpdate(updatedItem);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setTogglingVisibility(false);
     }
   };
 
@@ -113,10 +121,8 @@ const Item: React.FC<ItemProps> = ({
           <Grid
             item
             xs={3}
+            className="fcc"
             sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
               width: '100%',
               aspectRatio: 1,
             }}
@@ -143,7 +149,8 @@ const Item: React.FC<ItemProps> = ({
             </Box>
           </Grid>
           <Grid item xs={6}>
-            <Box
+            <Stack
+              className="fcs"
               component={RouterLink}
               to={`/product/${item.id}`}
               sx={{ textDecoration: 'none' }}
@@ -160,41 +167,30 @@ const Item: React.FC<ItemProps> = ({
               >
                 {item.name}
               </Typography>
-            </Box>
-          </Grid>
-          <Grid container item xs={3} className={'flexCenter'}>
-            <Grid item xs={4} className={'flexRight'}>
-              <IconButton
-                onClick={handleClickEdit}
-                sx={
-                  {
-                    // pointerEvents: checked ? 'auto' : 'none',
-                    // opacity: checked ? 1 : 0.5,
-                  }
-                }
-              >
-                <EditIcon fontSize="small" color="primary" />
+              <IconButton>
+                <EditIcon sx={{ color: 'success.main', fontSize: '20px' }} />
               </IconButton>
+            </Stack>
+          </Grid>
+          <Grid container item xs={3} className={'fcc'}>
+            <Grid item xs={6} className={'fcc'}>
+              {togglingVisibility && (
+                <CircularProgress thickness={6} size={30} />
+              )}
+              {!togglingVisibility && (
+                <Switch
+                  color="primary"
+                  onChange={toggleProductVisibility}
+                  checked={item.enabled}
+                  size="medium"
+                />
+              )}
             </Grid>
-            <Grid item xs={4} className={'flexCenter'}>
-              <Switch
-                color="primary"
-                onChange={toggleProductVisibility}
-                checked={item.enabled}
-                size="small"
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <IconButton
-                onClick={handleMenuOpen}
-                sx={
-                  {
-                    // pointerEvents: checked ? 'auto' : 'none',
-                    // opacity: checked ? 1 : 0.5,
-                  }
-                }
-              >
-                <MoreVertIcon fontSize="medium" color="primary" />
+            <Grid item xs={6} className={'fsc'}>
+              <IconButton onClick={handleMenuOpen} sx={{}}>
+                <MoreVertIcon
+                  sx={{ fontSize: '32px', color: 'primary.main' }}
+                />
               </IconButton>
             </Grid>
           </Grid>
@@ -203,7 +199,7 @@ const Item: React.FC<ItemProps> = ({
       <CustomSnackBar
         message={statusMessage}
         severity="info"
-        color="info"
+        color="success"
         duration={3000}
         vertical="top"
         horizontal="center"
@@ -241,31 +237,31 @@ const Item: React.FC<ItemProps> = ({
         </MenuItem>
         <Divider />
         <MenuItem>
-          <Button onClick={deleteItem}>
+          <Button onClick={handleClickEdit}>
             <Stack
-              gap={1}
+              gap={2}
               direction="row"
               sx={{ display: 'flex', alignItems: 'center' }}
             >
-              <Typography variant="button2" sx={{ color: 'grey.700' }}>
-                Delete
+              <Typography variant="button1" sx={{ color: 'primary.main' }}>
+                Edit
               </Typography>
-              <DeleteIcon fontSize="small" sx={{ color: 'grey.700' }} />
+              <EditIcon sx={{ color: 'primary.main', fontSize: '22px' }} />
             </Stack>
           </Button>
         </MenuItem>
         <Divider />
         <MenuItem>
-          <Button onClick={handleClickEdit}>
+          <Button onClick={deleteItem}>
             <Stack
-              gap={1}
+              gap={2}
               direction="row"
               sx={{ display: 'flex', alignItems: 'center' }}
             >
-              <Typography variant="button2" sx={{ color: 'grey.700' }}>
-                Edit
+              <Typography variant="button1" sx={{ color: 'primary.main' }}>
+                Delete
               </Typography>
-              <EditIcon fontSize="small" sx={{ color: 'success.main' }} />
+              <DeleteIcon fontSize="medium" sx={{ color: 'primary.main' }} />
             </Stack>
           </Button>
         </MenuItem>

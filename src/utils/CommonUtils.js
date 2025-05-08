@@ -13,14 +13,27 @@ export const isLocalStorageAvailable = () => {
 };
 
 // utils.js
-export const openWhatsAppChat = (phoneNumber, message) => {
-  let encodedMessage = '';
-  if (message) {
-    encodedMessage = encodeURIComponent(message);
-  }
-  const whatsappUrl = `https://wa.me/+91${phoneNumber}?text=${encodedMessage}`;
-  window.location.href = whatsappUrl;
+export const openWhatsAppChat = (phoneNumber, message = '') => {
+  console.log('phoneNumber:', phoneNumber);
+  console.log('message:', message);
+  const cleanedNumber = phoneNumber.replace(/\D/g, ''); // removes + and non-digits
+  const encodedText = encodeURIComponent(message);
+  const url =
+    message !== ''
+      ? `https://api.whatsapp.com/send/?phone=91${cleanedNumber}&text=${encodedText}&type=phone_number&app_absent=0`
+      : `https://wa.me/91${cleanedNumber}`;
+  window.open(url, '_blank');
 };
+
+// utils.js
+// export const openWhatsAppChat = (phoneNumber, message) => {
+//   let encodedMessage = '';
+//   if (message) {
+//     encodedMessage = encodeURIComponent(message);
+//   }
+//   const whatsappUrl = `https://wa.me/+91${phoneNumber}?text=${encodedMessage}`;
+//   window.location.href = whatsappUrl;
+// };
 
 export const initiateAudioCall = (phoneNumber) => {
   const audioCallUrl = `tel:+91${phoneNumber}`;

@@ -8,10 +8,15 @@ function ServiceSkeletonItem() {
       spacing={1}
     >
       <Grid item xs={3}>
-        <Skeleton variant="rounded" width="5rem" height="5rem" />
+        <Skeleton
+          variant="rounded"
+          width="5rem"
+          height="5rem"
+          animation="wave"
+        />
       </Grid>
       <Grid item xs={9}>
-        <Skeleton variant="text" sx={{ fontSize: '1.2rem' }} />
+        <Skeleton variant="text" sx={{ fontSize: '1.2rem' }} animation="wave" />
       </Grid>
     </Grid>
   );

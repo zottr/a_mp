@@ -23,6 +23,8 @@ import { UPDATE_PRODUCT } from '../../../libs/graphql/definitions/product-defini
 import { useMutation } from '@apollo/client';
 import CustomSnackBar from '../../common/Snackbars/CustomSnackBar';
 import DeleteProductDialog from '../../CreateProduct/DeleteProductDialog';
+import ReplyIcon from '@mui/icons-material/Reply';
+import ShareButton from '../../common/ShareButton';
 
 interface ItemProps {
   item: any;
@@ -122,7 +124,7 @@ const Item: React.FC<ItemProps> = ({
             >
               <Avatar
                 alt={item.name}
-                src={item?.featuredAsset?.preview}
+                src={`${item?.featuredAsset?.preview}?preset=small`}
                 variant="rounded"
                 sx={{
                   width: '100%',
@@ -137,7 +139,8 @@ const Item: React.FC<ItemProps> = ({
             </Box>
           </Grid>
           <Grid item xs={6}>
-            <Box
+            <Stack
+              className="fcs"
               component={RouterLink}
               to={`/service/${item.id}`}
               sx={{ textDecoration: 'none' }}
@@ -154,35 +157,19 @@ const Item: React.FC<ItemProps> = ({
               >
                 {item.name}
               </Typography>
-            </Box>
+              <IconButton>
+                <EditIcon sx={{ color: 'success.main', fontSize: '20px' }} />
+              </IconButton>
+            </Stack>
           </Grid>
-          <Grid container item xs={3} className={'flexCenter'}>
-            <Grid item xs={6} className={'flexRight'}>
-              <IconButton
-                onClick={handleClickEdit}
-                sx={
-                  {
-                    // pointerEvents: checked ? 'auto' : 'none',
-                    // opacity: checked ? 1 : 0.5,
-                  }
-                }
-              >
-                <EditIcon fontSize="small" color="primary" />
-              </IconButton>
-            </Grid>
-            <Grid item xs={6} className={'flexRight'}>
-              <IconButton
-                onClick={() => {}}
-                sx={
-                  {
-                    // pointerEvents: checked ? 'auto' : 'none',
-                    // opacity: checked ? 1 : 0.5,
-                  }
-                }
-              >
-                <ShareIcon fontSize="small" color="primary" />
-              </IconButton>
-            </Grid>
+          <Grid item xs={3} className={'fcc'}>
+            <ShareButton
+              preShareAction={() => {}}
+              title={item.name}
+              text={item.description}
+              url={`https://urbanahaat.zottr.com/product/${item?.slug}/share`}
+              showLabel={false}
+            />
           </Grid>
         </Grid>
       </Box>

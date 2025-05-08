@@ -4,8 +4,15 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import CloseIcon from '@mui/icons-material/Close';
 import { useState } from 'react';
 import { stripHtml } from '../../utils/CommonUtils';
+import ReplyIcon from '@mui/icons-material/Reply';
 
-const ShareButton = ({ title, text, url, preShareAction }) => {
+const ShareButton = ({
+  title,
+  text,
+  url,
+  preShareAction,
+  showLabel = true,
+}) => {
   const [toastOpen, setToastOpen] = useState(false);
 
   const handleShare = async () => {
@@ -29,18 +36,28 @@ const ShareButton = ({ title, text, url, preShareAction }) => {
 
   return (
     <>
-      <IconButton size="large" onClick={handleShare} sx={{ color: '#1976d2' }}>
+      <Button size="large" onClick={handleShare} sx={{ color: '#1976d2' }}>
         <Stack
           gap={1}
           direction="row"
           sx={{ display: 'flex', alignItems: 'center' }}
         >
-          <Typography variant="button2" sx={{ color: 'grey.700' }}>
-            Share
-          </Typography>
-          <ShareIcon fontSize="small" sx={{ color: 'primary.main' }} />
+          {showLabel && (
+            <Typography variant="button1" sx={{ color: 'primary.main' }}>
+              Share
+            </Typography>
+          )}
+          {/* <ShareIcon fontSize="small" sx={{ color: 'primary.main' }} /> */}
+          <ReplyIcon
+            sx={{
+              transform: 'scaleX(-1)',
+              ml: 1,
+              color: 'primary.main',
+              fontSize: '28px',
+            }}
+          />
         </Stack>
-      </IconButton>
+      </Button>
       {/* Snackbar for toast message */}
       <Snackbar
         open={toastOpen}

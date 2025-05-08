@@ -8,10 +8,15 @@ function ProductSkeletonItem() {
       spacing={1}
     >
       <Grid item xs={3}>
-        <Skeleton variant="rounded" width="5rem" height="5rem" />
+        <Skeleton
+          variant="rounded"
+          width="5rem"
+          height="5rem"
+          animation="wave"
+        />
       </Grid>
       <Grid item xs={9}>
-        <Skeleton variant="text" sx={{ fontSize: '1.2rem' }} />
+        <Skeleton variant="text" sx={{ fontSize: '1.2rem' }} animation="wave" />
       </Grid>
     </Grid>
   );
@@ -24,7 +29,7 @@ function ProductListSkeleton() {
       {Array.from({ length: numberOfItems }).map((_, index) => (
         <div key={index}>
           <ProductSkeletonItem />
-          {index < numberOfItems - 1 && <Divider sx={{ my: 2 }} />}
+          {index < numberOfItems - 1 && <Divider sx={{ my: 3 }} />}
         </div>
       ))}
     </>

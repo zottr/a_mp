@@ -58,8 +58,8 @@ function ServicesHome() {
             borderRadius: '10px',
           }}
         >
-          <Stack gap={2}>
-            <Typography variant="h7" color={theme.palette.grey[800]}>
+          <Stack gap={3}>
+            <Typography variant="h6" color={theme.palette.grey[900]}>
               Your Services
             </Typography>
             <Services

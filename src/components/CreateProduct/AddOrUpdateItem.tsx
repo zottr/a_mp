@@ -592,8 +592,6 @@ const AddOrUpdateItem: React.FC<AddOrUpdateItemProps> = ({
             sx={{
               bgcolor: 'white',
               maxWidth: 'calc(100% - 24px)',
-              // borderTopLeftRadius: '10px',
-              // borderTopRightRadius: '10px',
               borderRadius: '10px',
               minHeight: '100vh',
               p: 1,
@@ -827,7 +825,7 @@ const AddOrUpdateItem: React.FC<AddOrUpdateItemProps> = ({
                   </Stack>
                   {hasValidationErrors && <ValidationErrorAlert />}
                   {serviceError && <ServiceErrorAlert />}
-                  <Stack sx={{ width: '100%' }} gap={1.5}>
+                  <Stack sx={{ width: '100%' }} gap={2}>
                     <LoadingButton
                       onClick={() => {}}
                       loading={creatingOrUpdatingProduct}

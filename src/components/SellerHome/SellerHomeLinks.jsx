@@ -28,8 +28,8 @@ function SellerHomeLinks() {
             justifyContent: 'center',
           }}
         >
-          <ListAltIcon fontSize="small" sx={{ color: 'grey.800' }} />
-          <Typography variant="button2" sx={{ color: 'grey.800' }}>
+          <ListAltIcon fontSize="small" sx={{ color: 'primary.main' }} />
+          <Typography variant="button2" sx={{ color: 'primary.main' }}>
             Orders
           </Typography>
         </Stack>
@@ -47,15 +47,15 @@ function SellerHomeLinks() {
           }}
         >
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <StoreIcon fontSize="small" sx={{ color: 'grey.800' }} />
+            <StoreIcon fontSize="small" sx={{ color: 'primary.main' }} />
             <EditIcon
               sx={{
-                color: theme.palette.grey[800],
+                color: 'primary.main',
                 fontSize: '14px',
               }}
             />
           </Box>
-          <Typography variant="button2" sx={{ color: 'grey.800' }}>
+          <Typography variant="button2" sx={{ color: 'primary.main' }}>
             Customize
           </Typography>
         </Stack>
@@ -72,8 +72,8 @@ function SellerHomeLinks() {
             justifyContent: 'center',
           }}
         >
-          <SettingsIcon fontSize="small" sx={{ color: 'grey.800' }} />
-          <Typography variant="button2" sx={{ color: 'grey.800' }}>
+          <SettingsIcon fontSize="small" sx={{ color: 'primary.main' }} />
+          <Typography variant="button2" sx={{ color: 'primary.main' }}>
             Settings
           </Typography>
         </Stack>
@@ -90,8 +90,8 @@ function SellerHomeLinks() {
             justifyContent: 'center',
           }}
         >
-          <CurrencyRupeeIcon fontSize="small" sx={{ color: 'grey.800' }} />
-          <Typography variant="button2" sx={{ color: 'grey.800' }}>
+          <CurrencyRupeeIcon fontSize="small" sx={{ color: 'primary.main' }} />
+          <Typography variant="button2" sx={{ color: 'primary.main' }}>
             UPI
           </Typography>
         </Stack>

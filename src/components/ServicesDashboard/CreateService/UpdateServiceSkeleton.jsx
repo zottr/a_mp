@@ -6,20 +6,40 @@ function UpdateItemSkeleton() {
       <Container sx={{ px: 1 }}>
         <Stack gap={5} sx={{ mt: 5, display: 'flex', alignItems: 'center' }}>
           <Stack sx={{ width: '100%' }}>
-            <Skeleton variant="text" width="40%" />
-            <Skeleton variant="rounded" width="100%" height="2.7rem" />
+            <Skeleton variant="text" width="40%" animation="wave" />
+            <Skeleton
+              variant="rounded"
+              width="100%"
+              height="2.7rem"
+              animation="wave"
+            />
           </Stack>
           <Stack sx={{ width: '100%' }}>
-            <Skeleton variant="text" width="40%" />
-            <Skeleton variant="rounded" width="100%" height="220px" />
+            <Skeleton variant="text" width="40%" animation="wave" />
+            <Skeleton
+              variant="rounded"
+              width="100%"
+              height="220px"
+              animation="wave"
+            />
           </Stack>
           <Stack sx={{ width: '100%' }}>
-            <Skeleton variant="text" width="40%" />
-            <Skeleton variant="rounded" width="100%" height="2.7rem" />
+            <Skeleton variant="text" width="40%" animation="wave" />
+            <Skeleton
+              variant="rounded"
+              width="100%"
+              height="2.7rem"
+              animation="wave"
+            />
           </Stack>
           <Stack sx={{ width: '100%' }}>
-            <Skeleton variant="text" width="40%" />
-            <Skeleton variant="rounded" width="100%" height="3.7rem" />
+            <Skeleton variant="text" width="40%" animation="wave" />
+            <Skeleton
+              variant="rounded"
+              width="100%"
+              height="3.7rem"
+              animation="wave"
+            />
           </Stack>
         </Stack>
       </Container>

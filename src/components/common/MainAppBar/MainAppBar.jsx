@@ -380,9 +380,9 @@ export default function MainAppBar() {
                   sx={{
                     px: 1,
                     borderRadius: '25px',
-                    bgcolor: 'primary.light',
+                    bgcolor: 'primary.main',
                     '&:hover, &:focus, &:active': {
-                      backgroundColor: 'primary.light',
+                      backgroundColor: 'primary.main',
                     },
                   }}
                 >

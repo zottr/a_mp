@@ -33,28 +33,14 @@ const PWAInstallButton = () => {
         py: 1,
         borderColor: 'success.main',
         borderRadius: '20px',
-        // width: '100%',
-        // borderWidth: '0',
-        // backgroundColor: 'hsl(38 88.2% 98%)',
-        // '&:hover': {
-        //   backgroundColor: 'hsl(38 88.2% 98%)',
-        //   borderWidth: '0',
-        // },
-        // '&:focus': {
-        //   backgroundColor: 'hsl(38 88.2% 98%)',
-        // },
-        // '&:active': {
-        //   backgroundColor: 'hsl(38 88.2% 98%)',
-        // },
+        '&:hover, &:focus, &:active': {
+          borderColor: 'success.main',
+        },
       }}
       startIcon={
-        // <GetAppIcon fontSize="medium" sx={{ color: 'hsl(30 , 100% , 20%)' }} />
         <GetAppIcon fontSize="medium" sx={{ color: 'success.main' }} />
       }
     >
-      {/* <Typography variant="button1" sx={{ color: 'hsl(30 , 100% , 20%)' }}>
-        Install App
-      </Typography> */}
       <Typography variant="button1" sx={{ color: 'success.main' }}>
         Install App
       </Typography>

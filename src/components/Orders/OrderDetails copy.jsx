@@ -38,7 +38,6 @@ function OrderDetails() {
   const theme = useTheme();
   const [updating, setUpdating] = useState(false);
   const [openDialog, setOpenDialog] = React.useState(false);
-  const [acceptOrder, setAcceptOrder] = React.useState(false);
   const query = useParams();
   const [updateOrder] = useMutation(UPDATE_ORDER_CUSTOM_FIELDS);
   const { adminUser } = useUserContext();
@@ -48,9 +47,7 @@ function OrderDetails() {
       id: query.orderId,
     },
     fetchPolicy: 'cache-and-network',
-    onCompleted: (fetchedData) => {
-      console.log(fetchedData);
-    },
+    onCompleted: (fetchedData) => {},
   });
 
   let statusLabelColor = '#ffffff';
@@ -98,7 +95,7 @@ function OrderDetails() {
     setUpdating(true);
     try {
       await handleUpdateOrder(query.orderId, status);
-      // if (status !== 'delivered') setOpenDialog(true);
+      if (status !== 'delivered') setOpenDialog(true);
     } catch (error) {
       console.error('Error updating status:', error);
     } finally {
@@ -147,7 +144,7 @@ function OrderDetails() {
               Order# {query.orderId}
             </Typography>
           </Stack>
-          {/* {updating && (
+          {updating && (
             <Box
               sx={{
                 position: 'absolute',
@@ -166,7 +163,7 @@ function OrderDetails() {
             >
               <CircularProgress size={40} thickness={4} sx={{ mb: 10 }} />
             </Box>
-          )} */}
+          )}
           {loading && <OrderDetailsSkeleton />}
           {!loading && data?.order == null && (
             <Container sx={{ mt: 10, px: 3 }}>
@@ -442,29 +439,6 @@ function OrderDetails() {
                     </Grid>
                   </Grid>
                 </Grid>
-                <Grid item xs={12}>
-                  <Stack
-                    sx={{
-                      bgcolor: 'primary.lightsurface',
-                      p: 2,
-                      border: '1px solid grey',
-                    }}
-                  >
-                    <Typography variant="h8" sx={{ mb: 1, color: 'grey.900' }}>
-                      Order Instructions
-                    </Typography>
-                    <Typography
-                      variant="heavyb2"
-                      sx={{
-                        mb: 1,
-                        color: 'grey.900',
-                        wordWrap: 'break-word', // Ensures long words break and wrap onto the next line
-                      }}
-                    >
-                      {data?.order?.customFields?.notes}
-                    </Typography>
-                  </Stack>
-                </Grid>
               </Grid>
               <Box sx={{ height: '90px' }} />
               <Paper
@@ -483,9 +457,7 @@ function OrderDetails() {
                       data?.order?.customFields?.adminStatus === 'delivered'
                     }
                     onClick={() => {
-                      // changeOrderStatus('accepted');
-                      setAcceptOrder(true);
-                      setOpenDialog(true);
+                      changeOrderStatus('accepted');
                     }}
                     sx={{
                       backgroundColor: 'secondary.light',
@@ -505,9 +477,7 @@ function OrderDetails() {
                       data?.order?.customFields?.adminStatus === 'delivered'
                     }
                     onClick={() => {
-                      // changeOrderStatus('rejected');
-                      setAcceptOrder(false);
-                      setOpenDialog(true);
+                      changeOrderStatus('rejected');
                     }}
                     sx={{
                       borderWidth: 1,
@@ -540,8 +510,6 @@ function OrderDetails() {
             orderId={data?.order?.id}
             adminUser={adminUser}
             changeOrderStatus={changeOrderStatus}
-            acceptOrder={acceptOrder}
-            updating={updating}
           />
         </Container>
       </Box>

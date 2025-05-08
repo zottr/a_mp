@@ -2,7 +2,7 @@ import { Box, Button, Grid, Stack, Typography } from '@mui/material';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import NewReleasesIcon from '@mui/icons-material/NewReleases';
 import { useEffect, useState } from 'react';
-import { useQuery } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client';
 import { GET_COUNT_NEW_ORDERS } from '../libs/graphql/definitions/order-definitions';
 import { useUserContext } from '../hooks/useUserContext';
 import NotificationsSkeleton from './NotificationsSkeleton';
@@ -20,21 +20,34 @@ const Notifications: React.FC<NotifificationsProps> = ({ type }) => {
   const { adminUser } = useUserContext();
   const navigate = useNavigate();
 
-  const { loading, error, data, fetchMore } = useQuery(GET_COUNT_NEW_ORDERS, {
-    variables: {
-      options: {
-        filter: {
-          adminId: { eq: adminUser?.id },
-          adminStatus: { in: ['new'] },
+  const [fetchOrders, { loading, error, data, fetchMore }] = useLazyQuery(
+    GET_COUNT_NEW_ORDERS,
+    {
+      variables: {
+        options: {
+          filter: {
+            adminId: { eq: adminUser?.id },
+            adminStatus: { in: ['new'] },
+          },
         },
       },
-    },
-    skip: type === 'services',
-    fetchPolicy: 'network-only',
-    onCompleted: (fetchedData) => {
-      if (fetchedData.orders?.totalItems > 0) setHasNewOrders(true);
-    },
-  });
+      fetchPolicy: 'network-only',
+      onCompleted: (fetchedData) => {
+        if (fetchedData.orders?.totalItems > 0) {
+          setHasNewOrders(true);
+        }
+      },
+    }
+  );
+
+  useEffect(() => {
+    const callFetchOrders = async () => {
+      if (type === 'seller' && adminUser?.id) {
+        await fetchOrders();
+      }
+    };
+    callFetchOrders();
+  }, [adminUser]);
 
   useEffect(() => {
     if (adminUser != null) {
@@ -77,14 +90,15 @@ const Notifications: React.FC<NotifificationsProps> = ({ type }) => {
       }}
     >
       <Typography
-        variant="h7"
+        variant="heavyb2"
         color="grey.800"
         sx={{
-          textAlign: 'center',
+          fontWeight: 700,
+          textAlign: 'left',
           margin: 'auto',
         }}
       >
-        Notifications
+        NOTIFICATIONS
       </Typography>
       {(loading || adminUser === null) && (
         <Box sx={{ mt: 1 }}>
@@ -124,7 +138,7 @@ const Notifications: React.FC<NotifificationsProps> = ({ type }) => {
                   justifyContent: 'flex-start',
                 }}
               >
-                <Typography variant="b2" sx={{ ml: 1 }}>
+                <Typography variant="heavyb1" sx={{ ml: 1 }}>
                   You have new orders!
                 </Typography>
                 <Button
@@ -133,7 +147,7 @@ const Notifications: React.FC<NotifificationsProps> = ({ type }) => {
                     navigate('/seller/orders');
                   }}
                 >
-                  <Typography variant="button2">View Orders</Typography>
+                  <Typography variant="h8">View Orders</Typography>
                 </Button>
               </Grid>
             </Grid>
@@ -165,11 +179,11 @@ const Notifications: React.FC<NotifificationsProps> = ({ type }) => {
                   justifyContent: 'flex-start',
                 }}
               >
-                <Typography variant="b2" sx={{ ml: 1 }}>
+                <Typography variant="heavyb2" sx={{ ml: 1 }}>
                   Add an account logo
                 </Typography>
                 <Button
-                  sx={{ color: 'primary.light' }}
+                  sx={{ color: 'primary.main' }}
                   onClick={() => {
                     navigate(`/${type}/customize`);
                   }}
@@ -206,11 +220,11 @@ const Notifications: React.FC<NotifificationsProps> = ({ type }) => {
                   justifyContent: 'flex-start',
                 }}
               >
-                <Typography variant="b2" sx={{ ml: 1 }}>
+                <Typography variant="heavyb2" sx={{ ml: 1 }}>
                   Add an account tagline
                 </Typography>
                 <Button
-                  sx={{ color: 'primary.light' }}
+                  sx={{ color: 'primary.main' }}
                   onClick={() => {
                     navigate(`/${type}/customize`);
                   }}
@@ -247,11 +261,11 @@ const Notifications: React.FC<NotifificationsProps> = ({ type }) => {
                   justifyContent: 'flex-start',
                 }}
               >
-                <Typography variant="b2" sx={{ ml: 1 }}>
+                <Typography variant="heavyb2" sx={{ ml: 1 }}>
                   Add UPI account details
                 </Typography>
                 <Button
-                  sx={{ color: 'primary.light' }}
+                  sx={{ color: 'primary.main' }}
                   onClick={() => {
                     navigate('/seller/payment-settings');
                   }}
