@@ -7,6 +7,7 @@ declare module '@mui/material/styles' {
     button2: React.CSSProperties;
     button3: React.CSSProperties;
     h7: React.CSSProperties;
+    h8: React.CSSProperties;
     b2: React.CSSProperties;
     heavylabel1: React.CSSProperties;
     label2: React.CSSProperties;
@@ -22,6 +23,7 @@ declare module '@mui/material/styles' {
     button2?: React.CSSProperties;
     button3?: React.CSSProperties;
     h7: React.CSSProperties;
+    h8: React.CSSProperties;
     b2?: React.CSSProperties;
     heavylabel1?: React.CSSProperties;
     label2?: React.CSSProperties;
@@ -39,6 +41,7 @@ declare module '@mui/material/Typography' {
     button2: true;
     button3: true;
     h7: true;
+    h8: true;
     b2: true;
     heavylabel1: true;
     label2: true;
