@@ -453,16 +453,29 @@ function OrderDetails() {
                     <Typography variant="h8" sx={{ mb: 1, color: 'grey.900' }}>
                       Order Instructions
                     </Typography>
-                    <Typography
-                      variant="heavyb2"
-                      sx={{
-                        mb: 1,
-                        color: 'grey.900',
-                        wordWrap: 'break-word', // Ensures long words break and wrap onto the next line
-                      }}
-                    >
-                      {data?.order?.customFields?.notes}
-                    </Typography>
+                    {data?.order?.customFields?.notes ? (
+                      <Typography
+                        variant="heavyb2"
+                        sx={{
+                          mb: 1,
+                          color: 'grey.900',
+                          wordWrap: 'break-word', // Ensures long words break and wrap onto the next line
+                        }}
+                      >
+                        {data?.order?.customFields?.notes}
+                      </Typography>
+                    ) : (
+                      <Typography
+                        variant="heavyb2"
+                        sx={{
+                          mb: 1,
+                          color: 'grey.500',
+                          wordWrap: 'break-word', // Ensures long words break and wrap onto the next line
+                        }}
+                      >
+                        {'None'}
+                      </Typography>
+                    )}
                   </Stack>
                 </Grid>
               </Grid>
