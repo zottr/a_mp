@@ -13,11 +13,15 @@ function DescriptionEditor({ value, setValue }) {
   };
 
   const handleFocus = () => {
-    // If empty, force Quill to consider it active
-    if (!value || value === '<p><br></p>') {
-      const editor = quillRef.current?.getEditor();
-      editor?.insertText(0, ' ');
-      editor?.deleteText(0, 1);
+    if (!value || value.trim() === '' || value === '<p><br></p>') {
+      // Wait for the mobile keyboard to settle
+      setTimeout(() => {
+        const editor = quillRef.current?.getEditor();
+        if (editor) {
+          editor.insertText(0, ' ');
+          editor.deleteText(0, 1);
+        }
+      }, 50); // Slight delay helps mobile browsers apply the focus
     }
   };
 
