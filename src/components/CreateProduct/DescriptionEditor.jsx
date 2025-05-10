@@ -1,28 +1,13 @@
 import { Box } from '@mui/material';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 import 'react-quill-new/dist/quill.bubble.css';
 import './quillstyles.css';
 
 function DescriptionEditor({ value, setValue }) {
-  const quillRef = useRef(null);
-
   const setDescription = (html) => {
     setValue(html);
-  };
-
-  const handleFocus = () => {
-    if (!value || value.trim() === '' || value === '<p><br></p>') {
-      // Wait for the mobile keyboard to settle
-      setTimeout(() => {
-        const editor = quillRef.current?.getEditor();
-        if (editor) {
-          editor.insertText(0, ' ');
-          editor.deleteText(0, 1);
-        }
-      }, 50); // Slight delay helps mobile browsers apply the focus
-    }
   };
 
   const modules = {
@@ -45,13 +30,11 @@ function DescriptionEditor({ value, setValue }) {
     <>
       <Box width="100%" height="215px">
         <ReactQuill
-          ref={quillRef}
           theme="snow"
           value={value}
           onChange={setDescription}
           style={{ height: '150px', width: '100%' }}
           modules={modules}
-          placeholder="Add few lines about the product..."
         />
       </Box>
     </>
