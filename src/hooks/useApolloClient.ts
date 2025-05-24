@@ -3,6 +3,8 @@ import { setContext } from '@apollo/client/link/context';
 import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
 import { useAuth } from '../context/AuthContext';
 
+const hostname = window.location.hostname;
+const subdomain = hostname.split('.')[0];
 const API_URL = import.meta.env.VITE_VENDURE_SERVER_URL;
 // If using bearer-token based session management, we'll store the token
 // in localStorage using this key.
@@ -52,7 +54,10 @@ const useApolloClient = () => {
       // If we have stored the authToken from a previous
       // response, we attach it to all subsequent requests.
       setContext((request, operation) => {
-        const channelToken = '8d8f0da4-d470-41fc-897c-7604c139f8cb'; //sample store token
+        let channelToken = '8dda0c24-c422-4cca-bbe2-53375856c0d7'; //urbana store token
+        if (subdomain === 'demo') {
+          channelToken = '8d8f0da4-d470-41fc-897c-7604c139f8cb'; //sample store token
+        }
         //const channelToken = '';
         let headers: Record<string, any> = {};
         if (authToken) {

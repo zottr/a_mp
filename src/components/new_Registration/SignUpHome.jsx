@@ -32,9 +32,6 @@ function SignUpHome() {
           <Grid
             item
             xs={12}
-            sm={12}
-            lg={4}
-            xl={3}
             display="flex"
             justifyContent="center"
             alignItems="center"
