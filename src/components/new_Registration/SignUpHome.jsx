@@ -39,7 +39,7 @@ function SignUpHome() {
             <Card
               elevation={elevation}
               sx={{
-                py: 2,
+                py: 5,
                 px: 3,
                 zIndex: 1,
                 width: '100%',

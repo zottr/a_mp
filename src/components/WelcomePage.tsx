@@ -23,7 +23,7 @@ function WelcomePage() {
 
   return (
     <>
-      <Stack direction="row">
+      <Stack direction="row" sx={{ bgcolor: 'white' }}>
         <Stack
           sx={{
             width: '100%',
@@ -57,7 +57,12 @@ function WelcomePage() {
       </Stack>
       <Stack
         gap={2}
-        sx={{ width: '100%', display: 'flex', alignItems: 'center' }}
+        sx={{
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          bgcolor: 'white',
+        }}
       >
         <Stack
           gap={1}

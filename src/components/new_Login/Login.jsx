@@ -26,7 +26,8 @@ function WelcomePage() {
           <Card
             elevation={useMediaQuery(theme.breakpoints.down('sm')) ? 0 : 2}
             sx={{
-              py: 2,
+              // height: '500px',
+              py: 5,
               px: 3,
               zIndex: 1,
               width: '100%',
