@@ -26,7 +26,7 @@ function App() {
 
   return (
     <ApolloProvider client={useApolloClient()}>
-      <BrowserRouter basename="/">
+      <BrowserRouter basename="/admin">
         <Layout>
           <Routes>
             <Route
