@@ -218,7 +218,7 @@ function App() {
                 />
               }
             />
-            <Route path="*" element={<Navigate replace to="/signup" />} />
+            <Route path="*" element={<Navigate replace to="/login" />} />
           </Routes>
         </Layout>
       </BrowserRouter>
