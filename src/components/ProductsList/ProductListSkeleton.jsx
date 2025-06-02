@@ -23,13 +23,13 @@ function ProductSkeletonItem() {
 }
 
 function ProductListSkeleton() {
-  const numberOfItems = 3;
+  const numberOfItems = 4;
   return (
     <>
       {Array.from({ length: numberOfItems }).map((_, index) => (
         <div key={index}>
           <ProductSkeletonItem />
-          {index < numberOfItems - 1 && <Divider sx={{ my: 3 }} />}
+          {index < numberOfItems - 1 && <Divider sx={{ mt: 2.3 }} />}
         </div>
       ))}
     </>

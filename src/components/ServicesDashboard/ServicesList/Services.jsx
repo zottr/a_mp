@@ -12,7 +12,7 @@ import { GET_PRODUCT_PREVIEW_LIST } from '../../../libs/graphql/definitions/prod
 import { useLazyQuery, useQuery } from '@apollo/client';
 import { useUserContext } from '../../../hooks/useUserContext';
 import { useEffect, useRef, useState } from 'react';
-import ProductListSkeleton from './ServicesListSkeleton';
+import ServicesListSkeleton from './ServicesListSkeleton';
 import { GET_FACET_VALUE_LIST } from '../../../libs/graphql/definitions/facet-definitions';
 import { useNavigate } from 'react-router-dom';
 import useLogout from '../../../hooks/useLogout';
@@ -205,7 +205,7 @@ function Services({ setProductAction, setUpdatedProductName }) {
 
   return (
     <>
-      {loading && <ProductListSkeleton />}
+      {loading && <ServicesListSkeleton />}
       {!loading && (
         <Stack
           direction="column"
@@ -295,7 +295,7 @@ function Services({ setProductAction, setUpdatedProductName }) {
             )}
           {loadingMore && (
             <Box sx={{ mt: 2 }}>
-              <ProductListSkeleton />
+              <ServicesListSkeleton />
             </Box>
           )}
         </Stack>

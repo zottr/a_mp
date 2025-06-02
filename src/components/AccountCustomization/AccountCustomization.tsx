@@ -276,15 +276,15 @@ const AccountCustomization: React.FC<AccountCustomizationProps> = ({
                 <Stack width="100%" gap={2}>
                   <Stack width="100%">
                     <Typography variant="heavylabel1" color="grey.800">
-                      Your Logo
+                      Your Business Logo
                     </Typography>
-                    <Typography
+                    {/* <Typography
                       variant="b2"
-                      color="grey.600"
+                      color="grey.700"
                       sx={{ fontStyle: 'italic' }}
                     >
                       Add your business logo
-                    </Typography>
+                    </Typography> */}
                   </Stack>
                   <Stack
                     direction="row"
@@ -322,9 +322,9 @@ const AccountCustomization: React.FC<AccountCustomizationProps> = ({
                           width: '100%',
                           height: '2.8rem',
                           borderRadius: '25px',
-                          borderColor: 'grey.700',
+                          borderColor: 'primary.main',
                           '&:hover, &:focus, &:active': {
-                            borderColor: 'grey.700',
+                            borderColor: 'primary.main',
                           },
                         }}
                       >
@@ -333,7 +333,7 @@ const AccountCustomization: React.FC<AccountCustomizationProps> = ({
                             fontSize="small"
                             sx={{
                               mr: '8px',
-                              color: 'grey.700',
+                              color: 'primary.main',
                             }}
                           />
                         ) : (
@@ -341,14 +341,14 @@ const AccountCustomization: React.FC<AccountCustomizationProps> = ({
                             fontSize="medium"
                             sx={{
                               mr: '8px',
-                              color: 'grey.700',
+                              color: 'primary.main',
                             }}
                           />
                         )}
 
                         <Typography
                           variant="button2"
-                          sx={{ color: 'grey.700' }}
+                          sx={{ color: 'primary.main' }}
                         >
                           {logoPreview !== '' ? 'Change Logo' : 'Add Logo'}
                         </Typography>
@@ -366,9 +366,9 @@ const AccountCustomization: React.FC<AccountCustomizationProps> = ({
                           sx={{
                             height: '2.8rem',
                             borderRadius: '25px',
-                            borderColor: 'grey.700',
+                            borderColor: 'primary.main',
                             '&:hover, &:focus, &:active': {
-                              borderColor: 'grey.700',
+                              borderColor: 'primary.main',
                             },
                           }}
                           onClick={() => {
@@ -379,11 +379,11 @@ const AccountCustomization: React.FC<AccountCustomizationProps> = ({
                         >
                           <DeleteIcon
                             fontSize="small"
-                            sx={{ mr: '8px', color: 'grey.700' }}
+                            sx={{ mr: '8px', color: 'primary.main' }}
                           />
                           <Typography
                             variant="button2"
-                            sx={{ color: 'grey.700' }}
+                            sx={{ color: 'primary.main' }}
                           >
                             Remove Logo
                           </Typography>
@@ -399,10 +399,10 @@ const AccountCustomization: React.FC<AccountCustomizationProps> = ({
                     </Typography>
                     <Typography
                       variant="b2"
-                      color="grey.600"
+                      color="grey.700"
                       sx={{ fontStyle: 'italic' }}
                     >
-                      A short statement introducing your products & services
+                      A short introduction of your products & services
                     </Typography>
                   </Stack>
                   <StyledTextField
@@ -414,6 +414,8 @@ const AccountCustomization: React.FC<AccountCustomizationProps> = ({
                       const { value } = event.target;
                       setTagline(value);
                     }}
+                    multiline
+                    rows={2}
                     placeholder="Your tagline here"
                     size="small"
                     // helperText={
@@ -435,14 +437,14 @@ const AccountCustomization: React.FC<AccountCustomizationProps> = ({
                 <Stack width="100%" gap={2}>
                   <Stack width="100%">
                     <Typography variant="heavylabel1" color="grey.800">
-                      Your Banner
+                      Promotional Banner
                     </Typography>
                     <Typography
                       variant="b2"
-                      color="grey.600"
+                      color="grey.700"
                       sx={{ fontStyle: 'italic' }}
                     >
-                      Promote your products & services
+                      use a <strong>16:9</strong> image ratio for best viewing
                     </Typography>
                   </Stack>
                   <Stack
@@ -474,27 +476,27 @@ const AccountCustomization: React.FC<AccountCustomizationProps> = ({
                         sx={{
                           height: '2.8rem',
                           borderRadius: '25px',
-                          borderColor: 'grey.700',
+                          borderColor: 'primary.main',
                           '&:hover, &:focus, &:active': {
-                            borderColor: 'grey.700',
+                            borderColor: 'primary.main',
                           },
                         }}
                       >
                         {bannerPreview !== '' ? (
                           <EditIcon
                             fontSize="small"
-                            sx={{ mr: '8px', color: 'grey.700' }}
+                            sx={{ mr: '8px', color: 'primary.main' }}
                           />
                         ) : (
                           <AddIcon
                             fontSize="medium"
-                            sx={{ mr: '8px', color: 'grey.700' }}
+                            sx={{ mr: '8px', color: 'primary.main' }}
                           />
                         )}
 
                         <Typography
                           variant="button2"
-                          sx={{ color: 'grey.700' }}
+                          sx={{ color: 'primary.main' }}
                         >
                           {bannerPreview !== ''
                             ? 'Change Banner'
@@ -514,9 +516,9 @@ const AccountCustomization: React.FC<AccountCustomizationProps> = ({
                           sx={{
                             height: '2.8rem',
                             borderRadius: '25px',
-                            borderColor: 'grey.700',
+                            borderColor: 'primary.main',
                             '&:hover, &:focus, &:active': {
-                              borderColor: 'grey.700',
+                              borderColor: 'primary.main',
                             },
                           }}
                           onClick={() => {
@@ -527,11 +529,11 @@ const AccountCustomization: React.FC<AccountCustomizationProps> = ({
                         >
                           <DeleteIcon
                             fontSize="small"
-                            sx={{ mr: '8px', color: 'grey.700' }}
+                            sx={{ mr: '8px', color: 'primary.main' }}
                           />
                           <Typography
                             variant="button2"
-                            sx={{ color: 'grey.700' }}
+                            sx={{ color: 'primary.main' }}
                           >
                             Remove Banner
                           </Typography>

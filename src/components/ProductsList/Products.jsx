@@ -284,7 +284,8 @@ function Products({ setProductAction, setUpdatedProductName }) {
           )}
           {initialLoadCompleted &&
             serverProductList.length === 0 &&
-            (data?.products == null || data?.products?.items?.length === 0) && (
+            (data?.products == null || data?.products?.items?.length === 0) &&
+            !loading && (
               <Stack
                 display="flex"
                 justifyContent="center"

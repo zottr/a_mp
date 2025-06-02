@@ -54,9 +54,9 @@ const useApolloClient = () => {
       // If we have stored the authToken from a previous
       // response, we attach it to all subsequent requests.
       setContext((request, operation) => {
-        let channelToken = '8dda0c24-c422-4cca-bbe2-53375856c0d7'; //urbana store token
-        if (subdomain === 'demo') {
-          channelToken = '8d8f0da4-d470-41fc-897c-7604c139f8cb'; //sample store token
+        let channelToken = '8d8f0da4-d470-41fc-897c-7604c139f8cb'; //sample store token
+        if (subdomain === 'urbanahaat') {
+          channelToken = '8dda0c24-c422-4cca-bbe2-53375856c0d7'; //urbanahaat token
         }
         //const channelToken = '';
         let headers: Record<string, any> = {};

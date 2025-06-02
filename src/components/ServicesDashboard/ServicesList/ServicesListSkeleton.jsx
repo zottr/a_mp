@@ -23,13 +23,13 @@ function ServiceSkeletonItem() {
 }
 
 function ServicesListSkeleton() {
-  const numberOfItems = 3;
+  const numberOfItems = 4;
   return (
     <>
       {Array.from({ length: numberOfItems }).map((_, index) => (
         <div key={index}>
           <ServiceSkeletonItem />
-          {index < numberOfItems - 1 && <Divider sx={{ my: 2 }} />}
+          {index < numberOfItems - 1 && <Divider sx={{ mt: 2.3 }} />}
         </div>
       ))}
     </>

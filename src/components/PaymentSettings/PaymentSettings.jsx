@@ -282,7 +282,7 @@ const PaymentSettings = () => {
               </Typography>
               <Typography
                 variant="b1"
-                color={theme.palette.grey[600]}
+                color={theme.palette.grey[700]}
                 sx={{
                   textAlign: 'center',
                   margin: 'auto',
@@ -454,25 +454,28 @@ const PaymentSettings = () => {
                       sx={{
                         height: '2.8rem',
                         borderRadius: '25px',
-                        borderColor: 'grey.700',
+                        borderColor: 'primary.main',
                         '&:hover, &:focus, &:active': {
-                          borderColor: 'grey.700',
+                          borderColor: 'primary.main',
                         },
                       }}
                     >
                       {qrPreview !== '' ? (
                         <EditIcon
                           fontSize="small"
-                          sx={{ mr: 0.5, color: 'grey.700' }}
+                          sx={{ mr: 0.5, color: 'primary.main' }}
                         />
                       ) : (
                         <QrCodeIcon
                           fontSize="small"
-                          sx={{ mr: 0.5, color: 'grey.700' }}
+                          sx={{ mr: 0.5, color: 'primary.main' }}
                         />
                       )}
 
-                      <Typography variant="button2" sx={{ color: 'grey.700' }}>
+                      <Typography
+                        variant="button2"
+                        sx={{ color: 'primary.main' }}
+                      >
                         {qrPreview !== '' ? 'Change Code' : 'Add Code'}
                       </Typography>
                       <input
@@ -489,9 +492,9 @@ const PaymentSettings = () => {
                         sx={{
                           height: '2.8rem',
                           borderRadius: '25px',
-                          borderColor: 'grey.700',
+                          borderColor: 'primary.main',
                           '&:hover, &:focus, &:active': {
-                            borderColor: 'grey.700',
+                            borderColor: 'primary.main',
                           },
                         }}
                         onClick={() => {
@@ -502,11 +505,11 @@ const PaymentSettings = () => {
                       >
                         <DeleteIcon
                           fontSize="small"
-                          sx={{ mr: 0.5, color: 'grey.700' }}
+                          sx={{ mr: 0.5, color: 'primary.main' }}
                         />
                         <Typography
                           variant="button2"
-                          sx={{ color: 'grey.700' }}
+                          sx={{ color: 'primary.main' }}
                         >
                           Remove Code
                         </Typography>
